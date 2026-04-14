@@ -205,7 +205,7 @@ function initRoadmapTerminal(lines) {
 
   function colorize(line) {
     return escapeHtml(line)
-      .replace('$', '<span class="prompt">$</span>')
+      .replaceAll('$', '<span class="prompt">$</span>')
       .replaceAll('active', '<span class="green">active</span>')
       .replace('in development', '<span class="accent">in development</span>');
   }
