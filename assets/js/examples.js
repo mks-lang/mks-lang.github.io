@@ -44,7 +44,7 @@
 
   function colorize(line) {
     return line
-      .replace('$', '<span class="prompt">$</span>')
+      .replace(/\$/g, '<span class="prompt">$</span>')
       .replace(/ok/g, '<span class="green">ok</span>')
       .replace(/pass/g, '<span class="green">pass</span>');
   }
