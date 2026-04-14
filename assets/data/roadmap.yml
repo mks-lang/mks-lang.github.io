@@ -1,0 +1,223 @@
+hero:
+  eyebrow: "Roadmap"
+  title: "Path to the next real MKS."
+  subtitle: "Small, shippable steps. Less fake hype, more real language progress."
+  chips:
+    - { text: "Now", variant: "live" }
+    - { text: "Next", variant: "default" }
+    - { text: "Later", variant: "ghost" }
+    - { text: "Future", variant: "ghost" }
+
+terminal:
+  path: "/roadmap/mks.next"
+  lines:
+    - "$ mks roadmap"
+    - "syntax ............ active"
+    - "entity polish ..... active"
+    - "extend polish ..... active"
+    - "packages .......... in development"
+
+metrics:
+  - label: "Current front"
+    value: "Language polish"
+  - label: "Next push"
+    value: "Tooling"
+  - label: "Long game"
+    value: "Compiler + systems"
+
+rail:
+  - phase: "Now"
+    title: "Stabilize the language"
+    state: "live"
+  - phase: "Next"
+    title: "Tooling & tests"
+    state: "next"
+  - phase: "Later"
+    title: "Stdlib & performance"
+    state: "later"
+  - phase: "Future"
+    title: "Compiler & systems"
+    state: "future"
+
+sections:
+  - id: "now"
+    eyebrow: "Now"
+    title: "Current focus"
+    subtitle: "The stuff that actually defines MKS right now."
+    cards:
+      - step: "01"
+        phase: "Current"
+        title: "Syntax stabilization"
+        status: "active"
+        state: "live"
+        progress: 72
+        description: "Lock down the core syntax so MKS stops feeling like a moving draft."
+        items:
+          - "finalize var, =:, -> <-"
+          - "fix edge cases in control flow"
+          - "operator consistency: ?=, !?, &&, ||, <-->"
+
+      - step: "02"
+        phase: "Current"
+        title: "Entity polish"
+        status: "active"
+        state: "live"
+        progress: 64
+        description: "Make entities feel sharper, cleaner, and less fragile."
+        items:
+          - "clean init behavior"
+          - "improve self handling"
+          - "better method call consistency"
+          - "clearer entity-related errors"
+
+      - step: "03"
+        phase: "Current"
+        title: "Extend polish"
+        status: "active"
+        state: "live"
+        progress: 58
+        description: "Stabilize extend for built-ins and prepare a path for richer custom methods."
+        items:
+          - "stabilize extend array"
+          - "unify method naming"
+          - "fix empty/null edge cases"
+          - "prepare custom method system"
+
+      - step: "04"
+        phase: "Current"
+        title: "Package system"
+        status: "in development"
+        state: "next"
+        progress: 41
+        description: "Push imports and packages toward something real and usable."
+        items:
+          - "module resolver fixes"
+          - "prevent double imports"
+          - "module cache"
+          - "better using UX"
+
+  - id: "next"
+    eyebrow: "Next"
+    title: "Short-term steps"
+    subtitle: "The next practical upgrades after the core is steadier."
+    cards:
+      - step: "05"
+        phase: "Next"
+        title: "Full test system"
+        status: "queued"
+        state: "next"
+        progress: 18
+        description: "Turn test / expect into a complete workflow."
+        items:
+          - "CLI test runner"
+          - "pass/fail output"
+          - "grouped results"
+          - "filter by file or suite"
+
+      - step: "06"
+        phase: "Next"
+        title: "Formatter"
+        status: "queued"
+        state: "next"
+        progress: 12
+        description: "Give MKS one official code style."
+        items:
+          - "consistent indentation"
+          - "arrow block formatting"
+          - "entity / extend formatting"
+          - "mks fmt command"
+
+      - step: "07"
+        phase: "Next"
+        title: "Better diagnostics"
+        status: "queued"
+        state: "next"
+        progress: 16
+        description: "Errors should point to the fix faster."
+        items:
+          - "clearer messages"
+          - "better line highlights"
+          - "helpful hints"
+          - "import and resolver errors"
+
+      - step: "08"
+        phase: "Next"
+        title: "REPL polish"
+        status: "queued"
+        state: "next"
+        progress: 9
+        description: "Make iteration smoother."
+        items:
+          - "history support"
+          - "multiline input"
+          - "cleaner output"
+          - "debug-friendly mode"
+
+  - id: "later"
+    eyebrow: "Later"
+    title: "After that"
+    subtitle: "Once the language and tooling stop wobbling."
+    cards:
+      - step: "09"
+        phase: "Later"
+        title: "Stdlib expansion"
+        status: "planned"
+        state: "future"
+        progress: 8
+        description: "Grow beyond std/math."
+        items:
+          - "std/strings"
+          - "std/arrays"
+          - "std/io"
+          - "improve std/math"
+
+      - step: "10"
+        phase: "Later"
+        title: "Performance work"
+        status: "planned"
+        state: "future"
+        progress: 6
+        description: "Make the runtime tighter."
+        items:
+          - "evaluator optimizations"
+          - "environment lookup speed"
+          - "lower allocation pressure"
+
+      - step: "11"
+        phase: "Later"
+        title: "Bytecode groundwork"
+        status: "planned"
+        state: "future"
+        progress: 5
+        description: "Prepare the first real compiler path."
+        items:
+          - "define bytecode format"
+          - "AST to bytecode prototype"
+          - "basic execution loop"
+
+timeline:
+  title: "Short bursts, visible progress"
+  subtitle: "Not version cosplay. Just real steps landing over time."
+  items:
+    - month: "Now"
+      title: "Syntax / entity / extend polish"
+      text: "Tighten the language itself before piling on more systems."
+    - month: "Soon"
+      title: "Packages get real"
+      text: "Resolver, cache, and import flow become more stable and predictable."
+    - month: "Next"
+      title: "Testing + formatter"
+      text: "Developer workflow gets less painful."
+    - month: "Later"
+      title: "Compiler groundwork"
+      text: "Bytecode experiments and execution model exploration."
+
+principle:
+  eyebrow: "Roadmap principle"
+  title: "Polish the core before chasing power."
+  text: "MKS gets stronger when syntax, entities, extend, packages, and tooling feel solid. Big system features can wait until the language stops wobbling."
+  pills:
+    - "Readable runtime"
+    - "Stable syntax"
+    - "Tooling first"
+    - "Compiler later"

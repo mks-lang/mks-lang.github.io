@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-page="playground">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MKS Playground</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/playground.css?v=20260414-1">
+</head>
+<body data-theme="dark">
+  <canvas class="particles"></canvas>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="logo" href="index.html"><span class="logo-mark"></span> MKS</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="examples.html">Examples</a>
+        <a href="docs.html">Docs</a>
+        <a href="playground.html">Playground</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="changelog.html">Changelog</a>
+        <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub ↗</a>
+      </div>
+
+      <div class="nav-mobile">
+        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false">
+          <span class="burger-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
+
+      <div class="mobile-menu">
+        <a href="index.html">Home</a>
+        <a href="examples.html">Examples</a>
+        <a href="docs.html">Docs</a>
+        <a href="playground.html">Playground</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="changelog.html">Changelog</a>
+        <a href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub ↗</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="play-hero">
+      <div class="section play-hero-inner">
+        <div class="play-copy">
+          <p class="eyebrow">Playground</p>
+          <h1>Runtime objects and syntax trees you can poke.</h1>
+          <p class="sub">
+            Step through a compact MKS program, watch the heap mark reachable objects,
+            sweep garbage, and inspect the AST that drives the execution.
+          </p>
+          <div class="play-actions">
+            <button class="btn" type="button" data-action="run">Run cycle</button>
+            <button class="btn ghost" type="button" data-action="mark">Mark</button>
+            <button class="btn ghost" type="button" data-action="sweep">Sweep</button>
+            <button class="btn ghost" type="button" data-action="reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="play-status panel glass">
+          <p class="eyebrow">Current pass</p>
+          <strong data-phase>Idle</strong>
+          <span data-detail>Ready to inspect roots, heap, and AST.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section playground-grid">
+      <div class="panel glass editor-panel">
+        <div class="panel-top">
+          <div>
+            <p class="eyebrow">Snippet</p>
+            <h2>watch + heap churn</h2>
+          </div>
+          <span class="play-chip">mks</span>
+        </div>
+        <div class="code-block">
+<pre><code>watch x;
+var root =: Entity("root");
+var temp =: Entity("temp");
+root.child =: Entity("leaf");
+temp =: null;
+x =: 2;</code></pre>
+        </div>
+      </div>
+
+      <div class="panel glass heap-panel">
+        <div class="panel-top">
+          <div>
+            <p class="eyebrow">GC</p>
+            <h2>Heap map</h2>
+          </div>
+          <span class="play-chip" data-heap-count>5 objects</span>
+        </div>
+        <canvas class="heap-canvas" data-heap-canvas></canvas>
+      </div>
+
+      <div class="panel glass ast-panel">
+        <div class="panel-top">
+          <div>
+            <p class="eyebrow">Parser</p>
+            <h2>AST shape</h2>
+          </div>
+          <span class="play-chip">live tree</span>
+        </div>
+        <div class="ast-tree" data-ast-tree></div>
+      </div>
+
+      <div class="panel glass log-panel">
+        <div class="panel-top">
+          <div>
+            <p class="eyebrow">Trace</p>
+            <h2>Runtime log</h2>
+          </div>
+          <span class="play-chip">events</span>
+        </div>
+        <div class="play-log" data-log></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/playground.js?v=20260414-1"></script>
+</body>
+</html>

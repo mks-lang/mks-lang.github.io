@@ -1,0 +1,751 @@
+{
+  "hero": {
+    "id": "overview",
+    "eyebrow": "Docs",
+    "title": "MKS reference",
+    "description": "Syntax, runtime primitives, entities, extend, imports, stdlib, tests, CLI, and project layout.",
+    "tags": [
+      "repeat",
+      "swap",
+      "test / expect",
+      "std/math",
+      "watch / defer",
+      "C interpreter",
+      "mark/sweep GC",
+      { "label": "experimental", "live": true }
+    ]
+  },
+  "sections": [
+    {
+      "id": "values",
+      "nav": "Values",
+      "title": "Values & variables",
+      "description": "Bind with <code>var</code>, assign with <code>=:</code>, swap with <code>&lt;--&gt;</code>.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var n =: 42;",
+            "var s =: \"hi\";",
+            "var arr =: [1, 2, 3];",
+            "",
+            "arr[0];",
+            "arr[1] =: 5;",
+            "",
+            "var a =: 1;",
+            "var b =: 2;",
+            "a <--> b;"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "n = 42",
+            "s = \"hi\"",
+            "arr = [1, 2, 3]",
+            "",
+            "arr[0]",
+            "arr[1] = 5",
+            "",
+            "a = 1",
+            "b = 2",
+            "a, b = b, a"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ops",
+      "nav": "Operators",
+      "title": "Expressions & operators",
+      "description": "Arithmetic, comparisons, and logical operators.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var a =: 6 + 3 * 2;",
+            "",
+            "if (a ?= 12) ->",
+            "  Writeln(\"ok\");",
+            "<-",
+            "",
+            "if (a > 5 && a < 20) ->",
+            "  Writeln(\"range\");",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "a = 6 + 3 * 2",
+            "",
+            "if a == 12:",
+            "    print(\"ok\")",
+            "",
+            "if 5 < a < 20:",
+            "    print(\"range\")"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "nav": "Flow",
+      "title": "Control flow",
+      "description": "if/else, while, for, repeat, break/continue.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "if (x > 0) ->",
+            "  Writeln(\"positive\");",
+            "<- else ->",
+            "  Writeln(\"non\");",
+            "<-",
+            "",
+            "while (i < 10) ->",
+            "  i =: i + 1;",
+            "<-",
+            "",
+            "for (var i =: 0; i < 3; i =: i + 1) ->",
+            "  Writeln(i);",
+            "<-",
+            "",
+            "repeat 3 ->",
+            "  Writeln(\"ping\");",
+            "<-",
+            "",
+            "repeat i in 3 ->",
+            "  Writeln(i);",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "if x > 0:",
+            "    print(\"positive\")",
+            "else:",
+            "    print(\"non\")",
+            "",
+            "while i < 10:",
+            "    i += 1",
+            "",
+            "for i in range(3):",
+            "    print(i)",
+            "",
+            "for _ in range(3):",
+            "    print(\"ping\")",
+            "",
+            "for i in range(3):",
+            "    print(i)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "funcs",
+      "nav": "Functions",
+      "title": "Functions",
+      "description": "Define, return, call, recurse.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "fnc add(a, b) ->",
+            "  return a + b;",
+            "<-",
+            "",
+            "Writeln(add(2, 3));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "def add(a, b):",
+            "    return a + b",
+            "",
+            "print(add(2, 3))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tests",
+      "nav": "Tests",
+      "title": "Swap & tests",
+      "description": "Fast in-place swap and built-in test blocks with <code>expect</code>.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var a =: 1;",
+            "var b =: 2;",
+            "a <--> b;",
+            "",
+            "test \"math add\" ->",
+            "  expect(1 + 1 ?= 2);",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "a = 1",
+            "b = 2",
+            "a, b = b, a",
+            "",
+            "def test_math_add():",
+            "    assert 1 + 1 == 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "entities",
+      "nav": "Entities",
+      "title": "Entities",
+      "description": "Lightweight objects with <code>init</code> and <code>method</code>.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "entity User(name) ->",
+            "  init ->",
+            "    self.name =: name;",
+            "  <-",
+            "",
+            "  method hi() ->",
+            "    Writeln(\"Hi \", self.name);",
+            "  <-",
+            "<-",
+            "",
+            "var u =: User(\"Ann\");",
+            "u.hi();"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "class User:",
+            "    def __init__(self, name):",
+            "        self.name = name",
+            "",
+            "    def hi(self):",
+            "        print(\"Hi\", self.name)",
+            "",
+            "u = User(\"Ann\")",
+            "u.hi()"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extend",
+      "nav": "Extend",
+      "title": "Extend built-ins",
+      "description": "Attach methods to arrays and strings.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "extend array ->",
+            "  method sum() ->",
+            "    var s =: 0;",
+            "    var i =: 0;",
+            "",
+            "    while (i < self.len()) ->",
+            "      s =: s + self[i];",
+            "      i =: i + 1;",
+            "    <-",
+            "",
+            "    return s;",
+            "  <-",
+            "<-",
+            "",
+            "Writeln([1,2,3].sum());"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "def sum_list(xs):",
+            "    s = 0",
+            "    for x in xs:",
+            "        s += x",
+            "    return s",
+            "",
+            "print(sum_list([1, 2, 3]))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "watch",
+      "nav": "Watch",
+      "title": "Watch / on change",
+      "description": "Reactive primitives built into the language surface.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var x =: 10;",
+            "watch x;",
+            "",
+            "on change x ->",
+            "  Writeln(\"x changed to \", x);",
+            "<-",
+            "",
+            "x =: 5;"
+          ],
+          "note": "Register <code>on change</code> before the assignment you want to observe."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "# pseudo example",
+            "class WatchVar:",
+            "    def __init__(self, v):",
+            "        self.v = v",
+            "        self.handlers = []",
+            "",
+            "    def set(self, v):",
+            "        self.v = v",
+            "        for h in self.handlers:",
+            "            h(v)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "defer",
+      "nav": "Defer",
+      "title": "defer",
+      "description": "Guaranteed cleanup on block exit.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "defer ->",
+            "  Writeln(\"leaving scope\");",
+            "<-",
+            "",
+            "Writeln(\"work...\");",
+            "Writeln(\"done\");"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "with open(\"file.txt\") as f:",
+            "    # work...",
+            "    pass"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "imports",
+      "nav": "Imports",
+      "title": "Imports",
+      "description": "Simple modules with <code>export</code> and <code>using</code>.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "// math.mks",
+            "export fnc add(a, b) ->",
+            "  return a + b;",
+            "<-",
+            "",
+            "// main.mks",
+            "using \"math\" as m;",
+            "Writeln(m.add(2, 2));"
+          ],
+          "note": "Resolution order: current file directory -> current working directory -> installed std path. A module runs once; duplicate and nested imports are skipped."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "# math.py",
+            "def add(a, b):",
+            "    return a + b",
+            "",
+            "# main.py",
+            "import math",
+            "math.add(2, 2)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stdlib",
+      "nav": "Stdlib",
+      "title": "Stdlib: std/math",
+      "description": "Built-in math helpers from the bundled standard path.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using \"std/math\";",
+            "",
+            "Writeln(abs(-5));",
+            "Writeln(square(4));",
+            "Writeln(min(10, 3));",
+            "Writeln(max(10, 3));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "print(abs(-5))",
+            "print(4 * 4)",
+            "print(min(10, 3))",
+            "print(max(10, 3))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cli",
+      "nav": "CLI",
+      "title": "CLI",
+      "description": "Run files, start REPL, inspect version/help.",
+      "code": [
+        "mks file.mks",
+        "mks --repl",
+        "mks --version",
+        "mks --help"
+      ]
+    },
+    {
+      "id": "arrays",
+      "nav": "Arrays",
+      "title": "Arrays & indexing",
+      "description": "Arrays are part of the core expression surface: create lists, read by index, assign by index, and extend array behavior with methods.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var xs =: [1, 2, 3];",
+            "",
+            "Writeln(xs[0]);",
+            "xs[1] =: 20;",
+            "",
+            "extend array ->",
+            "  method first() ->",
+            "    return self[0];",
+            "  <-",
+            "<-",
+            "",
+            "Writeln(xs.first());"
+          ],
+          "note": "The repository README lists arrays, indexing, and extend built-ins as core language features."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "xs = [1, 2, 3]",
+            "",
+            "print(xs[0])",
+            "xs[1] = 20",
+            "",
+            "def first(xs):",
+            "    return xs[0]",
+            "",
+            "print(first(xs))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "recursion",
+      "nav": "Recursion",
+      "title": "Functions & recursion guard",
+      "description": "Functions support recursion. The interpreter README also calls out a recursion-depth guard, so runaway calls should fail with a clearer runtime error instead of silently eating the process.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "fnc fact(n) ->",
+            "  if (n <= 1) ->",
+            "    return 1;",
+            "  <-",
+            "",
+            "  return n * fact(n - 1);",
+            "<-",
+            "",
+            "Writeln(fact(5));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "def fact(n):",
+            "    if n <= 1:",
+            "        return 1",
+            "    return n * fact(n - 1)",
+            "",
+            "print(fact(5))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testing-workflow",
+      "nav": "Test runner",
+      "title": "Tests & golden workflow",
+      "description": "The language has built-in <code>test</code> / <code>expect</code> blocks, and the repository keeps golden tests under <code>tests/</code> with <code>tests.sh</code> at the root.",
+      "code": [
+        "test \"math add\" ->",
+        "  expect(1 + 1 ?= 2);",
+        "<-",
+        "",
+        "# repository workflow",
+        "./tests.sh"
+      ]
+    },
+    {
+      "id": "build",
+      "nav": "Build",
+      "title": "Build shape",
+      "description": "The interpreter is a C project with <code>CMakeLists.txt</code>, shell test helpers, and a sanitizer-friendly direction called out in the README.",
+      "code": [
+        "cmake -S . -B build",
+        "cmake --build build",
+        "",
+        "./build/mks examples/showcase.mks",
+        "./tests.sh"
+      ]
+    },
+    {
+      "id": "layout",
+      "nav": "Repo layout",
+      "title": "Repo layout",
+      "description": "High-level structure of <code>mks-lang/MKS-interpreter</code>. The README describes this as a small experimental scripting language and interpreter in C.",
+      "code": [
+        ".github/workflows - CI automation",
+        "Lexer/    - tokens",
+        "Parser/   - AST + parsing",
+        "Eval/     - evaluation",
+        "Runtime/  - values, operators, modules, errors",
+        "Utils/    - helper code",
+        "env/      - variable scopes",
+        "GC/       - garbage collector",
+        "std/      - bundled stdlib",
+        "examples/ - runnable samples",
+        "docs/     - guides / reference",
+        "tests/    - golden tests",
+        "tools/    - project tooling"
+      ]
+    },
+    {
+      "id": "repo-docs",
+      "nav": "Repo docs",
+      "title": "Repository docs",
+      "description": "The repository has dedicated markdown docs alongside the website. Keep this page aligned with those files when language behavior changes.",
+      "code": [
+        "docs/REFERENCE.md  - quick syntax/reference examples",
+        "docs/USER_GUIDE.md - step-by-step guide",
+        "README.md          - overview, tour, layout, status"
+      ]
+    },
+    {
+      "id": "comparisons",
+      "nav": "Compare",
+      "title": "Comparisons & boolean flow",
+      "description": "The README calls out arithmetic, comparisons, logical operators, and the MKS equality spelling <code>?=</code>.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var n =: 8;",
+            "",
+            "if (n ?= 8) ->",
+            "  Writeln(\"same\");",
+            "<-",
+            "",
+            "if (n > 4 && n < 10) ->",
+            "  Writeln(\"inside\");",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "n = 8",
+            "",
+            "if n == 8:",
+            "    print(\"same\")",
+            "",
+            "if n > 4 and n < 10:",
+            "    print(\"inside\")"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "break-continue",
+      "nav": "Break",
+      "title": "break & continue",
+      "description": "Loop control is part of the language tour: use <code>break</code> to leave a loop and <code>continue</code> to skip to the next pass.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "for (var i =: 0; i < 10; i =: i + 1) ->",
+            "  if (i ?= 2) ->",
+            "    continue;",
+            "  <-",
+            "",
+            "  if (i ?= 5) ->",
+            "    break;",
+            "  <-",
+            "",
+            "  Writeln(i);",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "for i in range(10):",
+            "    if i == 2:",
+            "        continue",
+            "    if i == 5:",
+            "        break",
+            "    print(i)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "strings",
+      "nav": "Strings",
+      "title": "Strings & output",
+      "description": "Strings are first-class values in examples and are commonly printed through <code>Writeln</code>.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var name =: \"MKS\";",
+            "Writeln(\"hello\", name);",
+            "",
+            "var event =: \"x changed\";",
+            "Writeln(event);"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "name = \"MKS\"",
+            "print(\"hello\", name)",
+            "",
+            "event = \"x changed\"",
+            "print(event)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "module-resolution",
+      "nav": "Resolver",
+      "title": "Module resolution order",
+      "description": "The README describes module lookup as current file directory, then current working directory, then the installed std path. Modules run once; duplicate and nested imports are skipped.",
+      "code": [
+        "using \"path/to/file\";  # .mks optional",
+        "using \"std/math\";      # built-in std path",
+        "",
+        "lookup:",
+        "1. current file directory",
+        "2. current working directory",
+        "3. installed std path",
+        "",
+        "runtime:",
+        "- module runs once",
+        "- duplicate imports are skipped",
+        "- nested imports are skipped"
+      ]
+    },
+    {
+      "id": "sanitizers",
+      "nav": "Sanitizers",
+      "title": "Sanitizer-friendly runtime work",
+      "description": "The README calls out a sanitizer-friendly build direction. That matters because the interpreter is C and owns runtime structures, environments, modules, and GC.",
+      "code": [
+        "CMakeLists.txt",
+        "main.c / main.h",
+        "Runtime/",
+        "GC/",
+        "env/",
+        "",
+        "# local validation shape",
+        "cmake -S . -B build",
+        "cmake --build build",
+        "./tests.sh"
+      ]
+    },
+    {
+      "id": "errors",
+      "nav": "Errors",
+      "title": "Errors",
+      "description": "Readable errors with source positions and hints.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "Error: unknown symbol `y`",
+            "at main.mks:3:5"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "NameError: name 'y' is not defined",
+            "File \"main.py\", line 3"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "nav": "Status",
+      "title": "Status",
+      "description": "MKS is active and experimental. APIs may change while the language surface is still being shaped."
+    }
+  ]
+}

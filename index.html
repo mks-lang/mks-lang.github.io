@@ -1,199 +1,379 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="en" data-page="home">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MKS Language</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MKS Language</title>
 
-<style>
-:root {
-  --bg: #0b0f1a;
-  --bg2: #0f1629;
-  --text: #e8ecff;
-  --muted: #9aa4c7;
-  --accent: #7aa2ff;
-  --border: #1f2a44;
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: Inter, system-ui, sans-serif;
-  background: linear-gradient(180deg, var(--bg), var(--bg2));
-  color: var(--text);
-}
-
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 32px 20px 80px;
-}
-
-/* NAV */
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 80px;
-}
-
-.logo {
-  font-weight: 800;
-  letter-spacing: 0.1em;
-}
-
-.nav a {
-  text-decoration: none;
-  color: var(--muted);
-  margin-left: 20px;
-}
-
-/* HERO */
-.hero h1 {
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  margin: 0 0 16px;
-}
-
-.hero p {
-  max-width: 700px;
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 30px;
-}
-
-.buttons {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  padding: 12px 18px;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 600;
-  border: 1px solid var(--border);
-}
-
-.primary {
-  background: var(--accent);
-  color: #0b0f1a;
-  border-color: var(--accent);
-}
-
-.secondary {
-  background: transparent;
-  color: var(--text);
-}
-
-/* FEATURES */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin: 60px 0;
-}
-
-.card {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 18px;
-  background: rgba(255,255,255,0.03);
-}
-
-.card h3 {
-  margin: 0 0 10px;
-  font-size: 1rem;
-}
-
-.card p {
-  margin: 0;
-  color: var(--muted);
-}
-
-/* CODE */
-.code {
-  background: #080c16;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 18px;
-  font-size: 0.95rem;
-  overflow-x: auto;
-}
-
-/* FOOTER */
-footer {
-  margin-top: 60px;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-</style>
-
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/index.css?v=20260414-4">
 </head>
+<body data-theme="dark">
+  <canvas class="particles"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+  <div class="page-grid" aria-hidden="true"></div>
 
-<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-mark"></span> MKS</a>
 
-<div class="container">
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="examples.html">Examples</a>
+      <a href="docs.html">Docs</a>
+      <a href="playground.html">Playground</a>
+      <a href="roadmap.html">Roadmap</a>
+      <a href="changelog.html">Changelog</a>
+      <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </div>
 
-  <div class="nav">
-    <div class="logo">MKS</div>
-    <div>
-      <a href="https://github.com/mks-lang/MKS-interpreter">GitHub</a>
+    <div class="nav-mobile">
+      <button class="burger" type="button" aria-label="Open menu" aria-expanded="false">
+        <span class="burger-lines">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+    </div>
+
+    <div class="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="examples.html">Examples</a>
+      <a href="docs.html">Docs</a>
+      <a href="playground.html">Playground</a>
+      <a href="roadmap.html">Roadmap</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub ↗</a>
     </div>
   </div>
+</nav>
 
-  <section class="hero">
-    <h1>MKS</h1>
-    <p>
-      An interpreted programming language written in C, built around a minimal syntax,
-      custom runtime and AST-based execution.
-    </p>
+  <main>
+    <section class="hero hero-v2">
+      <div class="hero-bg">
+        <div class="hero-orb orb-1"></div>
+        <div class="hero-orb orb-2"></div>
+        <div class="hero-orb orb-3"></div>
+        <div class="hero-ring hero-ring-a"></div>
+        <div class="hero-ring hero-ring-b"></div>
+      </div>
 
-```
-<div class="buttons">
-  <a class="btn primary" href="https://github.com/mks-lang/MKS-interpreter">View on GitHub</a>
-  <a class="btn secondary" href="#example">Example</a>
-</div>
-```
+      <div class="hero-copy reveal-up">
+        <div class="hero-topline">
+          <span class="status-dot"></span>
+          <span>Experimental runtime · visible GC · reactive syntax</span>
+        </div>
 
-  </section>
+        <p class="eyebrow">MKS language · v0.2.x</p>
 
-  <section class="grid">
-    <div class="card">
-      <h3>Minimal syntax</h3>
-      <p>Simple, readable structure with clear control flow.</p>
-    </div>
-    <div class="card">
-      <h3>Custom runtime</h3>
-      <p>Built from scratch in C with its own execution model.</p>
-    </div>
-    <div class="card">
-      <h3>Garbage collected</h3>
-      <p>Mark-sweep GC integrated into the runtime.</p>
-    </div>
-  </section>
+        <h1>
+          A sharp,
+          <span class="gradient-text">systems-minded language</span>
+          with a runtime you can actually see.
+        </h1>
 
-  <section id="example">
-    <h2>Example</h2>
-    <pre class="code">
-fnc fib(n) ->
-    if (n &lt; 2) ->
-        return n;
-    &lt;-
-    return fib(n - 1) + fib(n - 2);
-&lt;-
+        <p class="lede">
+          Arrow blocks <code>-></code>/<code><-</code>, watch/on change, defer,
+          entity/extend, explicit runtime mechanics, and a mark-sweep collector
+          built to feel inspectable instead of mystical.
+        </p>
 
-Writeln(fib(10)); </pre>
+        <div class="hero-actions">
+          <a class="btn" href="playground.html">Open playground</a>
+          <a class="btn ghost strong" href="docs.html">Read docs</a>
+          <a class="btn ghost strong" href="examples.html">View examples</a>
+          <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
 
-  </section>
+        <div class="hero-pills">
+          <span class="pill live">watch / on change</span>
+          <span class="pill">defer</span>
+          <span class="pill">entity / extend</span>
+          <span class="pill ghost">test blocks</span>
+        </div>
 
-  <footer>
-    MKS language project
-  </footer>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-label">Runtime</span>
+            <strong>Mark-sweep</strong>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-label">Model</span>
+            <strong>Reactive core</strong>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-label">Style</span>
+            <strong>Arrow syntax</strong>
+          </div>
+        </div>
+      </div>
 
-</div>
+      <div class="hero-visual reveal-up">
+        <div class="signal-shell tilt-card">
+          <div class="signal-head">
+            <div class="term-dots"><span></span><span></span><span></span></div>
+            <div class="signal-path">/runtime/observe.mks</div>
+            <div class="signal-badge">LIVE</div>
+          </div>
 
+          <div class="signal-main">
+            <div class="signal-sidebar">
+              <div class="side-chip active">heap</div>
+              <div class="side-chip">watchers</div>
+              <div class="side-chip">events</div>
+              <div class="side-chip">module cache</div>
+            </div>
+
+            <div class="signal-content">
+              <div class="terminal-core" data-terminal>
+                <div class="term-line"><span class="prompt">$</span> mks run observe.mks</div>
+                <div class="term-line">lexer... <span class="green">ok</span></div>
+                <div class="term-line">parser... <span class="green">ok</span></div>
+                <div class="term-line">attach watch x ... <span class="green">ok</span></div>
+                <div class="term-line">gc pass #12 ... <span class="accent">6 freed</span></div>
+                <div class="term-line">event -> <span class="accent">"x changed 2"</span></div>
+              </div>
+
+              <div class="signal-grid">
+                <div class="signal-card pulse-card-ish">
+                  <span class="mini-label">Roots</span>
+                  <strong>03</strong>
+                  <small>env / stack / module</small>
+                </div>
+                <div class="signal-card pulse-card-ish">
+                  <span class="mini-label">Freed</span>
+                  <strong>256 B</strong>
+                  <small>last sweep</small>
+                </div>
+                <div class="signal-card pulse-card-ish">
+                  <span class="mini-label">Watchers</span>
+                  <strong>01</strong>
+                  <small>active bindings</small>
+                </div>
+                <div class="signal-card pulse-card-ish">
+                  <span class="mini-label">Latency</span>
+                  <strong>38 ms</strong>
+                  <small>demo execution</small>
+                </div>
+              </div>
+
+              <div class="runtime-stack" aria-hidden="true">
+                <div class="stack-layer layer-heap">
+                  <span>heap</span>
+                  <b></b><b></b><b></b>
+                </div>
+                <div class="stack-layer layer-ast">
+                  <span>ast</span>
+                  <b></b><b></b><b></b><b></b>
+                </div>
+                <div class="stack-layer layer-gc">
+                  <span>gc</span>
+                  <b></b><b></b>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scanline"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="status-rail reveal-up">
+      <div class="status-track">
+        <span>Reactive built-ins</span>
+        <span>Visible GC</span>
+        <span>Deterministic modules</span>
+        <span>Arrow blocks</span>
+        <span>Defer</span>
+        <span>Entity / Extend</span>
+        <span>Readable runtime</span>
+        <span>Experimental</span>
+        <span>Reactive built-ins</span>
+        <span>Visible GC</span>
+        <span>Deterministic modules</span>
+        <span>Arrow blocks</span>
+      </div>
+    </section>
+
+    <section class="section telemetry-strip reveal-up">
+      <div class="telemetry-card tilt-card">
+        <span class="telemetry-label">Lexer</span>
+        <strong>tokens stable</strong>
+        <div class="telemetry-meter"><span style="--w:82%"></span></div>
+      </div>
+      <div class="telemetry-card tilt-card">
+        <span class="telemetry-label">Parser</span>
+        <strong>AST visible</strong>
+        <div class="telemetry-meter"><span style="--w:74%"></span></div>
+      </div>
+      <div class="telemetry-card tilt-card">
+        <span class="telemetry-label">Runtime</span>
+        <strong>errors readable</strong>
+        <div class="telemetry-meter"><span style="--w:68%"></span></div>
+      </div>
+      <div class="telemetry-card tilt-card">
+        <span class="telemetry-label">GC</span>
+        <strong>sweep tracked</strong>
+        <div class="telemetry-meter"><span style="--w:76%"></span></div>
+      </div>
+    </section>
+
+    <section class="section lab-preview">
+      <div class="lab-copy reveal-up">
+        <p class="eyebrow">Playground</p>
+        <h2>Watch GC and AST move instead of guessing.</h2>
+        <p class="sub">
+          A hands-on visual layer for heap objects, roots, mark/sweep passes, and the syntax tree
+          behind a small MKS snippet.
+        </p>
+        <a class="btn" href="playground.html">Launch playground</a>
+      </div>
+
+      <div class="lab-stage reveal-up tilt-card" aria-hidden="true">
+        <div class="lab-cube">
+          <span class="cube-face face-a">GC</span>
+          <span class="cube-face face-b">AST</span>
+          <span class="cube-face face-c">RUN</span>
+        </div>
+        <div class="lab-nodes">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section feature-band">
+      <div class="feature-intro reveal-up">
+        <p class="eyebrow">Why MKS</p>
+        <h2>Low mystery. High visibility.</h2>
+        <p class="sub">
+          The whole pitch is simple: if the language has power, it should also have shape.
+          You should be able to reason about what the runtime is doing.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card reveal-up tilt-card">
+          <div class="feature-icon">GC</div>
+          <h3>Transparent memory model</h3>
+          <p>
+            Mark/sweep is not a black box. The runtime is presented like a system you can observe,
+            not a magic trick that quietly eats objects behind the curtain.
+          </p>
+          <div class="feature-line"></div>
+        </article>
+
+        <article class="feature-card reveal-up tilt-card">
+          <div class="feature-icon">RX</div>
+          <h3>Reactive kernel</h3>
+          <p>
+            <code>watch</code> and <code>on change</code> are built into the language surface,
+            so reactive behavior feels native instead of bolted on with framework glue.
+          </p>
+          <div class="feature-line"></div>
+        </article>
+
+        <article class="feature-card reveal-up tilt-card">
+          <div class="feature-icon">→</div>
+          <h3>Sharp block syntax</h3>
+          <p>
+            Arrow blocks give the language a distinct silhouette. Control flow stays compact,
+            readable, and weird in a good way.
+          </p>
+          <div class="feature-line"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section showcase-grid">
+      <div class="panel code-panel reveal-up">
+        <div class="panel-top">
+          <div>
+            <p class="eyebrow">Featured snippet</p>
+            <h3>Watch + defer</h3>
+          </div>
+          <span class="code-chip">runtime hooks</span>
+        </div>
+
+        <div class="code-block deluxe">
+          <button class="copy-btn">Copy</button>
+<pre><code>watch x;
+on change x -> Writeln("x changed", x); <-
+
+defer -> Writeln("closing"); <-
+
+var x =: 1;
+x =: 2;</code></pre>
+        </div>
+
+        <div class="mini-output deluxe-output">
+          <p class="label">Output</p>
+<pre><code>x changed 2
+closing</code></pre>
+        </div>
+      </div>
+
+      <div class="stack-col">
+        <div class="stack-card reveal-up tilt-card">
+          <p class="eyebrow">Language feel</p>
+          <h3>Not trying to be generic.</h3>
+          <p>
+            MKS gets stronger when it leans into its own identity: runtime visibility,
+            reactive primitives, compact syntax, and system-flavored semantics.
+          </p>
+        </div>
+
+        <div class="stack-card reveal-up tilt-card">
+          <p class="eyebrow">Design goal</p>
+          <h3>Readable power.</h3>
+          <p>
+            Useful features are great. Useful features that still look understandable
+            on the page are better.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pulse-section">
+      <div class="section-head reveal-up">
+        <h2>Current pulse</h2>
+        <p class="sub">A fast read on what feels alive right now.</p>
+      </div>
+
+      <div class="pulse-grid">
+        <div class="pulse-tile reveal-up tilt-card">
+          <span class="tile-label">Modules</span>
+          <strong>Cache pinned</strong>
+          <small>stable loading direction</small>
+        </div>
+        <div class="pulse-tile reveal-up tilt-card">
+          <span class="tile-label">GC</span>
+          <strong>Mark-sweep tuned</strong>
+          <small>inspectable passes</small>
+        </div>
+        <div class="pulse-tile reveal-up tilt-card">
+          <span class="tile-label">Runtime</span>
+          <strong>No known leaks</strong>
+          <small>current snapshot</small>
+        </div>
+        <div class="pulse-tile reveal-up tilt-card">
+          <span class="tile-label">Status</span>
+          <strong>Experimental</strong>
+          <small>fast-moving surface</small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/home.js?v=20260414-4"></script>
 </body>
 </html>

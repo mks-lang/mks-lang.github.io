@@ -1,0 +1,55 @@
+{
+  "hero": {
+    "eyebrow": "Changelog",
+    "title": "Shipping log",
+    "subtitle": "What changed, what landed, and what moved the language forward.",
+    "chips": [
+      { "text": "runtime", "variant": "live" },
+      { "text": "docs", "variant": "default" },
+      { "text": "tooling", "variant": "ghost" }
+    ]
+  },
+  "stats": [
+    { "label": "Latest", "value": "2026-04-14" },
+    { "label": "Track", "value": "Runtime + site" },
+    { "label": "Mode", "value": "Experimental" }
+  ],
+  "releases": [
+    {
+      "date": "2026-04-14",
+      "title": "GC playground",
+      "tag": "runtime",
+      "status": "latest",
+      "summary": "Standalone GC visualizer with sweep animation, default light theme, and errors with inline highlighting.",
+      "items": [
+        "interactive mark/sweep visualizer",
+        "inline error highlights",
+        "clearer runtime diagnostics"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "title": "Docs cleanup",
+      "tag": "docs",
+      "status": "shipped",
+      "summary": "Docs reorganized into concise examples, with stdlib and contribution guidance added.",
+      "items": [
+        "reference examples tightened",
+        "stdlib notes expanded",
+        "contribution path clarified"
+      ]
+    },
+    {
+      "date": "2026-04-12",
+      "title": "Roadmap polish",
+      "tag": "site",
+      "status": "shipped",
+      "summary": "Roadmap page got sharper cards, simplified content, and a clearer path from current work to future compiler ideas.",
+      "items": [
+        "roadmap structure simplified",
+        "progress cards updated",
+        "future track made easier to scan"
+      ]
+    }
+  ]
+}

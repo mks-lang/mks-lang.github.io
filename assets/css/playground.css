@@ -1,0 +1,220 @@
+.play-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 34px 0 8px;
+}
+
+.play-hero::before {
+  content: "";
+  position: absolute;
+  inset: 24px 0 auto;
+  height: 360px;
+  pointer-events: none;
+  opacity: 0.24;
+  background:
+    radial-gradient(circle at 22% 24%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 36%),
+    radial-gradient(circle at 72% 18%, color-mix(in srgb, #ff7bba 20%, transparent), transparent 34%),
+    radial-gradient(circle at 60% 70%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 38%);
+  filter: blur(28px);
+}
+
+.play-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 22px;
+  align-items: end;
+}
+
+.play-copy h1 {
+  max-width: 860px;
+  margin: 0 0 12px;
+  font-size: clamp(38px, 6vw, 72px);
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.play-copy .sub {
+  max-width: 68ch;
+  font-size: 17px;
+  line-height: 1.72;
+}
+
+.play-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.play-status {
+  display: grid;
+  gap: 8px;
+}
+
+.play-status strong {
+  font-size: 30px;
+}
+
+.play-status span {
+  color: var(--muted);
+}
+
+.playground-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+  gap: 16px;
+}
+
+.editor-panel,
+.log-panel {
+  align-self: start;
+}
+
+.heap-panel,
+.ast-panel {
+  min-height: 430px;
+}
+
+.panel-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+
+.panel-top h2 {
+  margin: 0;
+}
+
+.play-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--panel-2) 80%, transparent);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.heap-canvas {
+  width: 100%;
+  height: 340px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 28% 18%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 30%),
+    color-mix(in srgb, var(--panel-2) 86%, transparent);
+}
+
+.ast-tree {
+  position: relative;
+  min-height: 340px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel-2) 86%, transparent);
+  overflow: hidden;
+}
+
+.ast-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ast-node {
+  position: relative;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  transition: transform 180ms ease, color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.ast-node.active {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+  transform: translateY(-3px);
+}
+
+.ast-node.sweep {
+  border-color: color-mix(in srgb, #ff7bba 42%, var(--border));
+}
+
+.play-log {
+  min-height: 250px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel-2) 86%, transparent);
+  font-family: var(--font-mono);
+  color: var(--muted);
+  overflow: auto;
+}
+
+.log-line {
+  line-height: 1.8;
+  animation: logIn 220ms ease both;
+}
+
+.log-line span {
+  color: var(--accent);
+}
+
+@keyframes logIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .play-hero-inner,
+  .playground-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .play-status {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .play-copy h1 {
+    font-size: 40px;
+  }
+
+  .play-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .heap-canvas,
+  .ast-tree {
+    height: 300px;
+    min-height: 300px;
+  }
+
+  .panel-top {
+    display: grid;
+  }
+}

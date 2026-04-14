@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-page="docs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MKS Docs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/docs.css">
+</head>
+<body data-theme="dark">
+  <canvas class="particles"></canvas>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="logo" href="index.html"><span class="logo-mark"></span> MKS</a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="examples.html">Examples</a>
+        <a href="docs.html">Docs</a>
+        <a href="playground.html">Playground</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="changelog.html">Changelog</a>
+        <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub ↗</a>
+      </div>
+
+      <div class="nav-mobile">
+        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false">
+          <span class="burger-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
+
+      <div class="mobile-menu">
+        <a href="index.html">Home</a>
+        <a href="examples.html">Examples</a>
+        <a href="docs.html">Docs</a>
+        <a href="playground.html">Playground</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="changelog.html">Changelog</a>
+        <a href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub ↗</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="section sidebar-layout">
+    <aside class="sidebar" data-docs-sidebar aria-label="Docs navigation"></aside>
+
+    <div class="docs-body" data-docs-body>
+      <section class="panel glimmer docs-loading">Loading docs...</section>
+    </div>
+  </main>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/docs.js"></script>
+  <script src="assets/js/docs-page.js?v=20260414-3"></script>
+</body>
+</html>

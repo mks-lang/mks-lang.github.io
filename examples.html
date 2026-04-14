@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en" data-page="examples">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MKS Examples</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/examples.css?v=20260414-2">
+</head>
+<body data-theme="dark">
+  <canvas class="particles"></canvas>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-mark"></span> MKS</a>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="examples.html">Examples</a>
+      <a href="docs.html">Docs</a>
+      <a href="playground.html">Playground</a>
+      <a href="roadmap.html">Roadmap</a>
+      <a href="changelog.html">Changelog</a>
+      <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </div>
+
+    <div class="nav-mobile">
+      <button class="burger" type="button" aria-label="Open menu" aria-expanded="false">
+        <span class="burger-lines">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+    </div>
+
+    <div class="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="examples.html">Examples</a>
+      <a href="docs.html">Docs</a>
+      <a href="playground.html">Playground</a>
+      <a href="roadmap.html">Roadmap</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+  <main>
+    <section class="examples-hero">
+      <div class="examples-hero-bg">
+        <div class="hero-orb hero-orb-a"></div>
+        <div class="hero-orb hero-orb-b"></div>
+      </div>
+
+      <div class="section examples-wrap">
+        <header class="examples-head panel glass glimmer">
+          <div class="examples-copy">
+            <p class="eyebrow">Examples</p>
+            <h1>MKS by vibe and by feature.</h1>
+            <p class="sub">
+              Real syntax slices for loops, swap, tests, entities, extend, modules,
+              watch/on change, defer, and std helpers.
+            </p>
+
+            <div class="examples-pills">
+              <span class="tag live">repeat</span>
+              <span class="tag">swap</span>
+              <span class="tag">arrays</span>
+              <span class="tag">entity</span>
+              <span class="tag">extend</span>
+              <span class="tag">watch / defer</span>
+              <span class="tag">golden tests</span>
+              <span class="tag">stdlib</span>
+            </div>
+          </div>
+
+          <div class="examples-terminal">
+            <div class="term-header">
+              <div class="term-dots"><span></span><span></span><span></span></div>
+              <span class="term-path">/examples/showcase.mks</span>
+            </div>
+            <div class="term-body" data-examples-terminal>
+              <div class="term-line"><span class="prompt">$</span> mks examples/showcase.mks</div>
+              <div class="term-line">loading std/math... <span class="green">ok</span></div>
+              <div class="term-line">binding watcher... <span class="green">ok</span></div>
+              <div class="term-line">running tests... <span class="green">pass</span></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="examples-toolbar">
+          <div class="toolbar-left">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="basics">Basics</button>
+            <button class="filter-chip" data-filter="control">Control flow</button>
+            <button class="filter-chip" data-filter="runtime">Runtime</button>
+            <button class="filter-chip" data-filter="oop">Entity / Extend</button>
+            <button class="filter-chip" data-filter="modules">Modules</button>
+            <button class="filter-chip" data-filter="repo">Repo workflow</button>
+          </div>
+        </div>
+
+        <section class="featured-grid">
+          <article class="featured-card panel" data-kind="runtime">
+            <div class="feature-top">
+              <div>
+                <p class="eyebrow">Featured</p>
+                <h2>Watch + defer + std/math</h2>
+              </div>
+              <span class="tag live">runtime</span>
+            </div>
+
+            <p class="sub">
+              Small but very “MKS”: module import, watched state, deferred cleanup,
+              and a visible flow of events.
+            </p>
+
+            <div class="code-block big">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/math";
+
+var x =: 10;
+watch x;
+
+on change x ->
+  Writeln("x changed to", x);
+<-
+
+defer ->
+  Writeln("leaving scope");
+<-
+
+x =: square(x);
+Writeln("result:", x);</code></pre>
+            </div>
+          </article>
+
+          <article class="featured-card panel" data-kind="oop">
+            <div class="feature-top">
+              <div>
+                <p class="eyebrow">Featured</p>
+                <h2>Entity + extend array</h2>
+              </div>
+              <span class="tag">object model</span>
+            </div>
+
+            <p class="sub">
+              Lightweight entities plus built-in extension is one of the coolest parts
+              of the language surface.
+            </p>
+
+            <div class="code-block big">
+              <button class="copy-btn">Copy</button>
+<pre><code>entity User(name) ->
+  init ->
+    self.name =: name;
+  <-
+
+  method hi() ->
+    Writeln("Hi", self.name);
+  <-
+<-
+
+extend array ->
+  method sum() ->
+    var s =: 0;
+    var i =: 0;
+
+    while (i < self.len()) ->
+      s =: s + self[i];
+      i =: i + 1;
+    <-
+
+    return s;
+  <-
+<-
+
+var u =: User("Ann");
+u.hi();
+Writeln([1,2,3].sum());</code></pre>
+            </div>
+          </article>
+        </section>
+
+        <section class="repo-strip panel glass glimmer">
+          <div>
+            <p class="eyebrow">Repo-backed map</p>
+            <h2>Examples line up with the interpreter tree.</h2>
+            <p class="sub">
+              The source repo is split across Lexer, Parser, Eval, Runtime, env, GC, std,
+              examples, docs, tests, and tools. These examples mirror those surfaces.
+            </p>
+          </div>
+          <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">Open repository</a>
+        </section>
+
+        <section class="example-grid">
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Basics</span>
+              <h3 class="example-title">Hello world</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>Writeln("hello, mks");</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Arrays</span>
+              <h3 class="example-title">Index read + write</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var xs =: [1, 2, 3];
+
+Writeln(xs[0]);
+xs[1] =: 20;
+
+Writeln(xs[1]);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Basics</span>
+              <h3 class="example-title">Variables + swap</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var a =: 1;
+var b =: 2;
+
+a <--> b;
+
+Writeln(a);
+Writeln(b);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Functions</span>
+              <h3 class="example-title">Recursion</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>fnc fact(n) ->
+  if (n <= 1) ->
+    return 1;
+  <-
+
+  return n * fact(n - 1);
+<-
+
+Writeln(fact(5));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="control">
+            <div class="card-top">
+              <span class="tag">Control</span>
+              <h3 class="example-title">if / else</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var n =: 8;
+
+if (n ?= 8) ->
+  Writeln("ok");
+<- else ->
+  Writeln("no");
+<-</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="control">
+            <div class="card-top">
+              <span class="tag">Control</span>
+              <h3 class="example-title">repeat</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>repeat 3 ->
+  Writeln("ping");
+<-
+
+repeat i in 3 ->
+  Writeln(i);
+<-</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="control">
+            <div class="card-top">
+              <span class="tag">Control</span>
+              <h3 class="example-title">for loop</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>for (var i =: 0; i < 3; i =: i + 1) ->
+  Writeln(i);
+<-</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Functions</span>
+              <h3 class="example-title">Function + call</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>fnc add(a, b) ->
+  return a + b;
+<-
+
+Writeln(add(2, 3));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="runtime">
+            <div class="card-top">
+              <span class="tag">Runtime</span>
+              <h3 class="example-title">watch / on change</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var x =: 1;
+watch x;
+
+on change x ->
+  Writeln("x changed to", x);
+<-
+
+x =: 7;</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="runtime">
+            <div class="card-top">
+              <span class="tag">GC</span>
+              <h3 class="example-title">Heap pressure sketch</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var root =: [1, 2, 3];
+var temp =: [4, 5, 6];
+
+temp =: null;
+
+Writeln(root[0]);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="runtime">
+            <div class="card-top">
+              <span class="tag">Runtime</span>
+              <h3 class="example-title">defer</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>defer ->
+  Writeln("closing scope");
+<-
+
+Writeln("work...");
+Writeln("done");</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="oop">
+            <div class="card-top">
+              <span class="tag">Entity</span>
+              <h3 class="example-title">Simple entity</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>entity Point(x, y) ->
+  method len2() ->
+    return x * x + y * y;
+  <-
+<-
+
+var p =: Point(2, 3);
+Writeln(p.len2());</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="oop">
+            <div class="card-top">
+              <span class="tag">Extend</span>
+              <h3 class="example-title">extend array</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>extend array ->
+  method sum() ->
+    var s =: 0;
+    var i =: 0;
+
+    while (i < self.len()) ->
+      s =: s + self[i];
+      i =: i + 1;
+    <-
+
+    return s;
+  <-
+<-
+
+Writeln([1,2,3].sum());</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="modules">
+            <div class="card-top">
+              <span class="tag">Modules</span>
+              <h3 class="example-title">using std/math</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/math";
+
+Writeln(abs(-5));
+Writeln(square(4));
+Writeln(min(10, 3));
+Writeln(max(10, 3));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="modules">
+            <div class="card-top">
+              <span class="tag">Modules</span>
+              <h3 class="example-title">Local module import</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>// math.mks
+export fnc add(a, b) ->
+  return a + b;
+<-
+
+// main.mks
+using "math" as m;
+Writeln(m.add(2, 2));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="runtime">
+            <div class="card-top">
+              <span class="tag">Tests</span>
+              <h3 class="example-title">test / expect</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>test "math add" ->
+  expect(1 + 1 ?= 2);
+<-</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="control">
+            <div class="card-top">
+              <span class="tag">Control</span>
+              <h3 class="example-title">break / continue</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>for (var i =: 0; i < 10; i =: i + 1) ->
+  if (i ?= 2) ->
+    continue;
+  <-
+
+  if (i ?= 5) ->
+    break;
+  <-
+
+  Writeln(i);
+<-</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Strings</span>
+              <h3 class="example-title">String output</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var name =: "MKS";
+var event =: "x changed";
+
+Writeln("hello", name);
+Writeln(event);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="modules">
+            <div class="card-top">
+              <span class="tag">Resolver</span>
+              <h3 class="example-title">Import lookup order</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "path/to/file";
+using "std/math";
+
+// lookup:
+// current file dir
+// current working dir
+// installed std path</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="repo">
+            <div class="card-top">
+              <span class="tag">CLI</span>
+              <h3 class="example-title">Run + inspect</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>mks examples/showcase.mks
+mks --repl
+mks --version
+mks --help</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="repo">
+            <div class="card-top">
+              <span class="tag">Tests</span>
+              <h3 class="example-title">Golden tests</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>test "math add" ->
+  expect(1 + 1 ?= 2);
+<-
+
+// repository root
+// ./tests.sh</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="repo">
+            <div class="card-top">
+              <span class="tag">Repo</span>
+              <h3 class="example-title">Interpreter layout</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>Lexer/   -> tokens
+Parser/  -> AST
+Eval/    -> execution
+Runtime/ -> values/errors
+GC/      -> mark-sweep
+std/     -> std/math</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="repo">
+            <div class="card-top">
+              <span class="tag">Build</span>
+              <h3 class="example-title">CMake build</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>cmake -S . -B build
+cmake --build build
+
+./build/mks examples/showcase.mks
+./tests.sh</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="repo">
+            <div class="card-top">
+              <span class="tag">Docs</span>
+              <h3 class="example-title">Repo docs files</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>docs/REFERENCE.md
+docs/USER_GUIDE.md
+README.md
+
+// keep website docs aligned
+// with repo behavior</code></pre>
+            </div>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/examples.js?v=20260414-2"></script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+.sidebar-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  position: relative;
+}
+
+.sidebar-layout::before {
+  content: "";
+  position: fixed;
+  inset: 70px 0 auto 0;
+  height: 360px;
+  pointer-events: none;
+  opacity: 0.22;
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 24%, transparent), transparent),
+    repeating-linear-gradient(90deg, transparent 0 56px, rgba(255,255,255,0.08) 57px 58px);
+  transform: skewY(-7deg);
+  animation: docsScan 11s linear infinite;
+}
+
+.sidebar {
+  position: fixed;
+  left: max(24px, calc((100vw - 1200px) / 2 + 24px));
+  top: 76px;
+  width: 260px;
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel-2) 88%, transparent);
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  --indicator-y: 14px;
+  --indicator-height: 36px;
+  --indicator-opacity: 0;
+  --sidebar-shift: 0px;
+  transform: translateY(var(--sidebar-shift));
+  transition: transform 180ms ease;
+}
+
+.sidebar::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 0;
+  height: var(--indicator-height);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  opacity: var(--indicator-opacity);
+  pointer-events: none;
+  transform: translateY(var(--indicator-y));
+  transition:
+    transform 260ms cubic-bezier(.2,.8,.2,1),
+    height 260ms cubic-bezier(.2,.8,.2,1),
+    opacity 160ms ease;
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
+}
+
+.sidebar a {
+  position: relative;
+  z-index: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.sidebar a:hover {
+  color: var(--text);
+  transform: translateX(3px);
+}
+
+.sidebar a.active {
+  color: var(--text);
+}
+
+.docs-body {
+  grid-column: 2;
+  display: grid;
+  gap: 18px;
+}
+
+.docs-body > .panel {
+  scroll-margin-top: 92px;
+}
+
+.docs-hero h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 6px;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.docs-hero {
+  position: relative;
+  min-height: 360px;
+  display: grid;
+  align-content: center;
+}
+
+.docs-hero .eyebrow,
+.docs-hero .sub,
+.docs-hero-pills,
+.docs-mini-terminal {
+  position: relative;
+  z-index: 1;
+}
+
+.docs-hero-scene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.9;
+}
+
+.docs-hero-scene::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent-2) 18%, transparent);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  animation: docsGrid 14s linear infinite;
+}
+
+.docs-hero-scene span {
+  position: absolute;
+  height: 2px;
+  left: -10%;
+  right: -10%;
+  background: linear-gradient(90deg, transparent, var(--accent), #ff7bba, var(--accent-2), transparent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.docs-hero-scene span:nth-child(1) {
+  top: 24%;
+  transform: rotate(-4deg);
+  animation: docsBeam 4.6s ease-in-out infinite;
+}
+
+.docs-hero-scene span:nth-child(2) {
+  top: 58%;
+  transform: rotate(5deg);
+  animation: docsBeam 5.4s ease-in-out infinite reverse;
+}
+
+.docs-hero-scene span:nth-child(3) {
+  top: 78%;
+  transform: rotate(-2deg);
+  animation: docsBeam 6s ease-in-out infinite;
+}
+
+.docs-hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--panel-2) 78%, transparent);
+}
+
+.tag.live {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.tabs {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+  margin-bottom: 12px;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 2px;
+}
+
+.tab.active {
+  color: var(--text);
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--panel-2) 80%, transparent);
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+.docs-mini-terminal {
+  width: min(100%, 420px);
+  margin-top: 20px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--panel-2) 82%, transparent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  box-shadow: inset 0 0 26px color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.docs-mini-terminal div {
+  line-height: 1.8;
+  animation: docsLineIn 420ms ease both;
+}
+
+.docs-mini-terminal div:nth-child(2) {
+  animation-delay: 160ms;
+}
+
+.docs-mini-terminal div:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+.docs-mini-terminal span {
+  color: var(--accent);
+}
+
+[data-docs-card] {
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+[data-docs-card]::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--accent), #ff7bba, transparent);
+  opacity: 0.58;
+}
+
+[data-docs-card]:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  box-shadow: 0 22px 54px rgba(0,0,0,0.38);
+}
+
+.code-block {
+  isolation: isolate;
+}
+
+.code-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.07), transparent 58%);
+  transform: translateX(-120%);
+  animation: docsCodeSweep 6.8s ease-in-out infinite;
+}
+
+.note {
+  margin-top: 12px;
+}
+
+@media (max-width: 960px) {
+  .sidebar-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    transform: none;
+    max-height: none;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar a {
+    flex: 0 0 auto;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .sidebar::before {
+    display: none;
+  }
+
+  .sidebar a.active {
+    border-color: var(--border);
+    background: color-mix(in srgb, var(--panel) 72%, transparent);
+  }
+
+  .sidebar a:hover {
+    transform: none;
+  }
+
+  .docs-body {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .docs-hero h1 {
+    font-size: 34px;
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@keyframes docsScan {
+  from {
+    background-position: -180px 0, 0 0;
+  }
+  to {
+    background-position: 180px 0, 116px 0;
+  }
+}
+
+@keyframes docsGrid {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 84px 84px, 84px 84px;
+  }
+}
+
+@keyframes docsBeam {
+  0%, 100% {
+    opacity: 0.25;
+    clip-path: inset(0 72% 0 0);
+  }
+  48% {
+    opacity: 0.85;
+    clip-path: inset(0 8% 0 12%);
+  }
+  76% {
+    opacity: 0.45;
+    clip-path: inset(0 0 0 74%);
+  }
+}
+
+@keyframes docsLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes docsCodeSweep {
+  0%, 62% {
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-layout::before,
+  .docs-hero-scene::before,
+  .docs-hero-scene span,
+  .docs-mini-terminal div,
+  .code-block::after {
+    animation: none;
+  }
+}
