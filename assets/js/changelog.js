@@ -3,7 +3,7 @@
   if (!root) return;
 
   try {
-    const response = await fetch('assets/data/changelog.json?v=20260414-2', { cache: 'no-store' });
+    const response = await fetch('assets/data/changelog.json?v=20260415-1', { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`Failed to fetch changelog.json: ${response.status} ${response.statusText}`);
     }
@@ -81,11 +81,14 @@ function renderFilters(releases) {
   return `
     <section class="section change-filter-shell">
       <div class="change-filters panel glass" data-change-filters>
-        ${tags.map((tag, index) => `
-          <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}">
-            ${escapeHtml(tag)}
-          </button>
-        `).join('')}
+        <input class="change-search" type="search" placeholder="Search changelog..." aria-label="Search changelog" data-change-search>
+        <div class="change-filter-list">
+          ${tags.map((tag, index) => `
+            <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}">
+              ${escapeHtml(tag)}
+            </button>
+          `).join('')}
+        </div>
       </div>
     </section>
   `;
@@ -125,22 +128,38 @@ function renderReleases(releases) {
 function initFilters() {
   const filters = document.querySelector('[data-change-filters]');
   const cards = Array.from(document.querySelectorAll('.change-card'));
+  const search = document.querySelector('[data-change-search]');
   if (!filters || !cards.length) return;
+
+  let activeFilter = 'all';
+  let query = '';
+
+  function applyFilters() {
+    cards.forEach((card) => {
+      const matchesFilter = activeFilter === 'all' || card.dataset.tag === activeFilter;
+      const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
+      card.hidden = !(matchesFilter && matchesQuery);
+    });
+  }
 
   filters.addEventListener('click', (event) => {
     const button = event.target.closest('.change-filter');
     if (!button) return;
 
-    const filter = button.dataset.filter;
+    activeFilter = button.dataset.filter;
     filters.querySelectorAll('.change-filter').forEach((item) => {
       item.classList.toggle('active', item === button);
     });
 
-    cards.forEach((card) => {
-      const visible = filter === 'all' || card.dataset.tag === filter;
-      card.hidden = !visible;
-    });
+    applyFilters();
   });
+
+  if (search) {
+    search.addEventListener('input', () => {
+      query = search.value.trim().toLowerCase();
+      applyFilters();
+    });
+  }
 }
 
 function initChangelogFx() {

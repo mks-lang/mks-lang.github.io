@@ -1,25 +1,61 @@
 {
   "hero": {
     "eyebrow": "Changelog",
-    "title": "Shipping log",
-    "subtitle": "What changed, what landed, and what moved the language forward.",
+    "title": "What changed in MKS.",
+    "subtitle": "A concise log for site, docs, examples, standard library notes, and language-facing updates.",
     "chips": [
-      { "text": "runtime", "variant": "live" },
-      { "text": "docs", "variant": "default" },
-      { "text": "tooling", "variant": "ghost" }
+      {
+        "text": "latest",
+        "variant": "live"
+      },
+      {
+        "text": "docs",
+        "variant": "default"
+      },
+      {
+        "text": "examples",
+        "variant": "default"
+      },
+      {
+        "text": "site",
+        "variant": "ghost"
+      }
     ]
   },
   "stats": [
-    { "label": "Latest", "value": "2026-04-14" },
-    { "label": "Track", "value": "Runtime + site" },
-    { "label": "Mode", "value": "Experimental" }
+    {
+      "label": "Latest",
+      "value": "2026-04-15"
+    },
+    {
+      "label": "Focus",
+      "value": "Docs + examples"
+    },
+    {
+      "label": "Mode",
+      "value": "Experimental"
+    }
   ],
   "releases": [
+    {
+      "date": "2026-04-15",
+      "title": "Docs and examples redesign",
+      "tag": "site",
+      "status": "latest",
+      "summary": "Major website pass focused on practical English docs, richer example browsing, standard library coverage, and a cleaner roadmap.",
+      "items": [
+        "Docs reshaped into 50 practical sections with cookbook-style explanations and stdlib usage for std/math, std/array, std/string, std/bool, and std/time.",
+        "Examples page redesigned as a searchable snippet browser with 48 cards, 2 featured examples, stronger filtering, and no unsupported alias-import patterns.",
+        "Roadmap rewritten around useful next steps: learning surface, stdlib UX, playground workflow, tooling, and runtime strength.",
+        "Changelog redesigned into a cleaner release feed with search, filters, stats, and stronger visual hierarchy.",
+        "Russian user-facing copy removed; public site content is English-first."
+      ]
+    },
     {
       "date": "2026-04-14",
       "title": "GC playground",
       "tag": "runtime",
-      "status": "latest",
+      "status": "shipped",
       "summary": "Standalone GC visualizer with sweep animation, default light theme, and errors with inline highlighting.",
       "items": [
         "interactive mark/sweep visualizer",
