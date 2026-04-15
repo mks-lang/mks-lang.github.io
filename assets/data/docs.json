@@ -1478,6 +1478,50 @@
       ]
     },
     {
+      "id": "read-input",
+      "nav": "Read input",
+      "title": "Read input",
+      "description": "<code>Read</code> is a native input helper registered by the interpreter for files and the REPL.",
+      "points": [
+        "<code>Read()</code> reads one line from stdin and returns it as a string without the trailing newline.",
+        "<code>Read(\"prompt\")</code> prints the prompt first, flushes stdout, then reads a line.",
+        "<code>Read(0)</code> reads a line but returns only the first whitespace-separated word.",
+        "If stdin is closed or no line can be read, current behavior returns an empty string."
+      ],
+      "source": "Checked against <code>main.c</code> in <code>mks-lang/MKS-interpreter</code>: native <code>Read</code> uses <code>fgets</code>, trims newline characters, supports string prompts, and has a <code>Read(0)</code> word mode.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var name =: Read(\"name: \");",
+            "Writeln(\"hello\", name);",
+            "",
+            "var line =: Read();",
+            "Writeln(\"line\", line);",
+            "",
+            "var first =: Read(0);",
+            "Writeln(\"first word\", first);"
+          ],
+          "note": "Use <code>Read(\"prompt\")</code> for interactive examples. Use <code>Read(0)</code> only when you intentionally want a single word."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "name = input(\"name: \")",
+            "print(\"hello\", name)",
+            "",
+            "line = input()",
+            "print(\"line\", line)",
+            "",
+            "first = input().split()[0]",
+            "print(\"first word\", first)"
+          ]
+        }
+      ]
+    },
+    {
       "id": "return-early",
       "nav": "Early return",
       "title": "Early return from if",
