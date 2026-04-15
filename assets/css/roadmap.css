@@ -587,6 +587,135 @@
   background: color-mix(in srgb, var(--panel-2) 82%, transparent);
 }
 
+/* 2026 redesign: make roadmap read like a product map, not a release poster. */
+.road-hero {
+  min-height: min(680px, calc(100vh - 70px));
+  isolation: isolate;
+}
+
+.road-hero::after {
+  content: "useful next";
+  position: absolute;
+  right: 4vw;
+  bottom: 6vh;
+  z-index: 1;
+  color: color-mix(in srgb, var(--muted) 18%, transparent);
+  font-family: var(--font-mono);
+  font-size: clamp(44px, 10vw, 132px);
+  font-weight: 800;
+  line-height: 0.8;
+  pointer-events: none;
+}
+
+.scan-grid {
+  opacity: 0.42;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.075) 1px, transparent 1px),
+    radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 28%),
+    radial-gradient(circle at 86% 12%, color-mix(in srgb, #ff7bba 12%, transparent), transparent 30%);
+}
+
+.road-copy h1 {
+  max-width: 900px;
+}
+
+.hero-panel {
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.045), transparent 30%),
+    radial-gradient(circle at 85% 18%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 32%),
+    color-mix(in srgb, var(--panel) 92%, transparent);
+}
+
+.metric-card {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--panel) 86%, transparent), color-mix(in srgb, var(--panel-2) 84%, transparent));
+}
+
+.road-rail {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent)),
+    repeating-linear-gradient(90deg, transparent 0 48px, rgba(255,255,255,0.045) 49px 50px);
+}
+
+.rail-node {
+  border: 1px solid transparent;
+}
+
+.rail-node:hover {
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
+}
+
+.stage-grid {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.stage-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 26%),
+    radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 32%),
+    color-mix(in srgb, var(--panel) 92%, transparent);
+}
+
+.stage-card::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), #ff7bba, transparent);
+  opacity: 0.58;
+}
+
+.stage-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  padding-left: 0;
+}
+
+.stage-list li {
+  position: relative;
+  padding: 8px 10px 8px 28px;
+  border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel-2) 38%, transparent);
+}
+
+.stage-list li::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 16px;
+  width: 7px;
+  height: 7px;
+  border-radius: 7px;
+  background: var(--accent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.timeline-shell {
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent));
+}
+
+.timeline-card {
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 26%),
+    color-mix(in srgb, var(--panel) 88%, transparent);
+}
+
+.signal-panel {
+  background:
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, #ff7bba 12%, transparent), transparent 32%),
+    linear-gradient(135deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent));
+}
+
 @keyframes gridDrift {
   from { background-position: 0 0, 0 0; }
   to { background-position: 116px 116px, 116px 116px; }

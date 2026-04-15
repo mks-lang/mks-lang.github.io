@@ -1,259 +1,383 @@
 {
   "hero": {
     "eyebrow": "Roadmap",
-    "title": "Path to the next real MKS.",
-    "subtitle": "Small, shippable steps. Less fake hype, more real language progress.",
+    "title": "From toy syntax to usable language.",
+    "subtitle": "A practical map: stabilize what exists, make examples runnable, grow stdlib, then improve tooling and runtime. No fake version theater.",
     "chips": [
-      { "text": "Now", "variant": "live" },
-      { "text": "Next", "variant": "default" },
-      { "text": "Later", "variant": "ghost" },
-      { "text": "Future", "variant": "ghost" }
+      {
+        "text": "Current language",
+        "variant": "live"
+      },
+      {
+        "text": "Stdlib next",
+        "variant": "default"
+      },
+      {
+        "text": "Tooling",
+        "variant": "default"
+      },
+      {
+        "text": "Runtime later",
+        "variant": "ghost"
+      }
     ]
   },
   "terminal": {
-    "path": "/roadmap/mks.next",
+    "path": "/roadmap/useful.next",
     "lines": [
-      "$ mks roadmap",
-      "syntax ............ active",
-      "entity polish ..... active",
-      "extend polish ..... active",
-      "packages .......... in development"
+      "$ mks roadmap --focus",
+      "docs cookbook .... active",
+      "stdlib examples .. active",
+      "import UX ........ next",
+      "playground presets next",
+      "runtime polish ... later"
     ]
   },
   "metrics": [
-    { "label": "Current front", "value": "Language polish" },
-    { "label": "Next push", "value": "Tooling" },
-    { "label": "Long game", "value": "Compiler + systems" }
+    {
+      "label": "Now",
+      "value": "Docs + examples"
+    },
+    {
+      "label": "Next",
+      "value": "Stdlib UX"
+    },
+    {
+      "label": "Later",
+      "value": "Tooling/runtime"
+    }
   ],
   "rail": [
-    { "phase": "Now", "title": "Stabilize the language", "state": "live" },
-    { "phase": "Next", "title": "Tooling & tests", "state": "next" },
-    { "phase": "Later", "title": "Stdlib & performance", "state": "later" },
-    { "phase": "Future", "title": "Compiler & systems", "state": "future" }
+    {
+      "phase": "01",
+      "title": "Make the language easy to learn",
+      "state": "live"
+    },
+    {
+      "phase": "02",
+      "title": "Make stdlib discoverable",
+      "state": "next"
+    },
+    {
+      "phase": "03",
+      "title": "Make tooling pleasant",
+      "state": "later"
+    },
+    {
+      "phase": "04",
+      "title": "Make runtime stronger",
+      "state": "future"
+    }
   ],
   "sections": [
     {
-      "id": "now",
+      "id": "learn",
       "eyebrow": "Now",
-      "title": "Current focus",
-      "subtitle": "The stuff that actually defines MKS right now.",
+      "title": "Learning surface",
+      "subtitle": "The website should teach real MKS with runnable examples before anything else.",
       "cards": [
         {
           "step": "01",
-          "phase": "Current",
-          "title": "Syntax stabilization",
+          "phase": "Active",
+          "title": "Cookbook docs",
           "status": "active",
           "state": "live",
-          "progress": 72,
-          "description": "Lock down the core syntax so MKS stops feeling like a moving draft.",
+          "progress": 78,
+          "description": "Turn reference snippets into practical recipes people can paste and modify.",
           "items": [
-            "finalize var, =:, -> <-",
-            "fix edge cases in control flow",
-            "operator consistency: ?=, !?, &&, ||, <-->"
+            "loop recipes with state placement",
+            "safe array helpers",
+            "watch/defer examples",
+            "module split examples"
           ]
         },
         {
           "step": "02",
-          "phase": "Current",
-          "title": "Entity polish",
+          "phase": "Active",
+          "title": "Examples expansion",
           "status": "active",
           "state": "live",
-          "progress": 64,
-          "description": "Make entities feel sharper, cleaner, and less fragile.",
+          "progress": 74,
+          "description": "Examples should cover the same behavior the interpreter tests cover.",
           "items": [
-            "clean init behavior",
-            "improve self handling",
-            "better method call consistency",
-            "clearer entity-related errors"
+            "arrays and strings",
+            "entities and extend",
+            "repeat/while/for",
+            "stdlib recipes"
           ]
         },
         {
           "step": "03",
-          "phase": "Current",
-          "title": "Extend polish",
+          "phase": "Active",
+          "title": "Truth labels",
           "status": "active",
           "state": "live",
-          "progress": 58,
-          "description": "Stabilize extend for built-ins and prepare a path for richer custom methods.",
+          "progress": 66,
+          "description": "Document what is tested, what is experimental, and what should not be relied on yet.",
           "items": [
-            "stabilize extend array",
-            "unify method naming",
-            "fix empty/null edge cases",
-            "prepare custom method system"
-          ]
-        },
-        {
-          "step": "04",
-          "phase": "Current",
-          "title": "Package system",
-          "status": "in development",
-          "state": "next",
-          "progress": 41,
-          "description": "Push imports and packages toward something real and usable.",
-          "items": [
-            "module resolver fixes",
-            "prevent double imports",
-            "module cache",
-            "better using UX"
+            "no unsupported alias examples",
+            "warn on thin docs",
+            "source-backed notes",
+            "experimental badges"
           ]
         }
       ]
     },
     {
-      "id": "next",
+      "id": "stdlib",
       "eyebrow": "Next",
-      "title": "Short-term steps",
-      "subtitle": "The next practical upgrades after the core is steadier.",
+      "title": "Standard library UX",
+      "subtitle": "Make stdlib feel like part of the language, not hidden files in the repo.",
       "cards": [
+        {
+          "step": "04",
+          "phase": "Next",
+          "title": "Stdlib explorer",
+          "status": "planned",
+          "state": "next",
+          "progress": 32,
+          "description": "A searchable page for std/math, std/array, std/string, std/bool, and std/time.",
+          "items": [
+            "function list",
+            "copyable examples",
+            "edge-case notes",
+            "source-backed signatures"
+          ]
+        },
         {
           "step": "05",
           "phase": "Next",
-          "title": "Full test system",
-          "status": "queued",
+          "title": "Array/string recipes",
+          "status": "planned",
           "state": "next",
-          "progress": 18,
-          "description": "Turn test / expect into a complete workflow.",
+          "progress": 28,
+          "description": "Practical examples for common data work.",
           "items": [
-            "CLI test runner",
-            "pass/fail output",
-            "grouped results",
-            "filter by file or suite"
+            "sum/avg/last",
+            "split/join/replace",
+            "safe empty handling",
+            "map/filter/reduce notes"
           ]
         },
         {
           "step": "06",
           "phase": "Next",
-          "title": "Formatter",
-          "status": "queued",
+          "title": "Import clarity",
+          "status": "planned",
           "state": "next",
-          "progress": 12,
-          "description": "Give MKS one official code style.",
+          "progress": 24,
+          "description": "Make module loading behavior obvious and avoid alias confusion until runtime supports it.",
           "items": [
-            "consistent indentation",
-            "arrow block formatting",
-            "entity / extend formatting",
-            "mks fmt command"
-          ]
-        },
-        {
-          "step": "07",
-          "phase": "Next",
-          "title": "Better diagnostics",
-          "status": "queued",
-          "state": "next",
-          "progress": 16,
-          "description": "Errors should point to the fix faster.",
-          "items": [
-            "clearer messages",
-            "better line highlights",
-            "helpful hints",
-            "import and resolver errors"
-          ]
-        },
-        {
-          "step": "08",
-          "phase": "Next",
-          "title": "REPL polish",
-          "status": "queued",
-          "state": "next",
-          "progress": 9,
-          "description": "Make iteration smoother.",
-          "items": [
-            "history support",
-            "multiline input",
-            "cleaner output",
-            "debug-friendly mode"
+            "current resolver rules",
+            "duplicate import behavior",
+            "local module pattern",
+            "clear warning for alias"
           ]
         }
       ]
     },
     {
-      "id": "later",
-      "eyebrow": "Later",
-      "title": "After that",
-      "subtitle": "Once the language and tooling stop wobbling.",
+      "id": "playground",
+      "eyebrow": "Next",
+      "title": "Interactive workflow",
+      "subtitle": "Move from reading examples to running and sharing them.",
       "cards": [
         {
-          "step": "09",
-          "phase": "Later",
-          "title": "Stdlib expansion",
-          "status": "planned",
-          "state": "future",
-          "progress": 8,
-          "description": "Grow beyond std/math.",
+          "step": "07",
+          "phase": "Next",
+          "title": "Open in Playground",
+          "status": "queued",
+          "state": "next",
+          "progress": 20,
+          "description": "Every example card should open directly in the playground.",
           "items": [
-            "std/strings",
-            "std/arrays",
-            "std/io",
-            "improve std/math"
+            "encode snippet in URL",
+            "preserve formatting",
+            "copy fallback",
+            "mobile-friendly action"
           ]
         },
         {
+          "step": "08",
+          "phase": "Next",
+          "title": "Playground presets",
+          "status": "queued",
+          "state": "next",
+          "progress": 18,
+          "description": "Preset menu for common examples.",
+          "items": [
+            "hello",
+            "arrays",
+            "loops",
+            "watch/defer",
+            "entity",
+            "stdlib"
+          ]
+        },
+        {
+          "step": "09",
+          "phase": "Next",
+          "title": "Visual trace mode",
+          "status": "idea",
+          "state": "future",
+          "progress": 10,
+          "description": "Explain simple snippets step by step without pretending to be the full interpreter.",
+          "items": [
+            "bind/update/read trace",
+            "stdout view",
+            "loop pass counter",
+            "clear limitations"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tooling",
+      "eyebrow": "Later",
+      "title": "Tooling and diagnostics",
+      "subtitle": "After docs and stdlib are understandable, make daily use smoother.",
+      "cards": [
+        {
           "step": "10",
           "phase": "Later",
-          "title": "Performance work",
+          "title": "Better errors",
           "status": "planned",
           "state": "future",
-          "progress": 6,
-          "description": "Make the runtime tighter.",
+          "progress": 14,
+          "description": "Parser/runtime errors should point to fixes faster.",
           "items": [
-            "evaluator optimizations",
-            "environment lookup speed",
-            "lower allocation pressure"
+            "missing semicolon hints",
+            "unclosed block hints",
+            "import errors",
+            "type mismatch notes"
           ]
         },
         {
           "step": "11",
           "phase": "Later",
-          "title": "Bytecode groundwork",
+          "title": "Formatter",
           "status": "planned",
           "state": "future",
-          "progress": 5,
-          "description": "Prepare the first real compiler path.",
+          "progress": 8,
+          "description": "One official code style for arrow blocks, entity, extend, and loops.",
           "items": [
-            "define bytecode format",
-            "AST to bytecode prototype",
-            "basic execution loop"
+            "indent blocks",
+            "normalize spacing",
+            "format examples",
+            "CLI command later"
+          ]
+        },
+        {
+          "step": "12",
+          "phase": "Later",
+          "title": "Test runner polish",
+          "status": "planned",
+          "state": "future",
+          "progress": 12,
+          "description": "Make built-in test blocks useful as a workflow.",
+          "items": [
+            "suite output",
+            "filter tests",
+            "better failures",
+            "golden test integration"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "runtime",
+      "eyebrow": "Future",
+      "title": "Runtime strength",
+      "subtitle": "Runtime work matters, but only after the surface is understandable.",
+      "cards": [
+        {
+          "step": "13",
+          "phase": "Future",
+          "title": "Method consistency",
+          "status": "planned",
+          "state": "future",
+          "progress": 12,
+          "description": "Make native and extended methods feel predictable.",
+          "items": [
+            "array method docs",
+            "string method docs",
+            "consistent argument errors",
+            "empty/null edge cases"
+          ]
+        },
+        {
+          "step": "14",
+          "phase": "Future",
+          "title": "Performance passes",
+          "status": "planned",
+          "state": "future",
+          "progress": 6,
+          "description": "Tighten evaluator and environment behavior when user-facing semantics settle.",
+          "items": [
+            "lookup speed",
+            "allocation pressure",
+            "module cache",
+            "GC visibility"
+          ]
+        },
+        {
+          "step": "15",
+          "phase": "Future",
+          "title": "Compiler experiments",
+          "status": "idea",
+          "state": "future",
+          "progress": 4,
+          "description": "Only worth chasing once syntax, stdlib, docs, and tooling are less wobbly.",
+          "items": [
+            "bytecode sketch",
+            "AST lowering",
+            "execution loop prototype",
+            "benchmarks later"
           ]
         }
       ]
     }
   ],
   "timeline": {
-    "title": "Short bursts, visible progress",
-    "subtitle": "Not version cosplay. Just real steps landing over time.",
+    "title": "Useful milestones",
+    "subtitle": "Each step should make the site or language easier to use.",
     "items": [
       {
         "month": "Now",
-        "title": "Syntax / entity / extend polish",
-        "text": "Tighten the language itself before piling on more systems."
-      },
-      {
-        "month": "Soon",
-        "title": "Packages get real",
-        "text": "Resolver, cache, and import flow become more stable and predictable."
+        "title": "Docs as cookbook",
+        "text": "Focus on loops, modules, stdlib, entities, tests, and real examples."
       },
       {
         "month": "Next",
-        "title": "Testing + formatter",
-        "text": "Developer workflow gets less painful."
+        "title": "Stdlib explorer",
+        "text": "Expose std/math, std/array, std/string, std/bool, and std/time with examples."
+      },
+      {
+        "month": "Next+",
+        "title": "Playground flow",
+        "text": "Open examples in playground and add presets."
       },
       {
         "month": "Later",
-        "title": "Compiler groundwork",
-        "text": "Bytecode experiments and execution model exploration."
+        "title": "Tooling polish",
+        "text": "Formatter, clearer diagnostics, and better test runner."
+      },
+      {
+        "month": "Future",
+        "title": "Runtime/compiler work",
+        "text": "Performance and compiler experiments after the surface settles."
       }
     ]
   },
   "principle": {
-    "eyebrow": "Roadmap principle",
-    "title": "Polish the core before chasing power.",
-    "text": "MKS gets stronger when syntax, entities, extend, packages, and tooling feel solid. Big system features can wait until the language stops wobbling.",
+    "eyebrow": "Principle",
+    "title": "Make useful things obvious.",
+    "text": "MKS is experimental, so the site should teach what actually works, mark uncertainty, and prioritize runnable snippets over internal project noise.",
     "pills": [
-      "Readable runtime",
-      "Stable syntax",
-      "Tooling first",
-      "Compiler later"
+      "Runnable examples",
+      "Stdlib first",
+      "No fake claims",
+      "Tooling after clarity"
     ]
   }
 }

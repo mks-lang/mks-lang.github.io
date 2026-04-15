@@ -2,6 +2,28 @@ function initDocsEnhancements() {
   document.querySelectorAll('.panel').forEach((panel, idx) => {
     panel.style.animationDelay = `${(idx % 5) * 0.08}s`;
   });
+
+  document.querySelectorAll('[data-docs-card]').forEach((panel) => {
+    panel.addEventListener('pointermove', (event) => {
+      const rect = panel.getBoundingClientRect();
+      panel.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+      panel.style.setProperty('--my', `${event.clientY - rect.top}px`);
+    });
+  });
+
+  const cards = Array.from(document.querySelectorAll('[data-docs-card]'));
+  if (!cards.length || !('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      entry.target.classList.toggle('docs-card-live', entry.isIntersecting);
+    });
+  }, {
+    rootMargin: '-32% 0px -50% 0px',
+    threshold: 0,
+  });
+
+  cards.forEach((card) => observer.observe(card));
 }
 
 (function bootDocsEnhancements() {

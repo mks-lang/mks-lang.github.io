@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/examples.css?v=20260414-2">
+  <link rel="stylesheet" href="assets/css/examples.css?v=20260415-3">
 </head>
 <body data-theme="dark">
   <canvas class="particles"></canvas>
@@ -54,28 +54,36 @@
   <main>
     <section class="examples-hero">
       <div class="examples-hero-bg">
-        <div class="hero-orb hero-orb-a"></div>
-        <div class="hero-orb hero-orb-b"></div>
+        <div class="hero-grid" aria-hidden="true"></div>
+        <div class="hero-beam hero-beam-a" aria-hidden="true"></div>
+        <div class="hero-beam hero-beam-b" aria-hidden="true"></div>
       </div>
 
       <div class="section examples-wrap">
         <header class="examples-head panel glass glimmer">
+          <div class="examples-kicker" aria-hidden="true">
+            <span>copy</span>
+            <span>filter</span>
+            <span>learn</span>
+          </div>
+
           <div class="examples-copy">
             <p class="eyebrow">Examples</p>
-            <h1>MKS by vibe and by feature.</h1>
+            <h1>Practical MKS snippets.</h1>
             <p class="sub">
-              Real syntax slices for loops, swap, tests, entities, extend, modules,
-              watch/on change, defer, and std helpers.
+              Copyable examples for loops, arrays, strings, entities, extend, modules,
+              watch/defer, tests, and the standard library.
             </p>
 
             <div class="examples-pills">
               <span class="tag live">repeat</span>
               <span class="tag">swap</span>
               <span class="tag">arrays</span>
+              <span class="tag">strings</span>
               <span class="tag">entity</span>
               <span class="tag">extend</span>
               <span class="tag">watch / defer</span>
-              <span class="tag">golden tests</span>
+              <span class="tag">tests</span>
               <span class="tag">stdlib</span>
             </div>
           </div>
@@ -95,6 +103,8 @@
         </header>
 
         <div class="examples-toolbar">
+          <input class="examples-search" type="search" placeholder="Search examples..." aria-label="Search examples" data-example-search>
+
           <div class="toolbar-left">
             <button class="filter-chip active" data-filter="all">All</button>
             <button class="filter-chip" data-filter="basics">Basics</button>
@@ -102,9 +112,25 @@
             <button class="filter-chip" data-filter="runtime">Runtime</button>
             <button class="filter-chip" data-filter="oop">Entity / Extend</button>
             <button class="filter-chip" data-filter="modules">Modules</button>
-            <button class="filter-chip" data-filter="repo">Repo workflow</button>
+            <button class="filter-chip" data-filter="stdlib">Stdlib</button>
+            <button class="filter-chip" data-filter="repo">Workflow</button>
           </div>
         </div>
+
+        <section class="examples-stats" aria-label="Examples summary">
+          <div>
+            <span data-example-count>0</span>
+            <p>copyable snippets</p>
+          </div>
+          <div>
+            <span>8</span>
+            <p>feature groups</p>
+          </div>
+          <div>
+            <span>0</span>
+            <p>unsupported alias patterns</p>
+          </div>
+        </section>
 
         <section class="featured-grid">
           <article class="featured-card panel" data-kind="runtime">
@@ -188,16 +214,20 @@ Writeln([1,2,3].sum());</code></pre>
           </article>
         </section>
 
-        <section class="repo-strip panel glass glimmer">
+        <section class="examples-guide panel glass glimmer">
           <div>
-            <p class="eyebrow">Repo-backed map</p>
-            <h2>Examples line up with the interpreter tree.</h2>
+            <p class="eyebrow">How to read this page</p>
+            <h2>Start with a small snippet, then combine patterns.</h2>
             <p class="sub">
-              The source repo is split across Lexer, Parser, Eval, Runtime, env, GC, std,
-              examples, docs, tests, and tools. These examples mirror those surfaces.
+              Each card is intentionally small. Learn the shape, copy it, then combine
+              loops, functions, modules, and stdlib helpers into larger programs.
             </p>
           </div>
-          <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">Open repository</a>
+          <div class="guide-steps">
+            <span>1. Pick a feature</span>
+            <span>2. Copy the snippet</span>
+            <span>3. Adapt one line</span>
+          </div>
         </section>
 
         <section class="example-grid">
@@ -384,8 +414,13 @@ Writeln("done");</code></pre>
             <div class="code-block">
               <button class="copy-btn">Copy</button>
 <pre><code>entity Point(x, y) ->
+  init ->
+    self.x =: x;
+    self.y =: y;
+  <-
+
   method len2() ->
-    return x * x + y * y;
+    return self.x * self.x + self.y * self.y;
   <-
 <-
 
@@ -443,13 +478,13 @@ Writeln(max(10, 3));</code></pre>
             <div class="code-block">
               <button class="copy-btn">Copy</button>
 <pre><code>// math.mks
-export fnc add(a, b) ->
+fnc add(a, b) ->
   return a + b;
 <-
 
 // main.mks
-using "math" as m;
-Writeln(m.add(2, 2));</code></pre>
+using "math.mks";
+Writeln(add(2, 2));</code></pre>
             </div>
           </article>
 
@@ -519,6 +554,465 @@ using "std/math";
             </div>
           </article>
 
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Numbers</span>
+              <h3 class="example-title">Arithmetic pack</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>Writeln(1 + 2);
+Writeln(10 - 3);
+Writeln(4 * 5);
+Writeln(20 / 4);
+Writeln(10 % 3);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Compare</span>
+              <h3 class="example-title">Comparison operators</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>Writeln(1 ?= 1);
+Writeln(1 !? 2);
+Writeln(5 > 3);
+Writeln(3 >= 3);
+Writeln(2 <= 5);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Arrays</span>
+              <h3 class="example-title">Empty array + inject</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var arr =: [];
+Writeln(arr.len());
+
+arr.inject(10);
+Writeln(arr[0]);
+Writeln(arr.len());</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Arrays</span>
+              <h3 class="example-title">Nested arrays</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var arr =: [[1, 2], [3, 4]];
+
+Writeln(arr[0][1]);
+Writeln(arr[1][0]);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Strings</span>
+              <h3 class="example-title">String methods</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var s =: "Hello";
+
+Writeln(s[1]);
+Writeln(s.upper());
+Writeln(s.lower());
+Writeln(s.len());</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="control">
+            <div class="card-top">
+              <span class="tag">Control</span>
+              <h3 class="example-title">while counter</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var i =: 0;
+
+while (i < 3) ->
+  Writeln(i);
+  i =: i + 1;
+<-</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="control">
+            <div class="card-top">
+              <span class="tag">Control</span>
+              <h3 class="example-title">Loop guard pattern</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var x =: 0;
+
+while (x < 6) ->
+  x =: x + 1;
+
+  if (x ?= 2) ->
+    continue;
+  <-
+
+  if (x ?= 4) ->
+    break;
+  <-
+
+  Writeln(x);
+<-</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="runtime">
+            <div class="card-top">
+              <span class="tag">Tests</span>
+              <h3 class="example-title">Expected pass line</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>test "math add" ->
+  expect(1 + 1 ?= 2);
+<-
+
+// prints:
+// [PASS] math add</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="runtime">
+            <div class="card-top">
+              <span class="tag">Defer</span>
+              <h3 class="example-title">Two defers</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>defer ->
+  Writeln("d1");
+<-
+
+defer ->
+  Writeln("d2");
+<-
+
+Writeln("body");</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="oop">
+            <div class="card-top">
+              <span class="tag">Entity</span>
+              <h3 class="example-title">Mutable entity field</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>entity Buba(name, power) ->
+  init ->
+    self.name =: name;
+    self.power =: power;
+  <-
+
+  method boost(amount) ->
+    self.power =: self.power + amount;
+  <-
+<-
+
+var b =: Buba("buba", 12);
+b.boost(5);
+Writeln(b.power);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="oop">
+            <div class="card-top">
+              <span class="tag">Extend</span>
+              <h3 class="example-title">extend array last</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>extend array ->
+  method last() ->
+    if (self.len() ?= 0) ->
+      return null;
+    <-
+    return self[self.len() - 1];
+  <-
+<-
+
+Writeln([1, 2, 3].last());</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/bool</span>
+              <h3 class="example-title">Boolean helpers</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/bool";
+
+Writeln(true);
+Writeln(false);
+Writeln(not(true));
+Writeln(and(true, false));
+Writeln(or(false, true));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/array</span>
+              <h3 class="example-title">Array helpers</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/array";
+
+var xs =: [1, 2, 3];
+push(xs, 4);
+
+Writeln(first(xs));
+Writeln(last(xs));
+Writeln(sum(xs));
+Writeln(avg(xs));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/string</span>
+              <h3 class="example-title">String wrappers</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/string";
+
+Writeln(len("Hello"));
+Writeln(upper("Hello"));
+Writeln(lower("Hello"));
+Writeln(contains("Hello", "ell"));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/time</span>
+              <h3 class="example-title">Time helpers</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/time";
+
+Writeln(now());
+Writeln(timestamp());
+sleep(100);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/math</span>
+              <h3 class="example-title">More math</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/math";
+
+Writeln(sqrt(9));
+Writeln(pow(2, 3));
+Writeln(floor(1.9));
+Writeln(ceil(1.1));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="modules">
+            <div class="card-top">
+              <span class="tag">Modules</span>
+              <h3 class="example-title">Duplicate import skip</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "math.mks";
+Writeln(PI);
+Writeln(get_circle_area(2));
+
+using "math.mks"; // duplicate skipped
+Writeln(VERSION);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/array</span>
+              <h3 class="example-title">Reverse copy</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/array";
+
+var xs =: [1, 2, 3];
+var reversed =: reverse(xs);
+
+Writeln(reversed);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/array</span>
+              <h3 class="example-title">Slice array</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/array";
+
+var xs =: [10, 20, 30, 40];
+var part =: slice(xs, 1, 2);
+
+Writeln(part);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/string</span>
+              <h3 class="example-title">Replace text</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/string";
+
+var text =: "hello mks";
+
+Writeln(replace(text, "mks", "MKS"));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/string</span>
+              <h3 class="example-title">Split and join</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/string";
+
+var parts =: split("a,b,c", ",");
+
+Writeln(join(parts, "-"));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="stdlib">
+            <div class="card-top">
+              <span class="tag">std/string</span>
+              <h3 class="example-title">Prefix and suffix</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>using "std/string";
+
+var name =: "MKS-lang";
+
+Writeln(starts_with(name, "MKS"));
+Writeln(ends_with(name, "lang"));</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="control">
+            <div class="card-top">
+              <span class="tag">Control</span>
+              <h3 class="example-title">Nested if in loop</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>repeat i in 5 ->
+  if (i > 2) ->
+    Writeln("big", i);
+  <- else ->
+    Writeln("small", i);
+  <-
+<-</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="control">
+            <div class="card-top">
+              <span class="tag">Control</span>
+              <h3 class="example-title">Manual countdown</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var n =: 3;
+
+while (n > 0) ->
+  Writeln(n);
+  n =: n - 1;
+<-
+
+Writeln("go");</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="basics">
+            <div class="card-top">
+              <span class="tag">Arrays</span>
+              <h3 class="example-title">Swap array values</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var xs =: [1, 2, 3];
+
+xs[0] <--> xs[2];
+
+Writeln(xs);</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="runtime">
+            <div class="card-top">
+              <span class="tag">Watch</span>
+              <h3 class="example-title">Watch score changes</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>var score =: 0;
+watch score;
+
+on change score ->
+  Writeln("score", score);
+<-
+
+score =: score + 10;
+score =: score + 5;</code></pre>
+            </div>
+          </article>
+
+          <article class="example-card" data-kind="oop">
+            <div class="card-top">
+              <span class="tag">Extend</span>
+              <h3 class="example-title">extend string shout</h3>
+            </div>
+            <div class="code-block">
+              <button class="copy-btn">Copy</button>
+<pre><code>extend string ->
+  method shout() ->
+    return self.upper();
+  <-
+<-
+
+Writeln("mks".shout());</code></pre>
+            </div>
+          </article>
+
           <article class="example-card" data-kind="repo">
             <div class="card-top">
               <span class="tag">CLI</span>
@@ -549,58 +1043,12 @@ mks --help</code></pre>
             </div>
           </article>
 
-          <article class="example-card" data-kind="repo">
-            <div class="card-top">
-              <span class="tag">Repo</span>
-              <h3 class="example-title">Interpreter layout</h3>
-            </div>
-            <div class="code-block">
-              <button class="copy-btn">Copy</button>
-<pre><code>Lexer/   -> tokens
-Parser/  -> AST
-Eval/    -> execution
-Runtime/ -> values/errors
-GC/      -> mark-sweep
-std/     -> std/math</code></pre>
-            </div>
-          </article>
-
-          <article class="example-card" data-kind="repo">
-            <div class="card-top">
-              <span class="tag">Build</span>
-              <h3 class="example-title">CMake build</h3>
-            </div>
-            <div class="code-block">
-              <button class="copy-btn">Copy</button>
-<pre><code>cmake -S . -B build
-cmake --build build
-
-./build/mks examples/showcase.mks
-./tests.sh</code></pre>
-            </div>
-          </article>
-
-          <article class="example-card" data-kind="repo">
-            <div class="card-top">
-              <span class="tag">Docs</span>
-              <h3 class="example-title">Repo docs files</h3>
-            </div>
-            <div class="code-block">
-              <button class="copy-btn">Copy</button>
-<pre><code>docs/REFERENCE.md
-docs/USER_GUIDE.md
-README.md
-
-// keep website docs aligned
-// with repo behavior</code></pre>
-            </div>
-          </article>
         </section>
       </div>
     </section>
   </main>
 
   <script src="assets/js/common.js"></script>
-  <script src="assets/js/examples.js?v=20260414-2"></script>
+  <script src="assets/js/examples.js?v=20260415-3"></script>
 </body>
 </html>

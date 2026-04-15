@@ -8,6 +8,7 @@
   function makeCodeBlock(code, withCopy = true) {
     const block = document.createElement('div');
     block.className = 'code-block';
+    block.dataset.lang = 'MKS';
 
     if (withCopy) {
       const copy = document.createElement('button');
@@ -26,6 +27,33 @@
     return block;
   }
 
+  function appendRichContent(parent, section) {
+    if (Array.isArray(section.points) && section.points.length) {
+      const list = document.createElement('ul');
+      list.className = 'docs-points';
+      section.points.forEach((item) => {
+        const point = document.createElement('li');
+        point.innerHTML = item;
+        list.append(point);
+      });
+      parent.append(list);
+    }
+
+    if (section.warning) {
+      const warning = document.createElement('p');
+      warning.className = 'docs-callout warning';
+      warning.innerHTML = section.warning;
+      parent.append(warning);
+    }
+
+    if (section.source) {
+      const source = document.createElement('p');
+      source.className = 'docs-source';
+      source.innerHTML = section.source;
+      parent.append(source);
+    }
+  }
+
   function renderHero(hero) {
     const header = document.createElement('header');
     header.className = 'panel glass glimmer docs-hero';
@@ -34,7 +62,11 @@
     const scene = document.createElement('div');
     scene.className = 'docs-hero-scene';
     scene.setAttribute('aria-hidden', 'true');
-    scene.innerHTML = '<span></span><span></span><span></span>';
+    scene.innerHTML = [
+      '<span></span><span></span><span></span>',
+      '<i></i><i></i><i></i><i></i>',
+      '<b></b><b></b>'
+    ].join('');
 
     const eyebrow = document.createElement('p');
     eyebrow.className = 'eyebrow';
@@ -99,11 +131,24 @@
       pane.className = index === 0 ? 'tab-pane active' : 'tab-pane';
       pane.dataset.tabPane = tab.id;
       pane.hidden = index !== 0;
-      pane.append(makeCodeBlock(tab.code));
+      const codeBlock = makeCodeBlock(tab.code);
+      codeBlock.dataset.lang = tab.label || tab.id || 'code';
+      pane.append(codeBlock);
+
+      if (Array.isArray(tab.steps) && tab.steps.length) {
+        const steps = document.createElement('ol');
+        steps.className = 'docs-steps';
+        tab.steps.forEach((item) => {
+          const step = document.createElement('li');
+          step.innerHTML = item;
+          steps.append(step);
+        });
+        pane.append(steps);
+      }
 
       if (tab.note) {
         const note = document.createElement('p');
-        note.className = 'sub note';
+        note.className = 'docs-callout';
         note.innerHTML = tab.note;
         pane.append(note);
       }
@@ -111,11 +156,33 @@
       panes.append(pane);
     });
 
-    el.append(title, description, tabs, panes);
+    el.append(title, description);
+    appendRichContent(el, section);
+    el.append(tabs, panes);
     return el;
   }
 
   function renderPlainSection(section) {
+    if (section.python) {
+      return renderTabbedSection({
+        ...section,
+        tabs: [
+          {
+            id: 'mks',
+            label: section.mksLabel || 'MKS',
+            code: section.code,
+            note: section.note,
+            steps: section.steps,
+          },
+          {
+            id: 'py',
+            label: section.pythonLabel || 'Python',
+            code: section.python,
+          },
+        ],
+      });
+    }
+
     const el = document.createElement('section');
     el.className = 'panel glimmer';
     el.id = section.id;
@@ -129,6 +196,7 @@
     description.innerHTML = section.description || '';
 
     el.append(title, description);
+    appendRichContent(el, section);
     if (section.code) el.append(makeCodeBlock(section.code));
 
     return el;
@@ -167,7 +235,7 @@
   }
 
   try {
-    const response = await fetch('assets/data/docs.json?v=20260414-3', { cache: 'no-store' });
+    const response = await fetch('assets/data/docs.json?v=20260415-2', { cache: 'no-store' });
     if (!response.ok) throw new Error(`Docs data request failed: ${response.status}`);
 
     const docs = await response.json();

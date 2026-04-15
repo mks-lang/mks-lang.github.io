@@ -2,28 +2,50 @@
   document.querySelectorAll('.example-card').forEach((card, idx) => {
     card.style.animationDelay = `${(idx % 6) * 0.08}s`;
   });
+
+  const count = document.querySelector('[data-example-count]');
+  if (count) count.textContent = String(document.querySelectorAll('.example-card').length);
 })();
 
 (function initExampleFilters() {
   const chips = document.querySelectorAll('.filter-chip');
   const cards = document.querySelectorAll('.example-card, .featured-card');
+  const search = document.querySelector('[data-example-search]');
 
   if (!chips.length || !cards.length) return;
+
+  let activeFilter = 'all';
+  let query = '';
+
+  function cardText(card) {
+    return card.textContent.toLowerCase();
+  }
+
+  function applyFilters() {
+    cards.forEach((card) => {
+      const kind = card.dataset.kind;
+      const matchesKind = activeFilter === 'all' || kind === activeFilter;
+      const matchesQuery = !query || cardText(card).includes(query);
+      card.classList.toggle('hidden', !(matchesKind && matchesQuery));
+    });
+  }
 
   chips.forEach((chip) => {
     chip.addEventListener('click', () => {
       chips.forEach((c) => c.classList.remove('active'));
       chip.classList.add('active');
 
-      const filter = chip.dataset.filter;
-
-      cards.forEach((card) => {
-        const kind = card.dataset.kind;
-        const show = filter === 'all' || kind === filter;
-        card.classList.toggle('hidden', !show);
-      });
+      activeFilter = chip.dataset.filter;
+      applyFilters();
     });
   });
+
+  if (search) {
+    search.addEventListener('input', () => {
+      query = search.value.trim().toLowerCase();
+      applyFilters();
+    });
+  }
 })();
 
 (function animateExamplesTerminal() {
