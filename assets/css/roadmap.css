@@ -1,9 +1,25 @@
 .road-hero {
   position: relative;
   overflow: hidden;
-  min-height: min(760px, calc(100vh - 70px));
+  min-height: min(700px, calc(100vh - 70px));
   display: grid;
   align-items: center;
+  isolation: isolate;
+}
+
+.road-hero::after {
+  content: "MKS";
+  position: absolute;
+  right: 4vw;
+  bottom: 4vh;
+  z-index: 1;
+  color: color-mix(in srgb, var(--muted) 12%, transparent);
+  font-family: var(--font-mono);
+  font-size: clamp(56px, 14vw, 180px);
+  font-weight: 800;
+  line-height: 0.8;
+  pointer-events: none;
+  letter-spacing: -0.04em;
 }
 
 .road-hero-bg {
@@ -16,11 +32,13 @@
 .scan-grid {
   position: absolute;
   inset: -20%;
-  opacity: 0.32;
+  opacity: 0.4;
   background-image:
-    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-  background-size: 58px 58px;
+    linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px),
+    radial-gradient(circle at 16% 18%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 26%),
+    radial-gradient(circle at 84% 18%, color-mix(in srgb, #ff7bba 14%, transparent), transparent 28%);
+  background-size: 58px 58px, 58px 58px, auto, auto;
   transform: perspective(900px) rotateX(58deg) translateY(-18%);
   animation: gridDrift 18s linear infinite;
 }
@@ -54,14 +72,37 @@
   animation: ribbonRun 5.4s ease-in-out infinite;
 }
 
+.hero-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.22;
+}
+
+.orb-a {
+  width: 260px;
+  height: 260px;
+  top: 12%;
+  left: -50px;
+  background: var(--accent);
+}
+
+.orb-b {
+  width: 240px;
+  height: 240px;
+  right: -60px;
+  bottom: 12%;
+  background: #ff7bba;
+}
+
 .road-hero-inner {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
-  gap: 26px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+  gap: 28px;
   align-items: center;
-  margin-top: 28px;
+  margin-top: 20px;
 }
 
 .road-copy {
@@ -69,11 +110,11 @@
 }
 
 .road-copy h1 {
-  max-width: 820px;
+  max-width: 860px;
   margin: 0 0 12px;
-  font-size: clamp(42px, 7vw, 82px);
-  line-height: 0.94;
-  letter-spacing: 0;
+  font-size: clamp(42px, 7vw, 84px);
+  line-height: 0.93;
+  letter-spacing: -0.04em;
 }
 
 .hero-sub {
@@ -99,7 +140,7 @@
   align-items: center;
   min-height: 36px;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 999px;
   border: 1px solid var(--border);
   background: color-mix(in srgb, var(--panel-2) 78%, transparent);
   color: var(--muted);
@@ -123,10 +164,15 @@
 
 .hero-panel {
   position: relative;
-  min-height: 460px;
+  min-height: 470px;
   overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr auto;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.045), transparent 30%),
+    radial-gradient(circle at 85% 18%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 32%),
+    color-mix(in srgb, var(--panel) 92%, transparent);
 }
 
 .signal-map {
@@ -140,7 +186,7 @@
   position: absolute;
   width: 12px;
   height: 12px;
-  border-radius: 4px;
+  border-radius: 999px;
   background: var(--accent);
   box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 55%, transparent);
   animation: signalBlink 2.8s ease-in-out infinite;
@@ -200,7 +246,8 @@
 
 .term-path,
 .roadmap-terminal,
-.stage-step {
+.stage-step,
+.version-number {
   font-family: var(--font-mono);
 }
 
@@ -245,14 +292,17 @@
 
 .metric-card,
 .stage-card,
-.timeline-card {
+.timeline-card,
+.version-card {
   border: 1px solid var(--border);
   background: color-mix(in srgb, var(--panel) 90%, transparent);
 }
 
 .metric-card {
   padding: 12px;
-  border-radius: 8px;
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--panel) 86%, transparent), color-mix(in srgb, var(--panel-2) 84%, transparent));
 }
 
 .label {
@@ -260,7 +310,7 @@
   color: var(--muted);
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0;
+  letter-spacing: 0.08em;
 }
 
 .value {
@@ -278,16 +328,124 @@
   animation: panelSweep 5.8s ease-in-out infinite;
 }
 
+/* VERSION PATH */
+.version-path-section {
+  margin-top: 16px;
+}
+
+.version-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 28px 22px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent));
+}
+
+.version-line {
+  position: absolute;
+  left: 80px;
+  right: 80px;
+  top: 72px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), #ff7bba, var(--accent-2));
+  opacity: 0.6;
+}
+
+.version-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.version-node {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 360ms ease var(--delay),
+    transform 360ms ease var(--delay);
+}
+
+.version-node.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.version-dot-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.version-dot {
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel-2) 92%, transparent), color-mix(in srgb, var(--panel) 88%, transparent));
+  box-shadow: 0 0 30px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.version-node.done .version-dot {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+}
+
+.version-node.live .version-dot {
+  color: #ff7bba;
+  border-color: color-mix(in srgb, #ff7bba 32%, var(--border));
+}
+
+.version-node.next .version-dot {
+  color: var(--accent-2);
+  border-color: color-mix(in srgb, var(--accent-2) 32%, var(--border));
+}
+
+.version-card {
+  height: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  text-align: center;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), transparent 26%),
+    color-mix(in srgb, var(--panel) 90%, transparent);
+}
+
+.version-number {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.version-card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+/* RAIL */
 .roadmap-rail-section {
-  margin-top: 10px;
+  margin-top: 18px;
 }
 
 .road-rail {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   overflow: hidden;
+  border-radius: 24px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent)),
+    repeating-linear-gradient(90deg, transparent 0 48px, rgba(255,255,255,0.045) 49px 50px);
 }
 
 .rail-line {
@@ -305,8 +463,9 @@
   z-index: 1;
   display: grid;
   gap: 12px;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid transparent;
   opacity: 0;
   transform: translateY(16px);
   transition:
@@ -323,12 +482,13 @@
 
 .rail-node:hover {
   background: color-mix(in srgb, var(--panel) 72%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
 }
 
 .rail-dot {
   width: 52px;
   height: 52px;
-  border-radius: 8px;
+  border-radius: 999px;
   border: 1px solid var(--border);
   display: grid;
   place-items: center;
@@ -343,10 +503,11 @@
 .rail-node.next .rail-dot { color: #ff7bba; }
 .rail-node.future .rail-dot { color: var(--accent-2); }
 
+/* MAIN BLOCKS */
 .roadmap-block,
 .roadmap-band,
 .signal-section {
-  margin-top: 28px;
+  margin-top: 30px;
 }
 
 .section-head {
@@ -362,6 +523,7 @@
   margin: 0;
   font-size: clamp(28px, 4vw, 44px);
   line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
 .section-head .sub {
@@ -370,7 +532,7 @@
 
 .stage-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 14px;
 }
 
@@ -378,7 +540,7 @@
   position: relative;
   min-height: 100%;
   padding: 18px;
-  border-radius: 8px;
+  border-radius: 22px;
   box-shadow: var(--shadow);
   overflow: hidden;
   opacity: 0;
@@ -388,6 +550,10 @@
     transform 360ms ease var(--delay),
     box-shadow 180ms ease,
     border-color 180ms ease;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 26%),
+    radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 32%),
+    color-mix(in srgb, var(--panel) 92%, transparent);
 }
 
 .stage-card.is-visible {
@@ -405,6 +571,17 @@
     linear-gradient(315deg, color-mix(in srgb, #ff7bba 9%, transparent), transparent 38%);
   opacity: 0;
   transition: opacity 180ms ease;
+}
+
+.stage-card::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), #ff7bba, transparent);
+  opacity: 0.58;
 }
 
 .stage-card:hover {
@@ -440,7 +617,7 @@
 .stage-step {
   width: 42px;
   height: 42px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   display: grid;
   place-items: center;
@@ -455,8 +632,8 @@
 }
 
 .stage-chip {
-  padding: 6px 9px;
-  border-radius: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
   border: 1px solid var(--border);
   font-size: 12px;
   white-space: nowrap;
@@ -472,27 +649,30 @@
 
 .stage-list {
   margin: 12px 0 14px;
-  padding: 0;
   display: grid;
-  gap: 7px;
-  color: var(--muted);
+  gap: 8px;
   list-style: none;
+  padding-left: 0;
 }
 
 .stage-list li {
   position: relative;
-  padding-left: 18px;
+  padding: 8px 10px 8px 28px;
+  border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel-2) 38%, transparent);
 }
 
 .stage-list li::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0.72em;
+  left: 10px;
+  top: 16px;
   width: 7px;
-  height: 2px;
+  height: 7px;
   border-radius: 999px;
-  background: currentColor;
+  background: var(--accent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
 .stage-meter {
@@ -521,8 +701,12 @@
   opacity: 0.55;
 }
 
+/* TIMELINE */
 .timeline-shell {
   overflow: hidden;
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent));
 }
 
 .timeline-track {
@@ -536,7 +720,7 @@
   position: relative;
   min-height: 190px;
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: var(--shadow);
   overflow: hidden;
   opacity: 0;
@@ -545,6 +729,9 @@
     opacity 360ms ease var(--delay),
     transform 360ms ease var(--delay),
     border-color 180ms ease;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 26%),
+    color-mix(in srgb, var(--panel) 88%, transparent);
 }
 
 .timeline-card.is-visible {
@@ -567,12 +754,17 @@
   border-color: color-mix(in srgb, #ff7bba 38%, var(--border));
 }
 
+/* PRINCIPLE */
 .signal-panel {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 20px;
   align-items: center;
   overflow: hidden;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, #ff7bba 12%, transparent), transparent 32%),
+    linear-gradient(135deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent));
 }
 
 .signal-pill {
@@ -580,145 +772,16 @@
   align-items: center;
   min-height: 36px;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 999px;
   border: 1px solid var(--border);
   color: var(--muted);
   font-weight: 700;
   background: color-mix(in srgb, var(--panel-2) 82%, transparent);
 }
 
-/* 2026 redesign: make roadmap read like a product map, not a release poster. */
-.road-hero {
-  min-height: min(680px, calc(100vh - 70px));
-  isolation: isolate;
-}
-
-.road-hero::after {
-  content: "useful next";
-  position: absolute;
-  right: 4vw;
-  bottom: 6vh;
-  z-index: 1;
-  color: color-mix(in srgb, var(--muted) 18%, transparent);
-  font-family: var(--font-mono);
-  font-size: clamp(44px, 10vw, 132px);
-  font-weight: 800;
-  line-height: 0.8;
-  pointer-events: none;
-}
-
-.scan-grid {
-  opacity: 0.42;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.075) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.075) 1px, transparent 1px),
-    radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 28%),
-    radial-gradient(circle at 86% 12%, color-mix(in srgb, #ff7bba 12%, transparent), transparent 30%);
-}
-
-.road-copy h1 {
-  max-width: 900px;
-}
-
-.hero-panel {
-  border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.045), transparent 30%),
-    radial-gradient(circle at 85% 18%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 32%),
-    color-mix(in srgb, var(--panel) 92%, transparent);
-}
-
-.metric-card {
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--panel) 86%, transparent), color-mix(in srgb, var(--panel-2) 84%, transparent));
-}
-
-.road-rail {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent)),
-    repeating-linear-gradient(90deg, transparent 0 48px, rgba(255,255,255,0.045) 49px 50px);
-}
-
-.rail-node {
-  border: 1px solid transparent;
-}
-
-.rail-node:hover {
-  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
-}
-
-.stage-grid {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.stage-card {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 26%),
-    radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 32%),
-    color-mix(in srgb, var(--panel) 92%, transparent);
-}
-
-.stage-card::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  top: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), #ff7bba, transparent);
-  opacity: 0.58;
-}
-
-.stage-list {
-  display: grid;
-  gap: 8px;
-  list-style: none;
-  padding-left: 0;
-}
-
-.stage-list li {
-  position: relative;
-  padding: 8px 10px 8px 28px;
-  border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--panel-2) 38%, transparent);
-}
-
-.stage-list li::before {
-  content: "";
-  position: absolute;
-  left: 10px;
-  top: 16px;
-  width: 7px;
-  height: 7px;
-  border-radius: 7px;
-  background: var(--accent);
-  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 60%, transparent);
-}
-
-.timeline-shell {
-  overflow: hidden;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent));
-}
-
-.timeline-card {
-  border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 26%),
-    color-mix(in srgb, var(--panel) 88%, transparent);
-}
-
-.signal-panel {
-  background:
-    radial-gradient(circle at 88% 18%, color-mix(in srgb, #ff7bba 12%, transparent), transparent 32%),
-    linear-gradient(135deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel-2) 88%, transparent));
-}
-
 @keyframes gridDrift {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 116px 116px, 116px 116px; }
+  from { background-position: 0 0, 0 0, 0 0, 0 0; }
+  to { background-position: 116px 116px, 116px 116px, 0 0, 0 0; }
 }
 
 @keyframes ribbonRun {
@@ -756,6 +819,16 @@
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 1ms !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .version-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .version-line {
+    display: none;
   }
 }
 
@@ -798,7 +871,8 @@
   .hero-metrics,
   .stage-grid,
   .road-rail,
-  .timeline-track {
+  .timeline-track,
+  .version-grid {
     grid-template-columns: 1fr;
   }
 
@@ -821,5 +895,351 @@
   .stage-chip {
     grid-column: 1 / -1;
     justify-self: start;
+  }
+}
+
+/* soft visual pass, content unchanged */
+.road-hero {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background:
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 30%),
+    radial-gradient(circle at 82% 20%, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 32%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 82%, transparent), transparent 72%),
+    linear-gradient(135deg, color-mix(in srgb, var(--panel-2) 52%, transparent), transparent 50%);
+}
+
+.road-copy h1 {
+  text-wrap: balance;
+}
+
+.path-badge {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--accent-2) 7%, transparent)),
+    color-mix(in srgb, var(--panel) 80%, transparent);
+  box-shadow:
+    0 16px 42px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.path-ring {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+  box-shadow:
+    inset 0 0 0 8px color-mix(in srgb, var(--bg) 34%, transparent),
+    0 0 24px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.hero-panel,
+.version-shell,
+.road-rail,
+.timeline-shell,
+.signal-panel {
+  border-color: color-mix(in srgb, var(--border) 86%, transparent);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.052), transparent 36%),
+    radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 28%),
+    color-mix(in srgb, var(--panel) 88%, transparent);
+  box-shadow:
+    0 20px 48px rgba(0,0,0,0.30),
+    inset 0 1px 0 rgba(255,255,255,0.055);
+}
+
+.metric-card,
+.version-card,
+.stage-card,
+.timeline-card {
+  border-color: color-mix(in srgb, var(--border) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 34%),
+    color-mix(in srgb, var(--panel) 84%, transparent);
+}
+
+.stage-card {
+  transition:
+    opacity 360ms ease var(--delay),
+    transform 360ms ease var(--delay),
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.stage-card:hover,
+.timeline-card:hover,
+.version-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), transparent 34%),
+    color-mix(in srgb, var(--panel) 90%, transparent);
+}
+
+.stage-card.done {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 6%, transparent), transparent 36%),
+    color-mix(in srgb, var(--panel) 86%, transparent);
+}
+
+.version-node.done .version-dot,
+.rail-node.done .rail-dot,
+.stage-card.done .stage-step {
+  box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.stage-chip {
+  background: color-mix(in srgb, var(--panel-2) 72%, transparent);
+}
+
+.stage-meter {
+  height: 7px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* calm roadmap refresh */
+.road-hero {
+  min-height: min(640px, calc(100vh - 72px));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 86%, transparent), transparent 70%),
+    linear-gradient(135deg, color-mix(in srgb, var(--panel-2) 46%, transparent), transparent 48%);
+}
+
+.road-hero::after {
+  content: "0.0.3";
+  right: 5vw;
+  bottom: 6vh;
+  color: color-mix(in srgb, var(--muted) 10%, transparent);
+  letter-spacing: 0;
+}
+
+.scan-grid {
+  opacity: 0.16;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+}
+
+.signal-ribbon,
+.hero-orb,
+.terminal-sweep {
+  display: none;
+}
+
+.road-hero-inner {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  gap: 34px;
+}
+
+.road-copy h1 {
+  max-width: 760px;
+  font-size: clamp(42px, 6vw, 76px);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.hero-sub {
+  max-width: 68ch;
+  color: color-mix(in srgb, var(--muted) 88%, white);
+}
+
+.path-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 10px 14px 10px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel) 78%, transparent);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.22);
+}
+
+.path-ring {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--border));
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 64%),
+    color-mix(in srgb, var(--panel-2) 88%, transparent);
+  box-shadow: inset 0 0 0 8px color-mix(in srgb, var(--bg) 32%, transparent);
+}
+
+.path-ring span {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.path-ring i {
+  width: 26px;
+  height: 1px;
+  display: block;
+  background: color-mix(in srgb, var(--accent) 72%, var(--muted));
+}
+
+.path-badge .eyebrow,
+.path-badge strong {
+  margin: 0;
+}
+
+.path-badge strong {
+  display: block;
+  max-width: 22ch;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.chip {
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel) 62%, transparent);
+}
+
+.chip-live {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+  box-shadow: none;
+}
+
+.hero-panel,
+.version-shell,
+.road-rail,
+.timeline-shell,
+.signal-panel {
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 36%),
+    color-mix(in srgb, var(--panel) 88%, transparent);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.28);
+}
+
+.hero-panel {
+  min-height: 430px;
+}
+
+.signal-map {
+  opacity: 0.22;
+}
+
+.signal-map span:nth-child(2) {
+  background: var(--accent-2);
+}
+
+.signal-map::after {
+  border-color: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.term-header {
+  background: color-mix(in srgb, var(--panel-2) 74%, transparent);
+}
+
+.term-dots span:nth-child(2) {
+  background: color-mix(in srgb, var(--accent) 62%, var(--accent-2));
+}
+
+.metric-card,
+.version-card,
+.stage-card,
+.timeline-card {
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel) 84%, transparent);
+  box-shadow: none;
+}
+
+.version-line,
+.rail-line {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 72%, transparent), color-mix(in srgb, var(--accent-2) 54%, transparent));
+  opacity: 0.42;
+}
+
+.version-dot,
+.rail-dot {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel-2) 82%, transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.version-node.done .version-dot,
+.rail-node.done .rail-dot,
+.stage-card.done .stage-step {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
+}
+
+.version-node.live .version-dot,
+.rail-node.live .rail-dot,
+.stage-card.live .stage-step {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
+}
+
+.version-node.next .version-dot,
+.rail-node.next .rail-dot,
+.stage-card.next .stage-step {
+  color: var(--accent-2);
+  border-color: color-mix(in srgb, var(--accent-2) 32%, var(--border));
+}
+
+.stage-card {
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.028), transparent 28%),
+    color-mix(in srgb, var(--panel) 88%, transparent);
+}
+
+.stage-card::before,
+.stage-card::after,
+.card-aura {
+  display: none;
+}
+
+.stage-card:hover {
+  border-color: color-mix(in srgb, var(--text) 16%, var(--border));
+  box-shadow: 0 16px 34px rgba(0,0,0,0.28);
+}
+
+.stage-card.done {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+}
+
+.stage-chip {
+  border-radius: 8px;
+}
+
+.stage-meter {
+  background: color-mix(in srgb, var(--panel-2) 80%, transparent);
+}
+
+.stage-meter span {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 70%, white), var(--accent-2));
+}
+
+.signal-pill {
+  border-radius: 8px;
+}
+
+@media (max-width: 980px) {
+  .road-hero-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .road-copy h1 {
+    font-size: 40px;
+  }
+
+  .path-badge {
+    width: 100%;
+    align-items: center;
+  }
+
+  .path-ring {
+    width: 78px;
+    height: 78px;
+    flex: 0 0 auto;
   }
 }

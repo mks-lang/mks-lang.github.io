@@ -1,19 +1,23 @@
 {
   "hero": {
     "eyebrow": "Changelog",
-    "title": "What changed in MKS.",
-    "subtitle": "A concise log for site, docs, examples, standard library notes, and language-facing updates.",
+    "title": "Latest MKS site changes.",
+    "subtitle": "A concise release log for page redesigns, docs structure, roadmap progress, and static site updates.",
     "chips": [
       {
         "text": "latest",
         "variant": "live"
       },
       {
+        "text": "redesign",
+        "variant": "default"
+      },
+      {
         "text": "docs",
         "variant": "default"
       },
       {
-        "text": "examples",
+        "text": "roadmap",
         "variant": "default"
       },
       {
@@ -25,23 +29,39 @@
   "stats": [
     {
       "label": "Latest",
-      "value": "2026-04-15"
+      "value": "2026-04-16"
     },
     {
       "label": "Focus",
-      "value": "Docs + examples"
+      "value": "Site polish"
     },
     {
       "label": "Mode",
-      "value": "Experimental"
+      "value": "Static release"
     }
   ],
   "releases": [
     {
+      "date": "2026-04-16",
+      "title": "Site-wide redesign and roadmap advance",
+      "tag": "site",
+      "status": "latest",
+      "summary": "Visual and structural pass across the static site: shared navigation, cleaner docs, roadmap progression, and calmer page design.",
+      "items": [
+        "Moved the site header into a shared component so every page uses the same navigation markup and active-state behavior.",
+        "Redesigned the global header into a consistent macOS-style dock and kept it shared across Home, Docs, Roadmap, Examples, Playground, and Changelog.",
+        "Restructured Docs navigation from data, removed duplicate documentation sections, and grouped the sidebar without changing the meaning of the remaining docs.",
+        "Updated Docs cards with a more readable text font and fixed sidebar scrolling so manual scrollbar movement is no longer pulled back by active-link syncing.",
+        "Advanced the Roadmap from 0.0.2 toward 0.0.3, marked the cookbook work as complete, and highlighted stdlib and playground workflow as the active next tracks.",
+        "Refreshed Roadmap visuals with a calmer path badge, softer cards, clearer done/live/next states, and no content rewrite.",
+        "Updated cache-busting query strings for changed CSS, JS, and JSON-backed pages so GitHub Pages serves the current assets."
+      ]
+    },
+    {
       "date": "2026-04-15",
       "title": "Docs and examples redesign",
       "tag": "site",
-      "status": "latest",
+      "status": "shipped",
       "summary": "Major website pass focused on practical English docs, richer example browsing, standard library coverage, and a cleaner roadmap.",
       "items": [
         "Docs reshaped into 50 practical sections with cookbook-style explanations and stdlib usage for std/math, std/array, std/string, std/bool, and std/time.",

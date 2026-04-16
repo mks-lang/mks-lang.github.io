@@ -3,16 +3,20 @@
     "id": "overview",
     "eyebrow": "Docs",
     "title": "MKS cookbook & reference",
-    "description": "Practical syntax, loops, entities, modules, stdlib, tests, and Python comparisons. Repo internals stay out of the way unless they affect code you write.",
+    "description": "Practical syntax, control flow, entities, modules, stdlib, runtime helpers, and cookbook-style examples grounded in the public repo docs and tests.",
     "tags": [
-      "cookbook",
-      "loops",
+      "syntax",
+      "control-flow",
+      "functions",
+      "arrays",
+      "strings",
       "entities",
-      "modules",
-      "std/math",
-      "std/array",
-      "std/string",
-      "tests",
+      "extend",
+      "imports",
+      "stdlib",
+      "watch",
+      "defer",
+      "read",
       {
         "label": "experimental",
         "live": true
@@ -21,27 +25,83 @@
   },
   "sections": [
     {
+      "id": "hello",
+      "nav": "Hello",
+      "title": "Hello, MKS",
+      "description": "Small first example using variables, stdlib, watch, and output.",
+      "source": "Checked against README examples and std/math usage.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using \"std/math\";",
+            "",
+            "var x =: 10;",
+            "watch x;",
+            "on change x ->",
+            "  Writeln(\"x changed\", x);",
+            "<-",
+            "",
+            "x =: square(x);",
+            "Writeln(\"result\", x);"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "x = 10",
+            "",
+            "def changed():",
+            "    print(\"x changed\", x)",
+            "",
+            "x = x * x",
+            "changed()",
+            "print(\"result\", x)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "comments",
+      "nav": "Comments",
+      "title": "Comments",
+      "description": "Single-line comments use //.",
+      "code": [
+        "// one line comment",
+        "var x =: 10; // inline comment",
+        "Writeln(x);"
+      ],
+      "python": [
+        "# one line comment",
+        "x = 10  # inline comment",
+        "print(x)"
+      ]
+    },
+    {
       "id": "values",
       "nav": "Values",
       "title": "Values & variables",
-      "description": "Bind with <code>var</code>, assign with <code>=:</code>, swap with <code>&lt;--&gt;</code>.",
+      "description": "Core values are numbers, strings, arrays, and null. Variables use var for binding and =: for reassignment.",
       "points": [
-        "<code>var name =: value;</code> creates a variable in the current scope.",
-        "<code>name =: value;</code> updates an existing variable; array items can be updated with <code>arr[index] =: value;</code>.",
-        "The repo docs list numbers, strings, arrays, and <code>null</code>. The tests also cover booleans through <code>true</code> and <code>false</code> in <code>std/bool</code>."
+        "Create variables with var.",
+        "Reassign with =:.",
+        "Swap with <-->.",
+        "Arrays are indexed with [index]."
       ],
-      "source": "Checked against <code>docs/REFERENCE.md</code>, <code>docs/USER_GUIDE.md</code>, and <code>tests/cases/arrays_01.mks</code>.",
       "tabs": [
         {
           "id": "mks",
           "label": "MKS",
           "code": [
             "var n =: 42;",
-            "var s =: \"hi\";",
-            "var arr =: [1, 2, 3];",
+            "var s =: \"hello\";",
+            "var xs =: [1, 2, 3];",
+            "var nothing =: null;",
             "",
-            "arr[0];",
-            "arr[1] =: 5;",
+            "n =: 99;",
+            "xs[1] =: 20;",
             "",
             "var a =: 1;",
             "var b =: 2;",
@@ -53,11 +113,12 @@
           "label": "Python",
           "code": [
             "n = 42",
-            "s = \"hi\"",
-            "arr = [1, 2, 3]",
+            "s = \"hello\"",
+            "xs = [1, 2, 3]",
+            "nothing = None",
             "",
-            "arr[0]",
-            "arr[1] = 5",
+            "n = 99",
+            "xs[1] = 20",
             "",
             "a = 1",
             "b = 2",
@@ -67,111 +128,286 @@
       ]
     },
     {
-      "id": "ops",
+      "id": "operators",
       "nav": "Operators",
       "title": "Expressions & operators",
-      "description": "Arithmetic, comparisons, and logical operators.",
-      "points": [
-        "Arithmetic in tests: <code>+ - * / %</code>.",
-        "Equality is spelled <code>?=</code>; inequality is spelled <code>!?</code>.",
-        "Logical operators are <code>&amp;&amp;</code> and <code>||</code>; test cases print numeric truthy/falsy results."
+      "description": "Arithmetic, comparisons, and logic.",
+      "groups": [
+        {
+          "title": "Arithmetic",
+          "items": ["+", "-", "*", "/", "%"]
+        },
+        {
+          "title": "Comparison",
+          "items": ["?=", "!?", "<", ">", "<=", ">="]
+        },
+        {
+          "title": "Logic",
+          "items": ["&&", "||"]
+        }
       ],
-      "source": "Checked against <code>tests/cases/arithmetic_01.mks</code>, <code>comparison_01.mks</code>, and <code>logic_01.mks</code>.",
       "tabs": [
         {
           "id": "mks",
           "label": "MKS",
           "code": [
-            "var a =: 6 + 3 * 2;",
+            "Writeln(1 + 2);",
+            "Writeln(10 - 3);",
+            "Writeln(4 * 5);",
+            "Writeln(20 / 4);",
+            "Writeln(10 % 3);",
             "",
-            "if (a ?= 12) ->",
-            "  Writeln(\"ok\");",
-            "<-",
+            "Writeln(1 ?= 1);",
+            "Writeln(1 !? 2);",
+            "Writeln(5 > 3);",
+            "Writeln(3 >= 3);",
             "",
-            "if (a > 5 && a < 20) ->",
-            "  Writeln(\"range\");",
-            "<-"
+            "Writeln(1 && 1);",
+            "Writeln(1 && 0);",
+            "Writeln(0 || 1);",
+            "Writeln(0 || 0);"
           ]
         },
         {
           "id": "py",
           "label": "Python",
           "code": [
-            "a = 6 + 3 * 2",
+            "print(1 + 2)",
+            "print(10 - 3)",
+            "print(4 * 5)",
+            "print(20 / 4)",
+            "print(10 % 3)",
             "",
-            "if a == 12:",
-            "    print(\"ok\")",
+            "print(1 == 1)",
+            "print(1 != 2)",
+            "print(5 > 3)",
+            "print(3 >= 3)",
             "",
-            "if 5 < a < 20:",
-            "    print(\"range\")"
+            "print(1 and 1)",
+            "print(1 and 0)",
+            "print(0 or 1)",
+            "print(0 or 0)"
           ]
         }
       ]
     },
     {
-      "id": "flow",
-      "nav": "Flow",
-      "title": "Control flow",
-      "description": "if/else, while, for, repeat, break/continue.",
-      "points": [
-        "Every block starts with <code>-&gt;</code> and closes with <code>&lt;-</code>. Put statements inside the block and end normal statements with <code>;</code>.",
-        "<code>while</code> repeats while its condition is true. Put the update inside the block or the loop may never finish.",
-        "<code>for</code> keeps init, condition, and step in the header: <code>for (var i =: 0; i &lt; n; i =: i + 1)</code>.",
-        "<code>repeat N</code> runs the body N times. <code>repeat i in N</code> also creates an iterator <code>i</code> with values from <code>0</code> to <code>N - 1</code>.",
-        "<code>break;</code> exits the nearest loop. <code>continue;</code> skips the rest of the current pass."
-      ],
-      "source": "Checked against repo docs and loop test cases: <code>while_01.mks</code>, <code>for_01.mks</code>, <code>loop_control_01.mks</code>.",
+      "id": "precedence",
+      "nav": "Precedence",
+      "title": "Expression grouping",
+      "description": "Parentheses and operator precedence behave as expected.",
       "tabs": [
         {
           "id": "mks",
           "label": "MKS",
           "code": [
-            "if (x > 0) ->",
-            "  Writeln(\"positive\");",
-            "<- else ->",
-            "  Writeln(\"non\");",
-            "<-",
-            "",
-            "while (i < 10) ->",
-            "  i =: i + 1;",
-            "<-",
-            "",
-            "for (var i =: 0; i < 3; i =: i + 1) ->",
-            "  Writeln(i);",
-            "<-",
-            "",
-            "repeat 3 ->",
-            "  Writeln(\"ping\");",
-            "<-",
-            "",
-            "repeat i in 3 ->",
-            "  Writeln(i);",
-            "<-"
-          ],
-          "steps": [
-            "Use <code>repeat 3</code> when you only need three passes.",
-            "Use <code>repeat i in 3</code> when the body needs the pass number.",
-            "Use <code>for</code> when you need custom start, stop, or step logic.",
-            "Use <code>while</code> when the next pass depends on state changed inside the body."
+            "Writeln(2 + 3 * 4);",
+            "Writeln((2 + 3) * 4);"
           ]
         },
         {
           "id": "py",
           "label": "Python",
           "code": [
-            "if x > 0:",
-            "    print(\"positive\")",
-            "else:",
-            "    print(\"non\")",
+            "print(2 + 3 * 4)",
+            "print((2 + 3) * 4)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bools",
+      "nav": "Booleans",
+      "title": "Booleans via std/bool",
+      "description": "The std/bool module exposes true, false, not, and, and or as MKS values/functions.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using \"std/bool\";",
             "",
-            "while i < 10:",
-            "    i += 1",
+            "Writeln(true);",
+            "Writeln(false);",
+            "Writeln(not(false));",
+            "Writeln(and(true, true));",
+            "Writeln(and(true, false));",
+            "Writeln(or(false, true));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "print(True)",
+            "print(False)",
+            "print(not False)",
+            "print(True and True)",
+            "print(True and False)",
+            "print(False or True)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "output",
+      "nav": "Output",
+      "title": "Write & Writeln",
+      "description": "Basic built-in output helpers.",
+      "code": [
+        "Write(\"same line: \");",
+        "Writeln(123);",
+        "Writeln(\"name\", \"MKS\");",
+        "Writeln(\"x\", 10, \"y\", 20);"
+      ],
+      "python": [
+        "print(\"same line: \", end=\"\")",
+        "print(123)",
+        "print(\"name\", \"MKS\")",
+        "print(\"x\", 10, \"y\", 20)"
+      ]
+    },
+    {
+      "id": "read-input",
+      "nav": "Read",
+      "title": "Read input",
+      "description": "Read is a native helper registered by the interpreter.",
+      "points": [
+        "Read() reads one line and returns it as a string.",
+        "Read(\"prompt\") prints the prompt first.",
+        "Read(0) returns only the first whitespace-separated word.",
+        "If input cannot be read, current behavior returns an empty string."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var name =: Read(\"name: \");",
+            "Writeln(\"hello\", name);",
             "",
-            "for i in range(3):",
+            "var line =: Read();",
+            "Writeln(\"line\", line);",
+            "",
+            "var first =: Read(0);",
+            "Writeln(\"first\", first);"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "name = input(\"name: \")",
+            "print(\"hello\", name)",
+            "",
+            "line = input()",
+            "print(\"line\", line)",
+            "",
+            "first = input().split()[0]",
+            "print(\"first\", first)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "if-else",
+      "nav": "If / else",
+      "title": "if / else",
+      "description": "Branch with arrow blocks.",
+      "code": [
+        "if (x > 0) ->",
+        "  Writeln(\"positive\");",
+        "<- else ->",
+        "  Writeln(\"non-positive\");",
+        "<-"
+      ],
+      "python": [
+        "if x > 0:",
+        "    print(\"positive\")",
+        "else:",
+        "    print(\"non-positive\")"
+      ]
+    },
+    {
+      "id": "while",
+      "nav": "While",
+      "title": "while loops",
+      "description": "State-driven loops.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var i =: 0;",
+            "",
+            "while (i < 3) ->",
+            "  Writeln(i);",
+            "  i =: i + 1;",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "i = 0",
+            "while i < 3:",
             "    print(i)",
+            "    i += 1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "for",
+      "nav": "For",
+      "title": "for loops",
+      "description": "Classic init / condition / step loop header.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "for (var i =: 0; i < 3; i =: i + 1) ->",
+            "  Writeln(i);",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "for i in range(3):",
+            "    print(i)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "repeat",
+      "nav": "Repeat",
+      "title": "repeat loops",
+      "description": "Fixed-count loops, with or without an iterator variable.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "repeat 3 ->",
+            "  Writeln(\"tick\");",
+            "<-",
             "",
+            "repeat i in 3 ->",
+            "  Writeln(i);",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
             "for _ in range(3):",
-            "    print(\"ping\")",
+            "    print(\"tick\")",
             "",
             "for i in range(3):",
             "    print(i)"
@@ -180,16 +416,53 @@
       ]
     },
     {
-      "id": "funcs",
+      "id": "break-continue",
+      "nav": "Loop control",
+      "title": "break & continue",
+      "description": "Control the nearest loop.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var x =: 0;",
+            "",
+            "while (x < 6) ->",
+            "  x =: x + 1;",
+            "",
+            "  if (x ?= 2) ->",
+            "    continue;",
+            "  <-",
+            "",
+            "  if (x ?= 4) ->",
+            "    break;",
+            "  <-",
+            "",
+            "  Writeln(x);",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "x = 0",
+            "while x < 6:",
+            "    x += 1",
+            "    if x == 2:",
+            "        continue",
+            "    if x == 4:",
+            "        break",
+            "    print(x)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "functions",
       "nav": "Functions",
       "title": "Functions",
-      "description": "Define, return, call, recurse.",
-      "points": [
-        "A function starts with <code>fnc name(args) -&gt;</code> and closes with <code>&lt;-</code>.",
-        "Put <code>return value;</code> inside the body when the caller needs a value.",
-        "The repo tests cover normal calls, early return from <code>if</code>, and recursion."
-      ],
-      "source": "Checked against <code>tests/cases/functions_01.mks</code>, <code>return_if_01.mks</code>, and <code>recursion_01.mks</code>.",
+      "description": "Define and call functions with fnc.",
       "tabs": [
         {
           "id": "mks",
@@ -215,768 +488,38 @@
       ]
     },
     {
-      "id": "tests",
-      "nav": "Tests",
-      "title": "Swap & tests",
-      "description": "Fast in-place swap and built-in test blocks with <code>expect</code>.",
+      "id": "returns",
+      "nav": "Returns",
+      "title": "Early return",
+      "description": "Return from inside conditionals.",
       "tabs": [
         {
           "id": "mks",
           "label": "MKS",
           "code": [
-            "var a =: 1;",
-            "var b =: 2;",
-            "a <--> b;",
-            "",
-            "test \"math add\" ->",
-            "  expect(1 + 1 ?= 2);",
-            "<-"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "a = 1",
-            "b = 2",
-            "a, b = b, a",
-            "",
-            "def test_math_add():",
-            "    assert 1 + 1 == 2"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "entities",
-      "nav": "Entities",
-      "title": "Entities",
-      "description": "Lightweight objects with <code>init</code> and <code>method</code>.",
-      "points": [
-        "Entity parameters are passed into the constructor call: <code>EntityName(a, b)</code>.",
-        "Use <code>init</code> to copy constructor parameters into <code>self</code> fields: <code>self.name =: name;</code>.",
-        "Methods are declared with <code>method name(args) -&gt;</code> and can read or update <code>self</code>.",
-        "From the outside, read fields with dot access like <code>obj.power</code> and call methods like <code>obj.boost(5)</code>."
-      ],
-      "source": "Checked against <code>tests/cases/entity_01.mks</code> and user-facing entity docs.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "entity User(name) ->",
-            "  init ->",
-            "    self.name =: name;",
+            "fnc test(x) ->",
+            "  if (x > 0) ->",
+            "    return 111;",
             "  <-",
             "",
-            "  method hi() ->",
-            "    Writeln(\"Hi \", self.name);",
-            "  <-",
+            "  return 222;",
             "<-",
             "",
-            "var u =: User(\"Ann\");",
-            "u.hi();"
+            "Writeln(test(1));",
+            "Writeln(test(0));"
           ]
         },
         {
           "id": "py",
           "label": "Python",
           "code": [
-            "class User:",
-            "    def __init__(self, name):",
-            "        self.name = name",
+            "def test(x):",
+            "    if x > 0:",
+            "        return 111",
+            "    return 222",
             "",
-            "    def hi(self):",
-            "        print(\"Hi\", self.name)",
-            "",
-            "u = User(\"Ann\")",
-            "u.hi()"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "extend",
-      "nav": "Extend",
-      "title": "Extend built-ins",
-      "description": "Attach methods to arrays and strings.",
-      "points": [
-        "<code>extend array</code> adds methods to arrays.",
-        "Inside the method, <code>self</code> is the concrete array the method was called on.",
-        "To loop over <code>self</code>, use <code>self.len()</code> and indexed reads like <code>self[i]</code>.",
-        "Return explicitly with <code>return</code> when the method should give a value back to the caller."
-      ],
-      "source": "Checked against <code>tests/cases/extend_array_01.mks</code> and user-facing extend docs.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "extend array ->",
-            "  method sum() ->",
-            "    var s =: 0;",
-            "    var i =: 0;",
-            "",
-            "    while (i < self.len()) ->",
-            "      s =: s + self[i];",
-            "      i =: i + 1;",
-            "    <-",
-            "",
-            "    return s;",
-            "  <-",
-            "<-",
-            "",
-            "Writeln([1,2,3].sum());"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "def sum_list(xs):",
-            "    s = 0",
-            "    for x in xs:",
-            "        s += x",
-            "    return s",
-            "",
-            "print(sum_list([1, 2, 3]))"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "watch",
-      "nav": "Watch",
-      "title": "Watch / on change",
-      "description": "Reactive primitives built into the language surface.",
-      "points": [
-        "<code>watch x;</code> and <code>on change x</code> must refer to the same name.",
-        "Register the handler before the change; otherwise that specific assignment has already happened.",
-        "The handler runs when the watched name is assigned.",
-        "Keep handlers short: print something, update a counter, or run a small reaction."
-      ],
-      "source": "Checked against README, <code>docs/USER_GUIDE.md</code>, and <code>tests/cases/defer_watch_01.mks</code>.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "var x =: 10;",
-            "watch x;",
-            "",
-            "on change x ->",
-            "  Writeln(\"x changed to \", x);",
-            "<-",
-            "",
-            "x =: 5;"
-          ],
-          "note": "Register <code>on change</code> before the assignment you want to observe."
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "# pseudo example",
-            "class WatchVar:",
-            "    def __init__(self, v):",
-            "        self.v = v",
-            "        self.handlers = []",
-            "",
-            "    def set(self, v):",
-            "        self.v = v",
-            "        for h in self.handlers:",
-            "            h(v)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "defer",
-      "nav": "Defer",
-      "title": "defer",
-      "description": "Guaranteed cleanup on block exit.",
-      "points": [
-        "Read <code>defer</code> as “do this when leaving the block”.",
-        "The defer body is written as a normal <code>-&gt; ... &lt;-</code> block.",
-        "When several defers are registered, current behavior runs them in reverse registration order.",
-        "Use this for cleanup-style demos, but do not invent file APIs that are not documented for MKS."
-      ],
-      "source": "Checked against user-facing docs and <code>tests/cases/defer_watch_01.mks</code>.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "defer ->",
-            "  Writeln(\"leaving scope\");",
-            "<-",
-            "",
-            "Writeln(\"work...\");",
-            "Writeln(\"done\");"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "with open(\"file.txt\") as f:",
-            "    # work...",
-            "    pass"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "imports",
-      "nav": "Imports",
-      "title": "Imports",
-      "description": "Simple modules with <code>using</code>. Imported top-level definitions become available in the caller environment.",
-      "points": [
-        "<code>using \"std/math\";</code> loads a standard module from the std path.",
-        "<code>using \"math.mks\";</code> loads a local file and runs it once.",
-        "Definitions from the imported file become directly available in the current environment.",
-        "Alias-style access like <code>m.add()</code> is not used in examples because the public docs/tests show direct access to imported names."
-      ],
-      "warning": "Do not use <code>using \"x\" as m; m.fn()</code> as the main example. In the current user-facing docs/tests, the reliable pattern is <code>using \"file.mks\";</code> plus direct calls to imported names.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "// math.mks",
-            "fnc add(a, b) ->",
-            "  return a + b;",
-            "<-",
-            "",
-            "// main.mks",
-            "using \"math.mks\";",
-            "Writeln(add(2, 2));"
-          ],
-          "note": "Resolution order: current file directory -> current working directory -> installed std path. A module runs once; duplicate and nested imports are skipped."
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "# math.py",
-            "def add(a, b):",
-            "    return a + b",
-            "",
-            "# main.py",
-            "import math",
-            "math.add(2, 2)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "stdlib",
-      "nav": "Stdlib",
-      "title": "Stdlib: math, bool, array, string, time",
-      "description": "Bundled <code>std/</code> files are plain MKS wrappers around native methods and functions.",
-      "points": [
-        "<code>std/math</code>: <code>abs</code>, <code>min</code>, <code>max</code>, <code>square</code>, plus wrappers for <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sqrt</code>, <code>pow</code>, <code>sin</code>, <code>cos</code>, <code>rand</code>, <code>randint</code>.",
-        "<code>std/bool</code>: <code>not</code>, <code>and</code>, <code>or</code>.",
-        "<code>std/array</code>: helpers such as <code>push</code>, <code>pop</code>, <code>first</code>, <code>last</code>, <code>slice</code>, <code>reverse</code>, <code>map</code>, <code>filter</code>, <code>reduce</code>, <code>sum</code>, <code>avg</code>.",
-        "<code>std/string</code>: wrappers for <code>len</code>, <code>lower</code>, <code>upper</code>, <code>trim</code>, <code>contains</code>, <code>starts_with</code>, <code>ends_with</code>, <code>replace</code>, <code>split</code>, <code>join</code>.",
-        "<code>std/time</code>: wrappers for <code>now</code>, <code>timestamp</code>, and <code>sleep(ms)</code>."
-      ],
-      "source": "Checked against <code>std/math.mks</code>, <code>std/bool.mks</code>, <code>std/array.mks</code>, <code>std/string.mks</code>, and <code>std/time.mks</code>.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "using \"std/math\";",
-            "",
-            "Writeln(abs(-5));",
-            "Writeln(square(4));",
-            "Writeln(min(10, 3));",
-            "Writeln(max(10, 3));"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "print(abs(-5))",
-            "print(4 * 4)",
-            "print(min(10, 3))",
-            "print(max(10, 3))"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "cookbook-array-total",
-      "nav": "Array total",
-      "title": "Cookbook: sum numbers",
-      "description": "A practical loop shape for aggregating an array. Put the accumulator and index before the loop, then update both inside the loop.",
-      "points": [
-        "<code>var total =: 0;</code> lives before the loop because the value must survive every loop pass.",
-        "<code>var i =: 0;</code> is also declared before the loop: it is the current array index.",
-        "Inside the <code>while</code>, first add <code>nums[i]</code> to the total, then always advance with <code>i =: i + 1;</code>.",
-        "If you forget to update the index, <code>i &lt; nums.len()</code> will not change and the loop will not finish."
-      ],
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "var nums =: [3, 5, 8];",
-            "var total =: 0;",
-            "var i =: 0;",
-            "",
-            "while (i < nums.len()) ->",
-            "  total =: total + nums[i];",
-            "  i =: i + 1;",
-            "<-",
-            "",
-            "Writeln(total);"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "nums = [3, 5, 8]",
-            "total = 0",
-            "",
-            "for value in nums:",
-            "    total += value",
-            "",
-            "print(total)"
-          ]
-        }
-      ],
-      "source": "Based on documented arrays, <code>while</code>, <code>len()</code>, and assignment behavior from repo tests/docs."
-    },
-    {
-      "id": "cookbook-safe-last",
-      "nav": "Safe last",
-      "title": "Cookbook: safe last item",
-      "description": "Return <code>null</code> when the array is empty; otherwise return the last indexed value.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "fnc last_safe(arr) ->",
-            "  if (arr.len() ?= 0) ->",
-            "    return null;",
-            "  <-",
-            "",
-            "  return arr[arr.len() - 1];",
-            "<-",
-            "",
-            "Writeln(last_safe([1, 2, 3]));"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "def last_safe(arr):",
-            "    if len(arr) == 0:",
-            "        return None",
-            "    return arr[-1]",
-            "",
-            "print(last_safe([1, 2, 3]))"
-          ]
-        }
-      ],
-      "points": [
-        "Check for an empty array first: an empty array has no last index to read.",
-        "<code>return null;</code> means “there is no value” here, not “the program crashed”.",
-        "For a non-empty array, the last index is <code>arr.len() - 1</code>.",
-        "This kind of helper is useful when an empty array is a normal case."
-      ],
-      "source": "Based on <code>std/array.mks</code> and documented <code>null</code>."
-    },
-    {
-      "id": "cookbook-counter-watch",
-      "nav": "Watched counter",
-      "title": "Cookbook: watched counter",
-      "description": "Use <code>watch</code> when a named variable should announce changes. Register the handler before the writes you care about.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "var score =: 0;",
-            "watch score;",
-            "",
-            "on change score ->",
-            "  Writeln(\"score\", score);",
-            "<-",
-            "",
-            "score =: score + 10;",
-            "score =: score + 5;"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "score = 0",
-            "",
-            "def changed(value):",
-            "    print(\"score\", value)",
-            "",
-            "score = score + 10",
-            "changed(score)",
-            "score = score + 5",
-            "changed(score)"
-          ]
-        }
-      ],
-      "points": [
-        "<code>watch score;</code> registers the variable name to watch.",
-        "<code>on change score -&gt;</code> defines the code that runs when the value changes.",
-        "Declare the handler before the assignments you want to catch.",
-        "Inside the handler, read the current <code>score</code> and print it or run another small reaction."
-      ],
-      "source": "Based on README, <code>docs/USER_GUIDE.md</code>, and <code>tests/cases/defer_watch_01.mks</code>."
-    },
-    {
-      "id": "stdlib-math-cookbook",
-      "nav": "Math std",
-      "title": "Standard library: std/math",
-      "description": "Import <code>std/math</code> for small numeric helpers. The repository includes pure MKS wrappers around native math functions.",
-      "points": [
-        "Import <code>std/math</code> once near the top of a file that needs math helpers.",
-        "<code>square(x)</code> keeps code readable when you would otherwise repeat <code>x * x</code>.",
-        "<code>min</code> and <code>max</code> are cleaner than hand-written if blocks when you need a boundary value.",
-        "For helpers like <code>sqrt</code> and <code>pow</code>, keep examples simple: detailed edge cases are not fully documented yet."
-      ],
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "using \"std/math\";",
-            "",
-            "Writeln(abs(-8));",
-            "Writeln(square(6));",
-            "Writeln(min(10, 3));",
-            "Writeln(max(10, 3));",
-            "Writeln(sqrt(9));",
-            "Writeln(pow(2, 3));"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "import math",
-            "",
-            "print(abs(-8))",
-            "print(6 * 6)",
-            "print(min(10, 3))",
-            "print(max(10, 3))",
-            "print(math.sqrt(9))",
-            "print(math.pow(2, 3))"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "stdlib-array-cookbook",
-      "nav": "Array std",
-      "title": "Standard library: std/array",
-      "description": "<code>std/array</code> gives function-style helpers over array methods.",
-      "points": [
-        "<code>std/array</code> gives you a function-style API over array methods.",
-        "<code>push(xs, value)</code> mutates the array and returns that same array according to the stdlib source.",
-        "<code>first(xs)</code> and <code>last(xs)</code> are useful when you do not want to write indexes by hand.",
-        "<code>sum(xs)</code> and <code>avg(xs)</code> cover common numeric-array calculations."
-      ],
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "using \"std/array\";",
-            "",
-            "var xs =: [4, 6, 10];",
-            "push(xs, 12);",
-            "",
-            "Writeln(first(xs));",
-            "Writeln(last(xs));",
-            "Writeln(sum(xs));",
-            "Writeln(avg(xs));"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "xs = [4, 6, 10]",
-            "xs.append(12)",
-            "",
-            "print(xs[0])",
-            "print(xs[-1])",
-            "print(sum(xs))",
-            "print(sum(xs) / len(xs))"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "stdlib-string-cookbook",
-      "nav": "String std",
-      "title": "Standard library: std/string",
-      "description": "<code>std/string</code> exposes wrappers for string cleanup, casing, checks, replace, split, and join.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "using \"std/string\";",
-            "",
-            "var name =: \"MKS\";",
-            "",
-            "Writeln(len(name));",
-            "Writeln(upper(name));",
-            "Writeln(lower(name));",
-            "Writeln(contains(name, \"K\"));"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "name = \"MKS\"",
-            "",
-            "print(len(name))",
-            "print(name.upper())",
-            "print(name.lower())",
-            "print(\"K\" in name)"
-          ]
-        }
-      ],
-      "points": [
-        "Import <code>std/string</code> when you want to call string operations as functions.",
-        "<code>upper</code> and <code>lower</code> are useful for normalizing user input.",
-        "<code>contains(s, sub)</code> answers “does this string contain that substring?”",
-        "For method-style calls, see the strings section: <code>s.upper()</code>, <code>s.lower()</code>, <code>s.len()</code>."
-      ]
-    },
-    {
-      "id": "stdlib-bool-cookbook",
-      "nav": "Bool std",
-      "title": "Standard library: std/bool",
-      "description": "<code>std/bool</code> provides function-style boolean helpers.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "using \"std/bool\";",
-            "",
-            "var ok =: true;",
-            "var ready =: false;",
-            "",
-            "Writeln(not(ok));",
-            "Writeln(and(ok, ready));",
-            "Writeln(or(ok, ready));"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "ok = True",
-            "ready = False",
-            "",
-            "print(not ok)",
-            "print(ok and ready)",
-            "print(ok or ready)"
-          ]
-        }
-      ],
-      "points": [
-        "<code>std/bool</code> is useful when you want function-style boolean helpers.",
-        "<code>not(x)</code> inverts a truthy/falsy value.",
-        "<code>and(a, b)</code> and <code>or(a, b)</code> express normal boolean logic as functions.",
-        "For ordinary conditions, you can use <code>&amp;&amp;</code> and <code>||</code> directly."
-      ]
-    },
-    {
-      "id": "stdlib-time-cookbook",
-      "nav": "Time std",
-      "title": "Standard library: std/time",
-      "description": "<code>std/time</code> exposes current-time helpers and <code>sleep(ms)</code>. Exact formatting is runtime-defined, so examples keep claims narrow.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "using \"std/time\";",
-            "",
-            "Writeln(now());",
-            "Writeln(timestamp());",
-            "sleep(100);",
-            "Writeln(\"awake\");"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "import time",
-            "",
-            "print(time.ctime())",
-            "print(time.time())",
-            "time.sleep(0.1)",
-            "print(\"awake\")"
-          ]
-        }
-      ],
-      "points": [
-        "<code>now()</code> and <code>timestamp()</code> come from time helpers.",
-        "<code>sleep(ms)</code> takes milliseconds according to the helper naming and examples.",
-        "Do not make user code depend on the exact <code>now()</code> output format until public docs lock it down.",
-        "For time demos, show the call itself and a minimal “wait, then continue” scenario."
-      ]
-    },
-    {
-      "id": "cookbook-module-split",
-      "nav": "Module split",
-      "title": "Cookbook: split code into a module",
-      "description": "Put reusable values/functions in one file, then load it with <code>using</code>. Imported names are shown as direct calls because that is the reliable pattern in current docs/tests.",
-      "warning": "Avoid <code>using \"x\" as m; m.fn()</code> examples for now. Alias is parsed but not used by current evaluation.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "// math.mks",
-            "using \"std/math\";",
-            "",
-            "var PI =: 3.14159;",
-            "",
-            "fnc circle_area(r) ->",
-            "  return PI * square(r);",
-            "<-",
-            "",
-            "// main.mks",
-            "using \"math.mks\";",
-            "Writeln(circle_area(2));"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "# math_module.py",
-            "PI = 3.14159",
-            "",
-            "def circle_area(r):",
-            "    return PI * (r * r)",
-            "",
-            "# main.py",
-            "from math_module import circle_area",
-            "print(circle_area(2))"
-          ]
-        }
-      ],
-      "points": [
-        "Move reusable variables and functions into a separate <code>.mks</code> file.",
-        "In the main file, load it with <code>using \"file.mks\";</code>.",
-        "After import, top-level names are available directly: <code>circle_area(2)</code>, not <code>m.circle_area(2)</code>.",
-        "Duplicate imports should be skipped according to README and test behavior."
-      ]
-    },
-    {
-      "id": "cookbook-small-test-suite",
-      "nav": "Test suite",
-      "title": "Cookbook: small test suite",
-      "description": "Use <code>test</code> and <code>expect</code> to keep examples executable as behavior checks.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "fnc add(a, b) ->",
-            "  return a + b;",
-            "<-",
-            "",
-            "test \"add works\" ->",
-            "  expect(add(2, 3) ?= 5);",
-            "<-",
-            "",
-            "test \"comparison works\" ->",
-            "  expect(3 >= 3);",
-            "<-"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "def add(a, b):",
-            "    return a + b",
-            "",
-            "def test_add_works():",
-            "    assert add(2, 3) == 5",
-            "",
-            "def test_comparison_works():",
-            "    assert 3 >= 3"
-          ]
-        }
-      ],
-      "points": [
-        "First declare the function you want to test.",
-        "Then write <code>test \"name\" -&gt;</code> to give the check a readable name.",
-        "<code>expect(condition);</code> should receive an expression that is expected to pass.",
-        "Keep this block near the example so the example is both a demo and a behavior check."
-      ]
-    },
-    {
-      "id": "arrays",
-      "nav": "Arrays",
-      "title": "Arrays & indexing",
-      "description": "Arrays are part of the core expression surface: create lists, read by index, assign by index, and extend array behavior with methods.",
-      "points": [
-        "Create arrays with <code>[1, 2, 3]</code> or the empty literal <code>[]</code>.",
-        "Read with an index: <code>arr[0]</code>. Tests use zero-based indexing.",
-        "Assign to an element with <code>arr[1] =: 99;</code>.",
-        "Tests use <code>inject(value)</code> to grow arrays and <code>len()</code> to read length."
-      ],
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "var xs =: [1, 2, 3];",
-            "",
-            "Writeln(xs[0]);",
-            "xs[1] =: 20;",
-            "",
-            "extend array ->",
-            "  method first() ->",
-            "    return self[0];",
-            "  <-",
-            "<-",
-            "",
-            "Writeln(xs.first());"
-          ],
-          "note": "The repository README lists arrays, indexing, and extend built-ins as core language features."
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "xs = [1, 2, 3]",
-            "",
-            "print(xs[0])",
-            "xs[1] = 20",
-            "",
-            "def first(xs):",
-            "    return xs[0]",
-            "",
-            "print(first(xs))"
+            "print(test(1))",
+            "print(test(0))"
           ]
         }
       ]
@@ -984,8 +527,8 @@
     {
       "id": "recursion",
       "nav": "Recursion",
-      "title": "Functions & recursion guard",
-      "description": "Functions support recursion. The interpreter README also calls out a recursion-depth guard, so runaway calls should fail with a clearer runtime error instead of silently eating the process.",
+      "title": "Recursion",
+      "description": "Functions can call themselves.",
       "tabs": [
         {
           "id": "mks",
@@ -1017,374 +560,70 @@
       ]
     },
     {
-      "id": "comparisons",
-      "nav": "Compare",
-      "title": "Comparisons & boolean flow",
-      "description": "The README calls out arithmetic, comparisons, logical operators, and the MKS equality spelling <code>?=</code>.",
+      "id": "tests",
+      "nav": "Tests",
+      "title": "Tests with test / expect",
+      "description": "Executable checks inside MKS source files.",
       "tabs": [
         {
           "id": "mks",
           "label": "MKS",
           "code": [
-            "var n =: 8;",
-            "",
-            "if (n ?= 8) ->",
-            "  Writeln(\"same\");",
+            "test \"math add\" ->",
+            "  expect(1 + 1 ?= 2);",
             "<-",
             "",
-            "if (n > 4 && n < 10) ->",
-            "  Writeln(\"inside\");",
-            "<-"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "n = 8",
-            "",
-            "if n == 8:",
-            "    print(\"same\")",
-            "",
-            "if n > 4 and n < 10:",
-            "    print(\"inside\")"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "break-continue",
-      "nav": "Break",
-      "title": "break & continue",
-      "description": "Loop control is part of the language tour: use <code>break</code> to leave a loop and <code>continue</code> to skip to the next pass.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "for (var i =: 0; i < 10; i =: i + 1) ->",
-            "  if (i ?= 2) ->",
-            "    continue;",
-            "  <-",
-            "",
-            "  if (i ?= 5) ->",
-            "    break;",
-            "  <-",
-            "",
-            "  Writeln(i);",
-            "<-"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "for i in range(10):",
-            "    if i == 2:",
-            "        continue",
-            "    if i == 5:",
-            "        break",
-            "    print(i)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "strings",
-      "nav": "Strings",
-      "title": "Strings & output",
-      "description": "Strings are first-class values in examples and are commonly printed through <code>Writeln</code>.",
-      "points": [
-        "Strings use double quotes.",
-        "Tests cover string output, <code>s[1]</code> indexing, <code>upper()</code>, <code>lower()</code>, and <code>len()</code>.",
-        "<code>Writeln</code> accepts multiple arguments, so you can print text and values together.",
-        "For function-style wrappers, see <code>std/string</code>."
-      ],
-      "source": "Checked against <code>tests/cases/strings_01.mks</code>, <code>string_empty_01.mks</code>, and <code>docs/REFERENCE.md</code>.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "var name =: \"MKS\";",
-            "Writeln(\"hello\", name);",
-            "",
-            "var s =: \"Hello\";",
-            "Writeln(s[1]);",
-            "Writeln(s.upper());",
-            "Writeln(s.lower());",
-            "Writeln(s.len());",
-            "",
-            "var event =: \"x changed\";",
-            "Writeln(event);"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "name = \"MKS\"",
-            "print(\"hello\", name)",
-            "",
-            "s = \"Hello\"",
-            "print(s[1])",
-            "print(s.upper())",
-            "print(s.lower())",
-            "print(len(s))",
-            "",
-            "event = \"x changed\"",
-            "print(event)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "stdlib-array",
-      "nav": "Std array",
-      "title": "std/array workflow",
-      "description": "Use <code>std/array</code> when you want named helper functions around array methods.",
-      "points": [
-        "<code>push(arr, v)</code> calls <code>arr.inject(v)</code> and returns the same array.",
-        "<code>pop(arr)</code> removes and returns the last item through the stdlib helper.",
-        "<code>first(arr)</code> and <code>last(arr)</code> return <code>null</code> when the array is empty.",
-        "<code>map</code>, <code>filter</code>, and <code>reduce</code> expect a function argument, so keep those examples small and tested."
-      ],
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "using \"std/array\";",
-            "",
-            "var xs =: [1, 2, 3];",
-            "push(xs, 4);",
-            "",
-            "Writeln(first(xs));",
-            "Writeln(last(xs));",
-            "Writeln(sum(xs));",
-            "Writeln(avg(xs));"
-          ],
-          "note": "This is based on <code>std/array.mks</code>. The repo tests directly cover the underlying methods <code>inject</code>, <code>len</code>, <code>offset</code>, <code>exclude</code>, and <code>purge</code>."
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "xs = [1, 2, 3]",
-            "xs.append(4)",
-            "",
-            "print(xs[0])",
-            "print(xs[-1])",
-            "print(sum(xs))",
-            "print(sum(xs) / len(xs))"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "loop-recipes",
-      "nav": "Loop recipes",
-      "title": "Loop recipes: where to put state",
-      "description": "Most MKS loop bugs come from placing state in the wrong spot. Keep setup before the loop, updates inside or in the <code>for</code> step, and exits close to the condition that needs them.",
-      "points": [
-        "For <code>while</code>, state is usually prepared before the loop: counter, accumulator, current index.",
-        "State updates must be guaranteed. If there is a <code>continue;</code>, update the counter before it or use <code>for</code>.",
-        "<code>for</code> is useful when init/condition/step fit clearly in one header.",
-        "<code>repeat</code> is best for a simple “do this N times”; <code>repeat i in N</code> is for when you need the pass number."
-      ],
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "var x =: 0;",
-            "",
-            "while (x < 6) ->",
-            "  x =: x + 1;",
-            "",
-            "  if (x ?= 2) ->",
-            "    continue;",
-            "  <-",
-            "",
-            "  if (x ?= 4) ->",
-            "    break;",
-            "  <-",
-            "",
-            "  Writeln(x);",
+            "fnc add(a, b) ->",
+            "  return a + b;",
             "<-",
             "",
-            "repeat i in 3 ->",
-            "  Writeln(i);",
+            "test \"function add\" ->",
+            "  expect(add(2, 3) ?= 5);",
             "<-"
-          ],
-          "note": "The <code>while</code> example mirrors <code>tests/cases/loop_control_01.mks</code>. The update happens before <code>continue;</code>, so the loop can still finish."
+          ]
         },
         {
           "id": "py",
           "label": "Python",
           "code": [
-            "x = 0",
+            "def add(a, b):",
+            "    return a + b",
             "",
-            "while x < 6:",
-            "    x += 1",
-            "    if x == 2:",
-            "        continue",
-            "    if x == 4:",
-            "        break",
-            "    print(x)",
+            "def test_math_add():",
+            "    assert 1 + 1 == 2",
             "",
-            "for i in range(3):",
-            "    print(i)"
+            "def test_function_add():",
+            "    assert add(2, 3) == 5"
           ]
         }
       ]
     },
     {
-      "id": "comments",
-      "nav": "Comments",
-      "title": "Comments",
-      "description": "Single-line comments use <code>//</code>. The repo docs and tests use them for notes beside code.",
-      "source": "Checked against <code>docs/REFERENCE.md</code> and <code>tests/cases/using_01.mks</code>.",
-      "code": [
-        "// this line is ignored",
-        "var x =: 10; // note beside a statement",
-        "Writeln(x);"
-      ],
-      "python": [
-        "# this line is ignored",
-        "x = 10  # note beside a statement",
-        "print(x)"
-      ]
-    },
-    {
-      "id": "numbers",
-      "nav": "Numbers",
-      "title": "Numbers",
-      "description": "Numbers are core values. Arithmetic test cases cover integer-looking literals with <code>+ - * / %</code>.",
-      "source": "Checked against <code>tests/cases/arithmetic_01.mks</code> and <code>docs/REFERENCE.md</code>.",
+      "id": "arrays",
+      "nav": "Arrays",
+      "title": "Arrays & indexing",
+      "description": "Create arrays, index into them, mutate elements, and inspect length.",
       "tabs": [
         {
           "id": "mks",
           "label": "MKS",
           "code": [
-            "Writeln(1 + 2);",
-            "Writeln(10 - 3);",
-            "Writeln(4 * 5);",
-            "Writeln(20 / 4);",
-            "Writeln(10 % 3);"
+            "var arr =: [1, 2, 3];",
+            "Writeln(arr[0]);",
+            "arr[1] =: 99;",
+            "Writeln(arr[1]);",
+            "Writeln(arr.len());"
           ]
         },
         {
           "id": "py",
           "label": "Python",
           "code": [
-            "print(1 + 2)",
-            "print(10 - 3)",
-            "print(4 * 5)",
-            "print(20 / 4)",
-            "print(10 % 3)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "null",
-      "nav": "Null",
-      "title": "null",
-      "description": "<code>null</code> is listed as a value in the reference. The documented array <code>last</code> helper returns it for empty arrays.",
-      "source": "Checked against <code>docs/REFERENCE.md</code>, <code>docs/USER_GUIDE.md</code>, and <code>std/array.mks</code>.",
-      "code": [
-        "fnc last_safe(arr) ->",
-        "  if (arr.len() ?= 0) ->",
-        "    return null;",
-        "  <-",
-        "  return arr[arr.len() - 1];",
-        "<-"
-      ],
-      "python": [
-        "def last_safe(arr):",
-        "    if len(arr) == 0:",
-        "        return None",
-        "    return arr[-1]"
-      ]
-    },
-    {
-      "id": "bool-stdlib",
-      "nav": "Bool std",
-      "title": "std/bool",
-      "description": "Boolean helpers are bundled in <code>std/bool</code>. Tests cover <code>true</code>, <code>false</code>, <code>not</code>, <code>and</code>, and <code>or</code>.",
-      "source": "Checked against <code>tests/cases/std_bool_01.mks</code> and <code>std/bool.mks</code>.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "using \"std/bool\";",
-            "",
-            "Writeln(true);",
-            "Writeln(false);",
-            "Writeln(not(true));",
-            "Writeln(and(true, false));",
-            "Writeln(or(false, true));"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "print(True)",
-            "print(False)",
-            "print(not True)",
-            "print(True and False)",
-            "print(False or True)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "comparison-table",
-      "nav": "Compare ops",
-      "title": "Comparison operators",
-      "description": "Comparison tests cover equality, inequality, greater/less, and inclusive bounds.",
-      "source": "Checked against <code>tests/cases/comparison_01.mks</code>.",
-      "code": [
-        "Writeln(1 ?= 1);  // equality",
-        "Writeln(1 !? 2);  // inequality",
-        "Writeln(5 > 3);",
-        "Writeln(2 < 1);",
-        "Writeln(3 >= 3);",
-        "Writeln(2 <= 5);"
-      ],
-      "python": [
-        "print(1 == 1)  # equality",
-        "print(1 != 2)  # inequality",
-        "print(5 > 3)",
-        "print(2 < 1)",
-        "print(3 >= 3)",
-        "print(2 <= 5)"
-      ]
-    },
-    {
-      "id": "precedence",
-      "nav": "Precedence",
-      "title": "Expression grouping",
-      "description": "Nested expression tests show that normal precedence and parentheses are handled.",
-      "source": "Checked against <code>tests/cases/nested_01.mks</code>.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "Writeln(2 + 3 * 4);",
-            "Writeln((2 + 3) * 4);"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "print(2 + 3 * 4)",
-            "print((2 + 3) * 4)"
+            "arr = [1, 2, 3]",
+            "print(arr[0])",
+            "arr[1] = 99",
+            "print(arr[1])",
+            "print(len(arr))"
           ]
         }
       ]
@@ -1393,29 +632,37 @@
       "id": "empty-arrays",
       "nav": "Empty arrays",
       "title": "Empty arrays",
-      "description": "Empty arrays can be created, measured, then mutated with <code>inject</code>.",
-      "source": "Checked against <code>tests/cases/array_empty_01.mks</code>.",
-      "code": [
-        "var arr =: [];",
-        "Writeln(arr.len());",
-        "arr.inject(10);",
-        "Writeln(arr[0]);",
-        "Writeln(arr.len());"
-      ],
-      "python": [
-        "arr = []",
-        "print(len(arr))",
-        "arr.append(10)",
-        "print(arr[0])",
-        "print(len(arr))"
+      "description": "Create empty arrays and grow them.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var arr =: [];",
+            "Writeln(arr.len());",
+            "arr.inject(10);",
+            "Writeln(arr[0]);",
+            "Writeln(arr.len());"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "arr = []",
+            "print(len(arr))",
+            "arr.append(10)",
+            "print(arr[0])",
+            "print(len(arr))"
+          ]
+        }
       ]
     },
     {
       "id": "nested-arrays",
       "nav": "Nested arrays",
       "title": "Nested arrays",
-      "description": "Nested array literals and chained indexing are covered by tests.",
-      "source": "Checked against <code>tests/cases/nested_arrays_01.mks</code>.",
+      "description": "Arrays can contain arrays.",
       "tabs": [
         {
           "id": "mks",
@@ -1438,404 +685,710 @@
       ]
     },
     {
-      "id": "array-mutation",
-      "nav": "Array mutate",
-      "title": "Array mutation methods",
-      "description": "The tests exercise several mutating array methods. Keep their exact behavior tied to runtime tests while the language is experimental.",
-      "source": "Checked against <code>tests/cases/array_methods_01.mks</code>.",
-      "code": [
-        "var arr =: [1, 2, 3];",
-        "Writeln(arr.offset(1));",
-        "arr.exclude(1);",
-        "Writeln(arr);",
-        "arr.purge();",
-        "Writeln(arr);"
+      "id": "array-methods-core",
+      "nav": "Array methods",
+      "title": "Core array methods",
+      "description": "Common built-in array methods used in tests and std/array.",
+      "groups": [
+        {
+          "title": "Mutation",
+          "items": ["inject", "eject", "exclude", "purge"]
+        },
+        {
+          "title": "Access",
+          "items": ["offset", "len"]
+        },
+        {
+          "title": "Std wrappers",
+          "items": ["push", "pop", "first", "last", "slice", "reverse", "map", "filter", "reduce", "sum"]
+        }
       ],
-      "python": [
-        "arr = [1, 2, 3]",
-        "print(arr[1])",
-        "del arr[1]",
-        "print(arr)",
-        "arr.clear()",
-        "print(arr)"
-      ]
-    },
-    {
-      "id": "output",
-      "nav": "Output",
-      "title": "Write and Writeln",
-      "description": "The reference documents <code>Write</code> and <code>Writeln</code>. Examples mostly use <code>Writeln</code> for readable test output.",
-      "source": "Checked against <code>docs/REFERENCE.md</code> and test cases.",
-      "code": [
-        "Write(\"same line: \");",
-        "Writeln(123);",
-        "Writeln(\"name\", \"MKS\");"
-      ],
-      "python": [
-        "print(\"same line: \", end=\"\")",
-        "print(123)",
-        "print(\"name\", \"MKS\")"
-      ]
-    },
-    {
-      "id": "read-input",
-      "nav": "Read input",
-      "title": "Read input",
-      "description": "<code>Read</code> is a native input helper registered by the interpreter for files and the REPL.",
-      "points": [
-        "<code>Read()</code> reads one line from stdin and returns it as a string without the trailing newline.",
-        "<code>Read(\"prompt\")</code> prints the prompt first, flushes stdout, then reads a line.",
-        "<code>Read(0)</code> reads a line but returns only the first whitespace-separated word.",
-        "If stdin is closed or no line can be read, current behavior returns an empty string."
-      ],
-      "source": "Checked against <code>main.c</code> in <code>mks-lang/MKS-interpreter</code>: native <code>Read</code> uses <code>fgets</code>, trims newline characters, supports string prompts, and has a <code>Read(0)</code> word mode.",
       "tabs": [
         {
           "id": "mks",
           "label": "MKS",
           "code": [
-            "var name =: Read(\"name: \");",
-            "Writeln(\"hello\", name);",
-            "",
-            "var line =: Read();",
-            "Writeln(\"line\", line);",
-            "",
-            "var first =: Read(0);",
-            "Writeln(\"first word\", first);"
-          ],
-          "note": "Use <code>Read(\"prompt\")</code> for interactive examples. Use <code>Read(0)</code> only when you intentionally want a single word."
+            "var arr =: [1, 2, 3];",
+            "Writeln(arr.offset(1));",
+            "arr.exclude(1);",
+            "Writeln(arr);",
+            "arr.purge();",
+            "Writeln(arr);"
+          ]
         },
         {
           "id": "py",
           "label": "Python",
           "code": [
-            "name = input(\"name: \")",
-            "print(\"hello\", name)",
-            "",
-            "line = input()",
-            "print(\"line\", line)",
-            "",
-            "first = input().split()[0]",
-            "print(\"first word\", first)"
+            "arr = [1, 2, 3]",
+            "print(arr[1])",
+            "del arr[1]",
+            "print(arr)",
+            "arr.clear()",
+            "print(arr)"
           ]
         }
       ]
     },
     {
-      "id": "return-early",
-      "nav": "Early return",
-      "title": "Early return from if",
-      "description": "A function can return from inside an <code>if</code> block. Put the fallback return after the block.",
-      "source": "Checked against <code>tests/cases/return_if_01.mks</code>.",
-      "code": [
-        "fnc test(x) ->",
-        "  if (x > 0) ->",
-        "    return 111;",
-        "  <-",
-        "  return 222;",
-        "<-",
-        "",
-        "Writeln(test(1));",
-        "Writeln(test(0));"
-      ],
-      "python": [
-        "def test(x):",
-        "    if x > 0:",
-        "        return 111",
-        "    return 222",
-        "",
-        "print(test(1))",
-        "print(test(0))"
-      ]
-    },
-    {
-      "id": "factorial",
-      "nav": "Factorial",
-      "title": "Recursive factorial",
-      "description": "The recursion test uses a classic base case plus recursive multiplication.",
-      "source": "Checked against <code>tests/cases/recursion_01.mks</code>.",
-      "code": [
-        "fnc fact(n) ->",
-        "  if (n <= 1) ->",
-        "    return 1;",
-        "  <-",
-        "  return n * fact(n - 1);",
-        "<-",
-        "",
-        "Writeln(fact(5));"
-      ],
-      "python": [
-        "def fact(n):",
-        "    if n <= 1:",
-        "        return 1",
-        "    return n * fact(n - 1)",
-        "",
-        "print(fact(5))"
-      ]
-    },
-    {
-      "id": "std-math-extra",
-      "nav": "More math",
-      "title": "More std/math names",
-      "description": "The stdlib exposes more math helpers than the short README example shows.",
-      "source": "Checked against <code>std/math.mks</code>.",
-      "warning": "Examples here list available names. For edge-case numeric behavior, verify against the current MKS version.",
-      "code": [
-        "using \"std/math\";",
-        "",
-        "Writeln(floor(1.9));",
-        "Writeln(ceil(1.1));",
-        "Writeln(round(1.5));",
-        "Writeln(sqrt(9));",
-        "Writeln(pow(2, 3));",
-        "Writeln(sin(0));",
-        "Writeln(cos(0));"
-      ],
-      "python": [
-        "import math",
-        "",
-        "print(math.floor(1.9))",
-        "print(math.ceil(1.1))",
-        "print(round(1.5))",
-        "print(math.sqrt(9))",
-        "print(math.pow(2, 3))",
-        "print(math.sin(0))",
-        "print(math.cos(0))"
-      ]
-    },
-    {
-      "id": "string-methods",
-      "nav": "String methods",
-      "title": "String method examples",
-      "description": "String examples cover <code>empty</code>, <code>len</code>, <code>upper</code>, and <code>lower</code>, plus wrappers in <code>std/string</code>.",
-      "source": "Checked against <code>tests/cases/strings_01.mks</code>, <code>string_empty_01.mks</code>, and <code>std/string.mks</code>.",
-      "code": [
-        "var s =: \"Hello\";",
-        "Writeln(s.upper());",
-        "Writeln(s.lower());",
-        "Writeln(s.len());",
-        "",
-        "var empty =: \"\";",
-        "Writeln(empty.empty());"
-      ],
-      "python": [
-        "s = \"Hello\"",
-        "print(s.upper())",
-        "print(s.lower())",
-        "print(len(s))",
-        "",
-        "empty = \"\"",
-        "print(empty == \"\")"
+      "id": "strings",
+      "nav": "Strings",
+      "title": "Strings",
+      "description": "Strings are first-class values with built-in methods and std/string wrappers.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var s =: \"Hello\";",
+            "Writeln(s);",
+            "Writeln(s[1]);",
+            "Writeln(s.upper());",
+            "Writeln(s.lower());",
+            "Writeln(s.len());"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "s = \"Hello\"",
+            "print(s)",
+            "print(s[1])",
+            "print(s.upper())",
+            "print(s.lower())",
+            "print(len(s))"
+          ]
+        }
       ]
     },
     {
       "id": "std-string",
-      "nav": "Std string",
-      "title": "std/string wrappers",
-      "description": "<code>std/string</code> exposes function-style wrappers over string and array methods.",
-      "source": "Checked against <code>std/string.mks</code>.",
-      "code": [
-        "using \"std/string\";",
-        "",
-        "Writeln(len(\"Hello\"));",
-        "Writeln(upper(\"Hello\"));",
-        "Writeln(lower(\"Hello\"));",
-        "Writeln(contains(\"Hello\", \"ell\"));"
+      "nav": "std/string",
+      "title": "Stdlib string helpers",
+      "description": "std/string wraps native string methods in plain MKS functions.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using \"std/string\";",
+            "",
+            "Writeln(len(\"abc\"));",
+            "Writeln(lower(\"HeLLo\"));",
+            "Writeln(upper(\"hello\"));",
+            "Writeln(trim(\"  hi  \"));",
+            "Writeln(contains(\"mks-lang\", \"lang\"));",
+            "Writeln(starts_with(\"mks-lang\", \"mks\"));",
+            "Writeln(ends_with(\"main.mks\", \".mks\"));",
+            "Writeln(replace(\"a-b-c\", \"-\", \":\"));",
+            "Writeln(split(\"a,b,c\", \",\"));",
+            "Writeln(join([\"a\", \"b\", \"c\"], \"-\"));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "print(len(\"abc\"))",
+            "print(\"HeLLo\".lower())",
+            "print(\"hello\".upper())",
+            "print(\"  hi  \".strip())",
+            "print(\"lang\" in \"mks-lang\")",
+            "print(\"mks-lang\".startswith(\"mks\"))",
+            "print(\"main.mks\".endswith(\".mks\"))",
+            "print(\"a-b-c\".replace(\"-\", \":\"))",
+            "print(\"a,b,c\".split(\",\"))",
+            "print(\"-\".join([\"a\", \"b\", \"c\"]))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "entities",
+      "nav": "Entities",
+      "title": "Entities",
+      "description": "Lightweight object-style values with fields and methods.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "entity Buba(name, power) ->",
+            "  init ->",
+            "    self.name =: name;",
+            "    self.power =: power;",
+            "  <-",
+            "",
+            "  method hello() ->",
+            "    Writeln(\"Hello, I am \", self.name, \" with power \", self.power);",
+            "  <-",
+            "",
+            "  method boost(amount) ->",
+            "    self.power =: self.power + amount;",
+            "  <-",
+            "<-",
+            "",
+            "var b =: Buba(\"buba\", 12);",
+            "b.hello();",
+            "b.boost(5);",
+            "Writeln(b.power);"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "class Buba:",
+            "    def __init__(self, name, power):",
+            "        self.name = name",
+            "        self.power = power",
+            "",
+            "    def hello(self):",
+            "        print(\"Hello, I am\", self.name, \"with power\", self.power)",
+            "",
+            "    def boost(self, amount):",
+            "        self.power += amount",
+            "",
+            "b = Buba(\"buba\", 12)",
+            "b.hello()",
+            "b.boost(5)",
+            "print(b.power)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extend",
+      "nav": "Extend",
+      "title": "Extend built-ins",
+      "description": "Attach new methods to built-in array values.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "extend array ->",
+            "  method sum() ->",
+            "    var total =: 0;",
+            "    var i =: 0;",
+            "",
+            "    while (i < self.len()) ->",
+            "      total =: total + self[i];",
+            "      i =: i + 1;",
+            "    <-",
+            "",
+            "    return total;",
+            "  <-",
+            "",
+            "  method last() ->",
+            "    if (self.len() ?= 0) ->",
+            "      return null;",
+            "    <-",
+            "",
+            "    return self[self.len() - 1];",
+            "  <-",
+            "<-",
+            "",
+            "var nums =: [1, 2, 3];",
+            "Writeln(nums.sum());",
+            "Writeln(nums.last());"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "def sum_list(xs):",
+            "    total = 0",
+            "    for x in xs:",
+            "        total += x",
+            "    return total",
+            "",
+            "def last(xs):",
+            "    if len(xs) == 0:",
+            "        return None",
+            "    return xs[-1]",
+            "",
+            "nums = [1, 2, 3]",
+            "print(sum_list(nums))",
+            "print(last(nums))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "imports",
+      "nav": "Imports",
+      "title": "Imports with using",
+      "description": "Load a module once and use its top-level names directly.",
+      "points": [
+        "using works with local files and std modules.",
+        "The public examples use direct access to imported names.",
+        "Duplicate imports are skipped."
       ],
-      "python": [
-        "s = \"Hello\"",
-        "",
-        "print(len(s))",
-        "print(s.upper())",
-        "print(s.lower())",
-        "print(\"ell\" in s)"
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "// math.mks",
+            "using \"std/math\";",
+            "var PI =: 3;",
+            "var VERSION =: \"1.0.2\";",
+            "",
+            "fnc get_circle_area(r) ->",
+            "  return PI * r * r;",
+            "<-",
+            "",
+            "// main.mks",
+            "using \"math.mks\";",
+            "Writeln(PI);",
+            "Writeln(get_circle_area(2));",
+            "using \"math.mks\";",
+            "Writeln(VERSION);"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "# math_module.py",
+            "PI = 3",
+            "VERSION = \"1.0.2\"",
+            "",
+            "def get_circle_area(r):",
+            "    return PI * r * r",
+            "",
+            "# main.py",
+            "from math_module import PI, VERSION, get_circle_area",
+            "print(PI)",
+            "print(get_circle_area(2))",
+            "print(VERSION)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-math",
+      "nav": "std/math",
+      "title": "Stdlib: math",
+      "description": "Small math helpers and wrappers.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using \"std/math\";",
+            "",
+            "Writeln(abs(-5));",
+            "Writeln(min(10, 3));",
+            "Writeln(max(10, 3));",
+            "Writeln(square(4));",
+            "Writeln(floor(3.8));",
+            "Writeln(ceil(3.2));",
+            "Writeln(round(3.6));",
+            "Writeln(sqrt(16));",
+            "Writeln(pow(2, 5));",
+            "Writeln(sin(0));",
+            "Writeln(cos(0));",
+            "Writeln(rand());",
+            "Writeln(randint(1, 10));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import math, random",
+            "print(abs(-5))",
+            "print(min(10, 3))",
+            "print(max(10, 3))",
+            "print(4 * 4)",
+            "print(math.floor(3.8))",
+            "print(math.ceil(3.2))",
+            "print(round(3.6))",
+            "print(math.sqrt(16))",
+            "print(pow(2, 5))",
+            "print(math.sin(0))",
+            "print(math.cos(0))",
+            "print(random.random())",
+            "print(random.randint(1, 10))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-array",
+      "nav": "std/array",
+      "title": "Stdlib: array",
+      "description": "Plain-MKS helper functions built on array methods and loops.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using \"std/array\";",
+            "",
+            "var xs =: [1, 2, 3];",
+            "Writeln(first(xs));",
+            "Writeln(last(xs));",
+            "Writeln(slice(xs, 1, 2));",
+            "Writeln(reverse(xs));",
+            "Writeln(sum(xs));",
+            "",
+            "fnc twice(x) -> return x * 2; <-",
+            "Writeln(map(xs, twice));",
+            "",
+            "fnc gt1(x) -> return x > 1; <-",
+            "Writeln(filter(xs, gt1));",
+            "",
+            "fnc add(acc, x) -> return acc + x; <-",
+            "Writeln(reduce(xs, add, 0));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "xs = [1, 2, 3]",
+            "print(xs[0])",
+            "print(xs[-1])",
+            "print(xs[1:3])",
+            "print(list(reversed(xs)))",
+            "print(sum(xs))",
+            "print(list(map(lambda x: x * 2, xs)))",
+            "print(list(filter(lambda x: x > 1, xs)))",
+            "from functools import reduce",
+            "print(reduce(lambda acc, x: acc + x, xs, 0))"
+          ]
+        }
       ]
     },
     {
       "id": "std-time",
-      "nav": "Time",
-      "title": "std/time",
-      "description": "<code>std/time</code> wraps runtime time helpers.",
-      "source": "Checked against <code>std/time.mks</code>.",
-      "warning": "Verify time formatting and exact helper behavior against the current MKS version; public documentation is still thin here.",
-      "code": [
-        "using \"std/time\";",
-        "",
-        "Writeln(now());",
-        "Writeln(timestamp());",
-        "sleep(100);"
-      ],
-      "python": [
-        "import time",
-        "",
-        "print(time.ctime())",
-        "print(time.time())",
-        "time.sleep(0.1)"
+      "nav": "std/time",
+      "title": "Stdlib: time",
+      "description": "Simple wrappers for current time and sleeping.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using \"std/time\";",
+            "",
+            "Writeln(now());",
+            "Writeln(timestamp());",
+            "sleep(100);",
+            "Writeln(\"done\");"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import time",
+            "print(time.ctime())",
+            "print(int(time.time()))",
+            "time.sleep(0.1)",
+            "print(\"done\")"
+          ]
+        }
       ]
     },
     {
-      "id": "duplicate-imports",
-      "nav": "Dup imports",
-      "title": "Duplicate imports",
-      "description": "The README says modules run once. A test imports the same file twice and notes that the duplicate should be skipped.",
-      "source": "Checked against <code>tests/cases/using_01.mks</code> and README.",
-      "code": [
-        "using \"math.mks\";",
-        "Writeln(PI);",
-        "Writeln(get_circle_area(2));",
-        "",
-        "using \"math.mks\"; // duplicate should be skipped",
-        "Writeln(VERSION);"
-      ],
-      "python": [
-        "import math_module",
-        "print(math_module.PI)",
-        "print(math_module.get_circle_area(2))",
-        "",
-        "import math_module  # duplicate import uses module cache",
-        "print(math_module.VERSION)"
+      "id": "watch",
+      "nav": "Watch",
+      "title": "watch / on change",
+      "description": "Watch a named variable and run code when it changes.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "watch x;",
+            "",
+            "on change x ->",
+            "  Writeln(\"x changed\", x);",
+            "<-",
+            "",
+            "var x =: 1;",
+            "x =: 2;"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "x = 1",
+            "",
+            "def on_change(v):",
+            "    print(\"x changed\", v)",
+            "",
+            "x = 2",
+            "on_change(x)"
+          ]
+        }
       ]
     },
     {
-      "id": "module-file-example",
-      "nav": "Module file",
-      "title": "Module file example",
-      "description": "The repository root includes a small <code>math.mks</code> used by import tests.",
-      "source": "Checked against <code>math.mks</code> and <code>tests/cases/using_01.mks</code>.",
-      "code": [
-        "// math.mks",
-        "using \"std/math\";",
-        "",
-        "var PI =: 3.14159;",
-        "var VERSION =: \"math-1\";",
-        "",
-        "fnc get_circle_area(r) ->",
-        "  return PI * square(r);",
-        "<-"
-      ],
-      "python": [
-        "# math_module.py",
-        "PI = 3.14159",
-        "VERSION = \"math-1\"",
-        "",
-        "def square(x):",
-        "    return x * x",
-        "",
-        "def get_circle_area(r):",
-        "    return PI * square(r)"
-      ]
-    },
-    {
-      "id": "entity-mutation",
-      "nav": "Entity mutate",
-      "title": "Updating entity fields",
-      "description": "Entity methods can update fields through <code>self</code>. The entity test boosts a stored numeric field.",
-      "source": "Checked against <code>tests/cases/entity_01.mks</code>.",
-      "code": [
-        "entity Buba(name, power) ->",
-        "  init ->",
-        "    self.name =: name;",
-        "    self.power =: power;",
-        "  <-",
-        "  method boost(amount) ->",
-        "    self.power =: self.power + amount;",
-        "  <-",
-        "<-",
-        "",
-        "var b =: Buba(\"buba\", 12);",
-        "b.boost(5);",
-        "Writeln(b.power);"
-      ],
-      "python": [
-        "class Buba:",
-        "    def __init__(self, name, power):",
-        "        self.name = name",
-        "        self.power = power",
-        "",
-        "    def boost(self, amount):",
-        "        self.power = self.power + amount",
-        "",
-        "b = Buba(\"buba\", 12)",
-        "b.boost(5)",
-        "print(b.power)"
-      ]
-    },
-    {
-      "id": "defer-order",
-      "nav": "Defer order",
-      "title": "Defer order",
-      "description": "Current runtime code stores deferred blocks and executes them from newest to oldest when leaving the block.",
-      "source": "Checked against user-facing docs and <code>tests/cases/defer_watch_01.mks</code>.",
-      "code": [
-        "defer ->",
-        "  Writeln(\"d1\");",
-        "<-",
-        "",
-        "defer ->",
-        "  Writeln(\"d2\");",
-        "<-",
-        "",
-        "Writeln(\"body\");"
-      ],
-      "python": [
-        "from contextlib import ExitStack",
-        "",
-        "with ExitStack() as stack:",
-        "    stack.callback(lambda: print(\"d1\"))",
-        "    stack.callback(lambda: print(\"d2\"))",
-        "    print(\"body\")"
-      ]
-    },
-    {
-      "id": "watch-scope",
-      "nav": "Watch timing",
-      "title": "Watch timing",
-      "description": "Register the watcher and handler before the assignment that should trigger it.",
-      "source": "Checked against README, <code>docs/USER_GUIDE.md</code>, and <code>tests/cases/defer_watch_01.mks</code>.",
-      "code": [
-        "watch x;",
-        "on change x ->",
-        "  Writeln(\"x changed\", x);",
-        "<-",
-        "",
-        "var x =: 1;",
-        "x =: 2;"
-      ],
-      "python": [
-        "handlers = []",
-        "",
-        "def on_change(value):",
-        "    print(\"x changed\", value)",
-        "",
-        "handlers.append(on_change)",
-        "x = 1",
-        "x = 2",
-        "for handler in handlers:",
-        "    handler(x)"
+      "id": "defer",
+      "nav": "Defer",
+      "title": "defer",
+      "description": "Register cleanup-like work to run when leaving the scope.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "defer ->",
+            "  Writeln(\"d1\");",
+            "<-",
+            "",
+            "defer ->",
+            "  Writeln(\"d2\");",
+            "<-",
+            "",
+            "Writeln(\"body\");"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "print(\"body\")",
+            "print(\"d2\")",
+            "print(\"d1\")"
+          ]
+        }
       ]
     },
     {
       "id": "errors",
       "nav": "Errors",
       "title": "Errors",
-      "description": "Readable errors with source positions and hints.",
-      "tabs": [
-        {
-          "id": "mks",
-          "label": "MKS",
-          "code": [
-            "Error: unknown symbol `y`",
-            "at main.mks:3:5"
-          ]
-        },
-        {
-          "id": "py",
-          "label": "Python",
-          "code": [
-            "NameError: name 'y' is not defined",
-            "File \"main.py\", line 3"
-          ]
-        }
+      "description": "The docs describe file:line errors plus hints for common mistakes.",
+      "code": [
+        "Error: unknown symbol `y`",
+        "at main.mks:3:5"
+      ],
+      "tips": [
+        "Check missing semicolons.",
+        "Check missing <- block ends.",
+        "Check typos in keywords and names.",
+        "Check wrong value types."
+      ]
+    },
+    {
+      "id": "cookbook-sum-array",
+      "nav": "Sum array",
+      "title": "Cookbook: sum numbers",
+      "description": "Classic accumulator loop.",
+      "code": [
+        "var nums =: [3, 5, 8];",
+        "var total =: 0;",
+        "var i =: 0;",
+        "",
+        "while (i < nums.len()) ->",
+        "  total =: total + nums[i];",
+        "  i =: i + 1;",
+        "<-",
+        "",
+        "Writeln(total);"
+      ]
+    },
+    {
+      "id": "cookbook-safe-last",
+      "nav": "Safe last",
+      "title": "Cookbook: safe last item",
+      "description": "Return null for empty arrays.",
+      "code": [
+        "fnc last_safe(arr) ->",
+        "  if (arr.len() ?= 0) ->",
+        "    return null;",
+        "  <-",
+        "",
+        "  return arr[arr.len() - 1];",
+        "<-",
+        "",
+        "Writeln(last_safe([1, 2, 3]));"
+      ]
+    },
+    {
+      "id": "cookbook-extend-array",
+      "nav": "Custom array method",
+      "title": "Cookbook: custom array method",
+      "description": "Attach a reusable method with extend array.",
+      "code": [
+        "extend array ->",
+        "  method first() ->",
+        "    if (self.len() ?= 0) ->",
+        "      return null;",
+        "    <-",
+        "",
+        "    return self[0];",
+        "  <-",
+        "<-",
+        "",
+        "Writeln([10, 20, 30].first());"
+      ]
+    },
+    {
+      "id": "cookbook-entity-counter",
+      "nav": "Entity counter",
+      "title": "Cookbook: mutable entity state",
+      "description": "Entity methods can update self fields.",
+      "code": [
+        "entity Counter(value) ->",
+        "  init ->",
+        "    self.value =: value;",
+        "  <-",
+        "",
+        "  method inc() ->",
+        "    self.value =: self.value + 1;",
+        "  <-",
+        "<-",
+        "",
+        "var c =: Counter(0);",
+        "c.inc();",
+        "c.inc();",
+        "Writeln(c.value);"
+      ]
+    },
+    {
+      "id": "cookbook-module-math",
+      "nav": "Module split",
+      "title": "Cookbook: split code into a module",
+      "description": "Move reusable helpers into another .mks file.",
+      "code": [
+        "// math.mks",
+        "using \"std/math\";",
+        "",
+        "fnc area_square(x) ->",
+        "  return square(x);",
+        "<-",
+        "",
+        "// main.mks",
+        "using \"math.mks\";",
+        "Writeln(area_square(5));"
+      ]
+    },
+    {
+      "id": "cookbook-watch-counter",
+      "nav": "Watched counter",
+      "title": "Cookbook: watched counter",
+      "description": "Print whenever a value changes.",
+      "code": [
+        "var score =: 0;",
+        "watch score;",
+        "",
+        "on change score ->",
+        "  Writeln(\"score\", score);",
+        "<-",
+        "",
+        "score =: score + 10;",
+        "score =: score + 5;"
+      ]
+    },
+    {
+      "id": "cookbook-cli-input",
+      "nav": "Prompt input",
+      "title": "Cookbook: prompt for a name",
+      "description": "Tiny interactive script using Read.",
+      "code": [
+        "var name =: Read(\"Your name: \");",
+        "Writeln(\"Welcome,\", name);"
+      ]
+    },
+    {
+      "id": "cookbook-tests",
+      "nav": "Mini test suite",
+      "title": "Cookbook: tiny test suite",
+      "description": "Keep examples executable as checks.",
+      "code": [
+        "fnc add(a, b) ->",
+        "  return a + b;",
+        "<-",
+        "",
+        "test \"add works\" ->",
+        "  expect(add(2, 3) ?= 5);",
+        "<-",
+        "",
+        "test \"comparison works\" ->",
+        "  expect(3 >= 3);",
+        "<-"
+      ]
+    }
+  ],
+  "navigation": [
+    {
+      "title": "Getting started",
+      "sections": [
+        "hello",
+        "comments",
+        "values",
+        "operators",
+        "precedence",
+        "bools",
+        "output",
+        "read-input"
+      ]
+    },
+    {
+      "title": "Control flow",
+      "sections": [
+        "if-else",
+        "while",
+        "for",
+        "repeat",
+        "break-continue",
+        "functions",
+        "returns",
+        "recursion",
+        "tests"
+      ]
+    },
+    {
+      "title": "Data types",
+      "sections": [
+        "arrays",
+        "empty-arrays",
+        "nested-arrays",
+        "array-methods-core",
+        "strings",
+        "std-string",
+        "entities",
+        "extend"
+      ]
+    },
+    {
+      "title": "Modules & stdlib",
+      "sections": [
+        "imports",
+        "std-math",
+        "std-array",
+        "std-time"
+      ]
+    },
+    {
+      "title": "Runtime behavior",
+      "sections": [
+        "watch",
+        "defer",
+        "errors"
+      ]
+    },
+    {
+      "title": "Cookbook",
+      "sections": [
+        "cookbook-sum-array",
+        "cookbook-safe-last",
+        "cookbook-extend-array",
+        "cookbook-entity-counter",
+        "cookbook-module-math",
+        "cookbook-watch-counter",
+        "cookbook-cli-input",
+        "cookbook-tests"
       ]
     }
   ]

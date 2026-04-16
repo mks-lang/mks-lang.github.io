@@ -1,383 +1,530 @@
 {
   "hero": {
     "eyebrow": "Roadmap",
-    "title": "From toy syntax to usable language.",
-    "subtitle": "A practical map: stabilize what exists, make examples runnable, grow stdlib, then improve tooling and runtime. No fake version theater.",
+    "title": "Path from 0.0.2 to 0.0.3",
+    "subtitle": "A language roadmap focused on making MKS more usable as a real scripting and systems-oriented language: stronger stdlib, clearer modules, better tooling, and a cleaner path toward compilation.",
     "chips": [
       {
-        "text": "Current language",
+        "text": "Core syntax stable",
         "variant": "live"
+      },
+      {
+        "text": "0.0.3 active",
+        "variant": "default"
       },
       {
         "text": "Stdlib next",
         "variant": "default"
       },
       {
-        "text": "Tooling",
-        "variant": "default"
-      },
-      {
-        "text": "Runtime later",
+        "text": "Compiler later",
         "variant": "ghost"
       }
-    ]
+    ],
+    "pathBadge": {
+      "eyebrow": "Path",
+      "from": "0.0.2",
+      "to": "0.0.3",
+      "label": "surface stable, stdlib and tooling next"
+    }
   },
   "terminal": {
-    "path": "/roadmap/useful.next",
+    "path": "/roadmap/lang-0.0.2-to-0.0.3",
     "lines": [
-      "$ mks roadmap --focus",
-      "docs cookbook .... active",
-      "stdlib examples .. active",
-      "import UX ........ next",
-      "playground presets next",
-      "runtime polish ... later"
+      "$ mks roadmap --advance",
+      "core syntax ..... stable",
+      "stdlib growth ... active",
+      "module rules .... active",
+      "tooling layer .... next",
+      "compiler path ... later"
     ]
   },
   "metrics": [
     {
-      "label": "Now",
-      "value": "Docs + examples"
+      "label": "Stable",
+      "value": "Core syntax"
+    },
+    {
+      "label": "Active",
+      "value": "0.0.3"
     },
     {
       "label": "Next",
-      "value": "Stdlib UX"
-    },
-    {
-      "label": "Later",
-      "value": "Tooling/runtime"
+      "value": "Stdlib + tools"
     }
   ],
   "rail": [
     {
       "phase": "01",
-      "title": "Make the language easy to learn",
-      "state": "live"
+      "title": "Language surface is stable",
+      "state": "done"
     },
     {
       "phase": "02",
-      "title": "Make stdlib discoverable",
-      "state": "next"
+      "title": "Stdlib becomes practical",
+      "state": "live"
     },
     {
       "phase": "03",
-      "title": "Make tooling pleasant",
-      "state": "later"
+      "title": "Tooling becomes usable",
+      "state": "next"
     },
     {
       "phase": "04",
-      "title": "Make runtime stronger",
+      "title": "Compiler and system reach",
       "state": "future"
     }
   ],
   "sections": [
     {
-      "id": "learn",
-      "eyebrow": "Now",
-      "title": "Learning surface",
-      "subtitle": "The website should teach real MKS with runnable examples before anything else.",
+      "id": "core",
+      "eyebrow": "Done",
+      "title": "Core language surface",
+      "subtitle": "The main syntax and runtime-facing language surface already exist. The goal now is to keep this layer understandable and predictable instead of bloating it too early.",
       "cards": [
         {
           "step": "01",
-          "phase": "Active",
-          "title": "Cookbook docs",
-          "status": "active",
-          "state": "live",
-          "progress": 78,
-          "description": "Turn reference snippets into practical recipes people can paste and modify.",
+          "phase": "Done",
+          "title": "Variables and expressions",
+          "status": "stable",
+          "state": "done",
+          "progress": 100,
+          "description": "MKS already has a readable identity: var bindings, =: assignment, arithmetic, comparisons, and logical flow.",
           "items": [
-            "loop recipes with state placement",
-            "safe array helpers",
-            "watch/defer examples",
-            "module split examples"
+            "var and =: semantics",
+            "arithmetic and comparisons",
+            "truthy flow and conditions",
+            "swap operator <-->"
           ]
         },
         {
           "step": "02",
-          "phase": "Active",
-          "title": "Examples expansion",
-          "status": "active",
-          "state": "live",
-          "progress": 74,
-          "description": "Examples should cover the same behavior the interpreter tests cover.",
+          "phase": "Done",
+          "title": "Functions and control flow",
+          "status": "stable",
+          "state": "done",
+          "progress": 96,
+          "description": "Functions, if/else, while, for, repeat, break, and continue already define how code is written in MKS.",
           "items": [
-            "arrays and strings",
-            "entities and extend",
-            "repeat/while/for",
-            "stdlib recipes"
+            "fnc and return",
+            "if / else blocks",
+            "while / for / repeat",
+            "break / continue"
           ]
         },
         {
           "step": "03",
-          "phase": "Active",
-          "title": "Truth labels",
-          "status": "active",
-          "state": "live",
-          "progress": 66,
-          "description": "Document what is tested, what is experimental, and what should not be relied on yet.",
+          "phase": "Done",
+          "title": "Entities and extend",
+          "status": "stable",
+          "state": "done",
+          "progress": 90,
+          "description": "Entity and extend already give MKS its object-like and method-oriented style.",
           "items": [
-            "no unsupported alias examples",
-            "warn on thin docs",
-            "source-backed notes",
-            "experimental badges"
+            "entity with init",
+            "method blocks",
+            "self field access",
+            "extend built-ins"
           ]
         }
       ]
     },
     {
       "id": "stdlib",
-      "eyebrow": "Next",
-      "title": "Standard library UX",
-      "subtitle": "Make stdlib feel like part of the language, not hidden files in the repo.",
+      "eyebrow": "Active",
+      "title": "Standard library growth",
+      "subtitle": "This is the main 0.0.3 track: make MKS practical enough that people can actually write code in it without fighting the language.",
       "cards": [
         {
           "step": "04",
-          "phase": "Next",
-          "title": "Stdlib explorer",
-          "status": "planned",
-          "state": "next",
-          "progress": 32,
-          "description": "A searchable page for std/math, std/array, std/string, std/bool, and std/time.",
+          "phase": "Active",
+          "title": "Stdlib baseline",
+          "status": "active",
+          "state": "live",
+          "progress": 50,
+          "description": "Turn std into the real daily surface of the language, not just a few wrappers.",
           "items": [
-            "function list",
-            "copyable examples",
-            "edge-case notes",
-            "source-backed signatures"
+            "std/math cleanup",
+            "std/array stronger helpers",
+            "std/string consistency",
+            "std/time practical use"
           ]
         },
         {
           "step": "05",
-          "phase": "Next",
-          "title": "Array/string recipes",
-          "status": "planned",
-          "state": "next",
-          "progress": 28,
-          "description": "Practical examples for common data work.",
+          "phase": "Active",
+          "title": "Bool and data helpers",
+          "status": "active",
+          "state": "live",
+          "progress": 42,
+          "description": "Small helpers should reduce boilerplate and make scripts feel less raw.",
           "items": [
-            "sum/avg/last",
-            "split/join/replace",
-            "safe empty handling",
-            "map/filter/reduce notes"
+            "std/bool clarity",
+            "safe null handling",
+            "array empty-edge helpers",
+            "string and array recipes"
           ]
         },
         {
           "step": "06",
           "phase": "Next",
-          "title": "Import clarity",
+          "title": "Package groundwork",
           "status": "planned",
           "state": "next",
           "progress": 24,
-          "description": "Make module loading behavior obvious and avoid alias confusion until runtime supports it.",
+          "description": "A real package direction should start small: importable libraries, reusable folders, and a clean convention before a full package manager.",
           "items": [
-            "current resolver rules",
-            "duplicate import behavior",
-            "local module pattern",
-            "clear warning for alias"
+            "package layout rules",
+            "local library pattern",
+            "module naming rules",
+            "future registry direction"
           ]
         }
       ]
     },
     {
-      "id": "playground",
-      "eyebrow": "Next",
-      "title": "Interactive workflow",
-      "subtitle": "Move from reading examples to running and sharing them.",
+      "id": "modules",
+      "eyebrow": "Active",
+      "title": "Modules and imports",
+      "subtitle": "Module behavior should feel strict and obvious. Confusing import rules will make the language feel fake fast.",
       "cards": [
         {
           "step": "07",
-          "phase": "Next",
-          "title": "Open in Playground",
-          "status": "queued",
-          "state": "next",
-          "progress": 20,
-          "description": "Every example card should open directly in the playground.",
+          "phase": "Active",
+          "title": "Resolver clarity",
+          "status": "active",
+          "state": "live",
+          "progress": 44,
+          "description": "Make import resolution clear enough that users know exactly where code comes from.",
           "items": [
-            "encode snippet in URL",
-            "preserve formatting",
-            "copy fallback",
-            "mobile-friendly action"
+            "current directory rules",
+            "working directory rules",
+            "std path rules",
+            "duplicate import behavior"
           ]
         },
         {
           "step": "08",
           "phase": "Next",
-          "title": "Playground presets",
-          "status": "queued",
+          "title": "Alias semantics",
+          "status": "planned",
           "state": "next",
-          "progress": 18,
-          "description": "Preset menu for common examples.",
+          "progress": 20,
+          "description": "Do not pretend alias imports are done until runtime and evaluation fully support them.",
           "items": [
-            "hello",
-            "arrays",
-            "loops",
-            "watch/defer",
-            "entity",
-            "stdlib"
+            "parse vs runtime support",
+            "clear docs for alias status",
+            "direct import remains default",
+            "future namespace design"
           ]
         },
         {
           "step": "09",
           "phase": "Next",
-          "title": "Visual trace mode",
-          "status": "idea",
-          "state": "future",
-          "progress": 10,
-          "description": "Explain simple snippets step by step without pretending to be the full interpreter.",
+          "title": "Library structure",
+          "status": "planned",
+          "state": "next",
+          "progress": 18,
+          "description": "Reusable MKS code should have a clean file structure before packages become official.",
           "items": [
-            "bind/update/read trace",
-            "stdout view",
-            "loop pass counter",
-            "clear limitations"
+            "std module structure",
+            "project library folders",
+            "public vs internal modules",
+            "import-safe conventions"
           ]
         }
       ]
     },
     {
       "id": "tooling",
-      "eyebrow": "Later",
-      "title": "Tooling and diagnostics",
-      "subtitle": "After docs and stdlib are understandable, make daily use smoother.",
+      "eyebrow": "Next",
+      "title": "Tooling and developer workflow",
+      "subtitle": "Once the language surface is readable, daily use has to stop feeling raw.",
       "cards": [
         {
           "step": "10",
-          "phase": "Later",
-          "title": "Better errors",
+          "phase": "Next",
+          "title": "Socrates",
           "status": "planned",
-          "state": "future",
+          "state": "next",
           "progress": 14,
-          "description": "Parser/runtime errors should point to fixes faster.",
+          "description": "Official formatter for one code style across blocks, entities, extend, loops, and imports.",
           "items": [
-            "missing semicolon hints",
-            "unclosed block hints",
-            "import errors",
-            "type mismatch notes"
+            "normalize spacing",
+            "indent arrow blocks",
+            "format entities and extend",
+            "future fmt CLI"
           ]
         },
         {
           "step": "11",
-          "phase": "Later",
-          "title": "Formatter",
+          "phase": "Next",
+          "title": "Diagnostics",
           "status": "planned",
-          "state": "future",
-          "progress": 8,
-          "description": "One official code style for arrow blocks, entity, extend, and loops.",
+          "state": "next",
+          "progress": 16,
+          "description": "Errors should help fix code faster instead of only stating that something exploded.",
           "items": [
-            "indent blocks",
-            "normalize spacing",
-            "format examples",
-            "CLI command later"
+            "missing semicolon hints",
+            "unclosed block hints",
+            "import error messages",
+            "type mismatch notes"
           ]
         },
         {
           "step": "12",
           "phase": "Later",
-          "title": "Test runner polish",
+          "title": "Test workflow",
           "status": "planned",
           "state": "future",
           "progress": 12,
-          "description": "Make built-in test blocks useful as a workflow.",
+          "description": "Built-in test blocks should grow into a real lightweight workflow for language users.",
           "items": [
             "suite output",
-            "filter tests",
-            "better failures",
-            "golden test integration"
+            "named test filtering",
+            "clear failure reports",
+            "project test conventions"
           ]
         }
       ]
     },
     {
       "id": "runtime",
-      "eyebrow": "Future",
-      "title": "Runtime strength",
-      "subtitle": "Runtime work matters, but only after the surface is understandable.",
+      "eyebrow": "Later",
+      "title": "Runtime consistency and performance",
+      "subtitle": "Runtime work matters, but it should follow clear language semantics instead of racing ahead of them.",
       "cards": [
         {
           "step": "13",
-          "phase": "Future",
+          "phase": "Later",
           "title": "Method consistency",
           "status": "planned",
           "state": "future",
           "progress": 12,
-          "description": "Make native and extended methods feel predictable.",
+          "description": "Native and extended methods should feel like one coherent system.",
           "items": [
-            "array method docs",
-            "string method docs",
             "consistent argument errors",
-            "empty/null edge cases"
+            "array method behavior",
+            "string method behavior",
+            "null and empty edge cases"
           ]
         },
         {
           "step": "14",
-          "phase": "Future",
-          "title": "Performance passes",
+          "phase": "Later",
+          "title": "Evaluator speed",
           "status": "planned",
           "state": "future",
-          "progress": 6,
-          "description": "Tighten evaluator and environment behavior when user-facing semantics settle.",
+          "progress": 8,
+          "description": "Speed work only matters once user-facing semantics stop shifting every week.",
           "items": [
-            "lookup speed",
-            "allocation pressure",
-            "module cache",
-            "GC visibility"
+            "faster lookups",
+            "less allocation pressure",
+            "module cache cleanup",
+            "better runtime profiling"
           ]
         },
         {
           "step": "15",
+          "phase": "Later",
+          "title": "GC visibility",
+          "status": "planned",
+          "state": "future",
+          "progress": 7,
+          "description": "The runtime should become easier to reason about when debugging memory and performance.",
+          "items": [
+            "GC debug modes",
+            "allocation stats",
+            "collection timing",
+            "stress-test workflow"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compiler",
+      "eyebrow": "Future",
+      "title": "Compilation path",
+      "subtitle": "Compilation is important, but only when the interpreted language already feels coherent.",
+      "cards": [
+        {
+          "step": "16",
           "phase": "Future",
-          "title": "Compiler experiments",
+          "title": "Bytecode direction",
           "status": "idea",
           "state": "future",
-          "progress": 4,
-          "description": "Only worth chasing once syntax, stdlib, docs, and tooling are less wobbly.",
+          "progress": 6,
+          "description": "Explore whether MKS should first stabilize through bytecode before chasing full native output.",
           "items": [
-            "bytecode sketch",
-            "AST lowering",
+            "opcode set sketch",
             "execution loop prototype",
-            "benchmarks later"
+            "function call model",
+            "jump/control flow model"
+          ]
+        },
+        {
+          "step": "17",
+          "phase": "Future",
+          "title": "Native compiler path",
+          "status": "idea",
+          "state": "future",
+          "progress": 5,
+          "description": "Push toward a real native binary path once AST semantics and stdlib expectations are solid.",
+          "items": [
+            "AST lowering",
+            "IR design",
+            "x86-64 backend experiments",
+            "nasm/ld workflow"
+          ]
+        },
+        {
+          "step": "18",
+          "phase": "Future",
+          "title": "Benchmarks",
+          "status": "idea",
+          "state": "future",
+          "progress": 3,
+          "description": "Only meaningful after the compiler/runtime surface stops moving all the time.",
+          "items": [
+            "interpreter benchmarks",
+            "bytecode comparisons",
+            "native output comparisons",
+            "stdlib-heavy workloads"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "eyebrow": "Future",
+      "title": "Systems direction",
+      "subtitle": "This is the bigger vision: make MKS more capable in OS-facing and lower-level workflows without losing its own identity.",
+      "cards": [
+        {
+          "step": "19",
+          "phase": "Future",
+          "title": "OS interaction",
+          "status": "planned",
+          "state": "future",
+          "progress": 6,
+          "description": "The language should eventually be able to do more than toy scripting.",
+          "items": [
+            "filesystem access",
+            "process execution",
+            "environment access",
+            "path utilities"
+          ]
+        },
+        {
+          "step": "20",
+          "phase": "Future",
+          "title": "Package system",
+          "status": "planned",
+          "state": "future",
+          "progress": 4,
+          "description": "A package story matters if MKS should grow beyond one-file experiments.",
+          "items": [
+            "package manifest idea",
+            "dependency rules",
+            "local cache strategy",
+            "install workflow"
+          ]
+        },
+        {
+          "step": "21",
+          "phase": "Future",
+          "title": "Hardware reach",
+          "status": "idea",
+          "state": "future",
+          "progress": 2,
+          "description": "Long-term direction for lower-level integrations and system-facing libraries.",
+          "items": [
+            "serial / device APIs",
+            "FFI or native bridge ideas",
+            "unsafe boundary design",
+            "hardware experiment layer"
           ]
         }
       ]
     }
   ],
   "timeline": {
-    "title": "Useful milestones",
-    "subtitle": "Each step should make the site or language easier to use.",
+    "title": "Useful language milestones",
+    "subtitle": "Each step should make MKS easier to write, understand, or grow.",
     "items": [
       {
-        "month": "Now",
-        "title": "Docs as cookbook",
-        "text": "Focus on loops, modules, stdlib, entities, tests, and real examples."
+        "month": "Done",
+        "title": "Core syntax identity",
+        "text": "Variables, control flow, entities, extend, watch, defer, and import basics are already shaping the language."
+      },
+      {
+        "month": "Active",
+        "title": "0.0.3 stdlib track",
+        "text": "Make stdlib practical enough that MKS feels usable for real scripts."
       },
       {
         "month": "Next",
-        "title": "Stdlib explorer",
-        "text": "Expose std/math, std/array, std/string, std/bool, and std/time with examples."
-      },
-      {
-        "month": "Next+",
-        "title": "Playground flow",
-        "text": "Open examples in playground and add presets."
+        "title": "Tooling layer",
+        "text": "Add MKSFmt and better diagnostics so writing MKS feels less raw."
       },
       {
         "month": "Later",
-        "title": "Tooling polish",
-        "text": "Formatter, clearer diagnostics, and better test runner."
+        "title": "Runtime strength",
+        "text": "Method consistency, evaluator speed, and better GC visibility."
       },
       {
         "month": "Future",
-        "title": "Runtime/compiler work",
-        "text": "Performance and compiler experiments after the surface settles."
+        "title": "Compiler and systems reach",
+        "text": "Bytecode or native compiler path, package system, OS access, and hardware direction."
       }
     ]
   },
   "principle": {
     "eyebrow": "Principle",
-    "title": "Make useful things obvious.",
-    "text": "MKS is experimental, so the site should teach what actually works, mark uncertainty, and prioritize runnable snippets over internal project noise.",
+    "title": "Make the language feel real before making it huge.",
+    "text": "MKS should first become predictable, practical, and pleasant to write. More power matters, but only after the surface, stdlib, modules, and tooling stop fighting the user.",
     "pills": [
-      "Runnable examples",
-      "Stdlib first",
-      "No fake claims",
-      "Tooling after clarity"
+      "Surface first",
+      "Stdlib matters",
+      "Tooling before hype",
+      "Systems direction later"
+    ]
+  },
+  "versionPath": {
+    "eyebrow": "Version path",
+    "title": "Path 0.0.2 to 0.0.3",
+    "subtitle": "0.0.2 defines the core identity. 0.0.3 should make MKS more practical through stdlib growth, module clarity, and first real tooling.",
+    "items": [
+      {
+        "version": "0.0.2",
+        "label": "Core identity",
+        "state": "done",
+        "text": "Core syntax, control flow, entities, extend, and runtime-style features define how MKS code feels."
+      },
+      {
+        "version": "0.0.3",
+        "label": "Practical scripting",
+        "state": "live",
+        "text": "Active work: stdlib growth, import clarity, MKSFmt groundwork, and better diagnostics."
+      },
+      {
+        "version": "0.0.4",
+        "label": "Module and package shape",
+        "state": "next",
+        "text": "Cleaner module structure, reusable library conventions, and package groundwork."
+      },
+      {
+        "version": "0.0.5",
+        "label": "Compilation path",
+        "state": "future",
+        "text": "First serious bytecode or native compilation direction."
+      },
+      {
+        "version": "0.1.0",
+        "label": "Systems reach",
+        "state": "future",
+        "text": "Packages, OS interaction, stronger runtime, and groundwork for lower-level workflows."
+      }
     ]
   }
 }

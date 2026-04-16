@@ -235,7 +235,7 @@
   }
 
   try {
-    const response = await fetch('assets/data/docs.json?v=20260415-2', { cache: 'no-store' });
+    const response = await fetch('assets/data/docs.json?v=20260415-4', { cache: 'no-store' });
     if (!response.ok) throw new Error(`Docs data request failed: ${response.status}`);
 
     const docs = await response.json();
@@ -249,11 +249,30 @@
     overview.textContent = 'Overview';
     sidebar.append(overview);
 
-    sections.forEach((section) => {
-      const link = document.createElement('a');
-      link.href = `#${section.id}`;
-      link.textContent = section.nav || section.title;
-      sidebar.append(link);
+    const sectionById = new Map(sections.map((section) => [section.id, section]));
+    const navigation = Array.isArray(docs.navigation) && docs.navigation.length
+      ? docs.navigation
+      : [{ title: '', sections: sections.map((section) => section.id) }];
+
+    navigation.forEach((group) => {
+      const groupSections = (group.sections || [])
+        .map((id) => sectionById.get(id))
+        .filter(Boolean);
+      if (!groupSections.length) return;
+
+      if (group.title) {
+        const heading = document.createElement('p');
+        heading.className = 'sidebar-heading';
+        heading.textContent = group.title;
+        sidebar.append(heading);
+      }
+
+      groupSections.forEach((section) => {
+        const link = document.createElement('a');
+        link.href = `#${section.id}`;
+        link.textContent = section.nav || section.title;
+        sidebar.append(link);
+      });
     });
 
     body.append(renderHero(docs.hero || {}));

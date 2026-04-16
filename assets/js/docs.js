@@ -6,8 +6,16 @@ function initDocsEnhancements() {
   document.querySelectorAll('[data-docs-card]').forEach((panel) => {
     panel.addEventListener('pointermove', (event) => {
       const rect = panel.getBoundingClientRect();
-      panel.style.setProperty('--mx', `${event.clientX - rect.left}px`);
-      panel.style.setProperty('--my', `${event.clientY - rect.top}px`);
+      const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
+      const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
+
+      panel.style.setProperty('--mx', `${x}px`);
+      panel.style.setProperty('--my', `${y}px`);
+    });
+
+    panel.addEventListener('pointerleave', () => {
+      panel.style.setProperty('--mx', '50%');
+      panel.style.setProperty('--my', '18%');
     });
   });
 
@@ -30,18 +38,52 @@ function initDocsEnhancements() {
   window.addEventListener('docs:ready', initDocsEnhancements);
 })();
 
+
 function initSidebarLinks() {
   const sidebar = document.querySelector('.sidebar');
   const links = Array.from(document.querySelectorAll('.sidebar a'));
-  if (!links.length) return;
+  if (!sidebar || !links.length) return;
 
   const sections = links
     .map((link) => document.querySelector(link.getAttribute('href')))
     .filter(Boolean);
 
-  function moveSidebar() {
-    if (!sidebar) return;
+  let sidebarScrollTarget = sidebar.scrollTop;
+  let sidebarScrollFrame = null;
+  let userSidebarLockUntil = 0;
 
+  function lockSidebarAutoScroll(ms = 1400) {
+    userSidebarLockUntil = Date.now() + ms;
+
+    if (sidebarScrollFrame) {
+      cancelAnimationFrame(sidebarScrollFrame);
+      sidebarScrollFrame = null;
+    }
+  }
+
+  function smoothSidebarScrollTo(target) {
+    sidebarScrollTarget = target;
+
+    if (sidebarScrollFrame) return;
+
+    const step = () => {
+      const current = sidebar.scrollTop;
+      const delta = sidebarScrollTarget - current;
+
+      if (Math.abs(delta) < 0.8) {
+        sidebar.scrollTop = sidebarScrollTarget;
+        sidebarScrollFrame = null;
+        return;
+      }
+
+      sidebar.scrollTop = current + delta * 0.16;
+      sidebarScrollFrame = requestAnimationFrame(step);
+    };
+
+    sidebarScrollFrame = requestAnimationFrame(step);
+  }
+
+  function moveSidebar() {
     if (window.matchMedia('(max-width: 960px)').matches) {
       sidebar.style.setProperty('--sidebar-shift', '0px');
       return;
@@ -52,8 +94,6 @@ function initSidebarLinks() {
   }
 
   function moveIndicator(activeLink) {
-    if (!sidebar || !activeLink) return;
-
     const sidebarBox = sidebar.getBoundingClientRect();
     const linkBox = activeLink.getBoundingClientRect();
     const offset = linkBox.top - sidebarBox.top + sidebar.scrollTop;
@@ -64,8 +104,6 @@ function initSidebarLinks() {
   }
 
   function keepLinkVisible(activeLink, smooth = false) {
-    if (!sidebar || !activeLink) return;
-
     if (window.matchMedia('(max-width: 960px)').matches) {
       const targetLeft = activeLink.offsetLeft - (sidebar.clientWidth - activeLink.offsetWidth) / 2;
       sidebar.scrollTo({
@@ -79,18 +117,22 @@ function initSidebarLinks() {
     const linkBottom = linkTop + activeLink.offsetHeight;
     const visibleTop = sidebar.scrollTop;
     const visibleBottom = visibleTop + sidebar.clientHeight;
-    const padding = 14;
+    const padding = 12;
 
     if (linkTop < visibleTop + padding) {
-      sidebar.scrollTo({
-        top: Math.max(0, linkTop - padding),
-        behavior: smooth ? 'smooth' : 'auto',
-      });
+      const nextTop = Math.max(0, linkTop - padding);
+      if (smooth) {
+        smoothSidebarScrollTo(nextTop);
+      } else {
+        sidebar.scrollTop = nextTop;
+      }
     } else if (linkBottom > visibleBottom - padding) {
-      sidebar.scrollTo({
-        top: linkBottom - sidebar.clientHeight + padding,
-        behavior: smooth ? 'smooth' : 'auto',
-      });
+      const nextTop = linkBottom - sidebar.clientHeight + padding;
+      if (smooth) {
+        smoothSidebarScrollTo(nextTop);
+      } else {
+        sidebar.scrollTop = nextTop;
+      }
     }
   }
 
@@ -106,12 +148,14 @@ function initSidebarLinks() {
 
     if (activeLink) {
       moveIndicator(activeLink);
-      keepLinkVisible(activeLink);
+      if (Date.now() > userSidebarLockUntil) {
+        keepLinkVisible(activeLink, true);
+      }
     }
   }
 
   function sync() {
-    const viewportLine = window.innerHeight / 2;
+    const viewportLine = window.innerHeight * 0.44;
     const pageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
     let current = pageBottom ? sections[sections.length - 1] : sections[0];
     let closestDistance = Number.POSITIVE_INFINITY;
@@ -119,9 +163,7 @@ function initSidebarLinks() {
     if (!pageBottom) {
       sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
-        const sectionBottom = rect.bottom;
-
-        if (sectionBottom < viewportLine) return;
+        if (rect.bottom < viewportLine) return;
 
         const distance = Math.abs(rect.top - viewportLine);
         if (distance < closestDistance) {
@@ -146,8 +188,13 @@ function initSidebarLinks() {
     });
   }
 
+  sidebar.addEventListener('pointerdown', () => lockSidebarAutoScroll(1800));
+  sidebar.addEventListener('mousedown', () => lockSidebarAutoScroll(1800));
+  sidebar.addEventListener('wheel', () => lockSidebarAutoScroll(900), { passive: true });
+
   window.addEventListener('scroll', requestSync, { passive: true });
   window.addEventListener('resize', requestSync);
+
   links.forEach((link) => {
     link.addEventListener('click', (event) => {
       const section = document.querySelector(link.getAttribute('href'));
@@ -157,14 +204,15 @@ function initSidebarLinks() {
       section.scrollIntoView({ block: 'center', behavior: 'smooth' });
       history.pushState(null, '', link.getAttribute('href'));
       setActive(section.id);
-      keepLinkVisible(link, true);
     });
   });
+
   window.addEventListener('hashchange', () => {
     sync();
     const activeLink = links.find((link) => link.classList.contains('active'));
     if (activeLink) keepLinkVisible(activeLink, true);
   });
+
   sync();
 }
 

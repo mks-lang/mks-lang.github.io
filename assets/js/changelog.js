@@ -3,7 +3,7 @@
   if (!root) return;
 
   try {
-    const response = await fetch('assets/data/changelog.json?v=20260415-1', { cache: 'no-store' });
+    const response = await fetch('assets/data/changelog.json?v=20260416-1', { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`Failed to fetch changelog.json: ${response.status} ${response.statusText}`);
     }

@@ -3,7 +3,7 @@
   if (!root) return;
 
   try {
-    const response = await fetch('assets/data/roadmap.json');
+    const response = await fetch('assets/data/roadmap.json?v=20260416-1', { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`Failed to fetch roadmap.json: ${response.status} ${response.statusText}`);
     }
@@ -12,6 +12,7 @@
 
     root.innerHTML = `
       ${renderHero(data.hero, data.terminal, data.metrics)}
+      ${renderVersionPath(data.versionPath)}
       ${renderRail(data.rail)}
       ${renderSections(data.sections)}
       ${renderTimeline(data.timeline)}
@@ -42,6 +43,8 @@ function renderHero(hero, terminal, metrics) {
         <div class="signal-ribbon ribbon-a"></div>
         <div class="signal-ribbon ribbon-b"></div>
         <div class="signal-ribbon ribbon-c"></div>
+        <div class="hero-orb orb-a"></div>
+        <div class="hero-orb orb-b"></div>
       </div>
 
       <div class="section road-hero-inner">
@@ -49,6 +52,8 @@ function renderHero(hero, terminal, metrics) {
           <p class="eyebrow">${escapeHtml(hero?.eyebrow || '')}</p>
           <h1>${escapeHtml(hero?.title || '')}</h1>
           <p class="sub hero-sub">${escapeHtml(hero?.subtitle || '')}</p>
+
+          ${renderPathBadge(hero?.pathBadge)}
 
           <div class="chip-row">
             ${(hero?.chips || []).map(chip => `
@@ -58,6 +63,7 @@ function renderHero(hero, terminal, metrics) {
 
           <div class="hero-actions">
             <a class="btn" href="docs.html">Read docs</a>
+            <a class="btn ghost" href="examples.html">See examples</a>
             <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">Open GitHub</a>
           </div>
         </div>
@@ -84,6 +90,60 @@ function renderHero(hero, terminal, metrics) {
           </div>
 
           <div class="terminal-sweep"></div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderPathBadge(badge) {
+  if (!badge) return '';
+
+  return `
+    <div class="path-badge" aria-label="${escapeHtml(badge.eyebrow || 'Path')} ${escapeHtml(badge.from || '')} to ${escapeHtml(badge.to || '')}">
+      <div class="path-ring">
+        <span>${escapeHtml(badge.from || '')}</span>
+        <i></i>
+        <span>${escapeHtml(badge.to || '')}</span>
+      </div>
+      <div>
+        <p class="eyebrow">${escapeHtml(badge.eyebrow || 'Path')}</p>
+        <strong>${escapeHtml(badge.label || '')}</strong>
+      </div>
+    </div>
+  `;
+}
+
+function renderVersionPath(versionPath) {
+  if (!versionPath?.items?.length) return '';
+
+  return `
+    <section class="section version-path-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">${escapeHtml(versionPath?.eyebrow || 'Version path')}</p>
+          <h2>${escapeHtml(versionPath?.title || 'Where MKS is heading')}</h2>
+        </div>
+        <p class="sub">${escapeHtml(versionPath?.subtitle || '')}</p>
+      </div>
+
+      <div class="version-shell panel glass">
+        <div class="version-line"></div>
+
+        <div class="version-grid">
+          ${(versionPath.items || []).map((item, index) => `
+            <article class="version-node ${escapeHtml(item.state || '')}">
+              <div class="version-dot-wrap">
+                <span class="version-dot">${String(index + 1).padStart(2, '0')}</span>
+              </div>
+
+              <div class="version-card">
+                <p class="version-number">${escapeHtml(item.version || '')}</p>
+                <h3>${escapeHtml(item.label || '')}</h3>
+                <p class="sub">${escapeHtml(item.text || '')}</p>
+              </div>
+            </article>
+          `).join('')}
         </div>
       </div>
     </section>
@@ -270,8 +330,8 @@ function initTiltCards() {
       const px = (e.clientX - rect.left) / rect.width;
       const py = (e.clientY - rect.top) / rect.height;
 
-      const rotateY = (px - 0.5) * 8;
-      const rotateX = (0.5 - py) * 8;
+      const rotateY = (px - 0.5) * 7;
+      const rotateX = (0.5 - py) * 7;
 
       card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
     });
@@ -283,7 +343,7 @@ function initTiltCards() {
 }
 
 function initRoadmapScrollFx() {
-  const cards = document.querySelectorAll('.stage-card, .timeline-card, .rail-node');
+  const cards = document.querySelectorAll('.stage-card, .timeline-card, .rail-node, .version-node');
   if (!cards.length || !('IntersectionObserver' in window)) return;
 
   const observer = new IntersectionObserver((entries) => {
