@@ -1,0 +1,199 @@
+{
+  "ui": {
+    "en": {
+      "brand.language": "language",
+      "nav.home": "Home",
+      "nav.examples": "Examples",
+      "nav.docs": "Docs",
+      "nav.playground": "Playground",
+      "nav.roadmap": "Roadmap",
+      "nav.changelog": "Changelog",
+      "nav.github": "GitHub",
+      "lang.label": "Language",
+      "copy.default": "Copy",
+      "copy.copied": "Copied",
+      "docs.overview": "Overview",
+      "docs.unstable": "Not-Stable",
+      "docs.failed": "Docs failed to load.",
+      "roadmap.failed": "Failed to load roadmap",
+      "changelog.failed": "Failed to load changelog",
+      "filters.all": "all",
+      "changelog.search": "Search changelog...",
+      "roadmap.read_docs": "Read docs",
+      "roadmap.see_examples": "See examples",
+      "roadmap.open_github": "Open GitHub",
+      "roadmap.timeline": "Timeline",
+      "roadmap.version_path": "Version path",
+      "roadmap.where_heading": "Where MKS is heading",
+      "roadmap.path": "Path"
+    },
+    "ru": {
+      "brand.language": "язык",
+      "nav.home": "Главная",
+      "nav.examples": "Примеры",
+      "nav.docs": "Документация",
+      "nav.playground": "Песочница",
+      "nav.roadmap": "Роадмап",
+      "nav.changelog": "Изменения",
+      "nav.github": "GitHub",
+      "lang.label": "Язык",
+      "copy.default": "Копировать",
+      "copy.copied": "Скопировано",
+      "docs.overview": "Обзор",
+      "docs.unstable": "Not-Stable",
+      "docs.failed": "Не удалось загрузить документацию.",
+      "roadmap.failed": "Не удалось загрузить роадмап",
+      "changelog.failed": "Не удалось загрузить changelog",
+      "filters.all": "все",
+      "changelog.search": "Искать по changelog...",
+      "roadmap.read_docs": "Читать docs",
+      "roadmap.see_examples": "Смотреть примеры",
+      "roadmap.open_github": "Открыть GitHub",
+      "roadmap.timeline": "Таймлайн",
+      "roadmap.version_path": "Путь версий",
+      "roadmap.where_heading": "Куда движется MKS",
+      "roadmap.path": "Путь"
+    }
+  },
+  "pages": {
+    "home": {
+      "en": {
+        "title": "MKS Language",
+        "entries": []
+      },
+      "ru": {
+        "title": "MKS Язык",
+        "entries": [
+          { "selector": ".hero-kicker span:last-child", "text": "MKS language · экспериментальный runtime" },
+          { "selector": ".hero-copy .eyebrow", "text": "Минимальный синтаксис. Видимая механика." },
+          { "selector": "#hero-title + .hero-subtitle", "text": "Небольшой язык с системным уклоном, стрелочными блоками, реактивными хуками и читаемой моделью рантайма." },
+          { "selector": ".hero-actions a:nth-child(1) span", "text": "Открыть playground" },
+          { "selector": ".hero-actions a:nth-child(2)", "text": "Документация" },
+          { "selector": ".hero-actions a:nth-child(3)", "text": "Примеры" },
+          { "selector": ".runtime-head span:first-child", "text": "runtime.mks" },
+          { "selector": ".runtime-head span:last-child", "text": "live trace" },
+          { "selector": ".runtime-metrics div:nth-child(1) span", "text": "Корни" },
+          { "selector": ".runtime-metrics div:nth-child(2) span", "text": "Наблюдатели" },
+          { "selector": ".runtime-metrics div:nth-child(3) span", "text": "Сборка" },
+          { "selector": ".home-strip article:nth-child(1) h2", "text": "Стрелочные блоки" },
+          { "selector": ".home-strip article:nth-child(1) p", "html": "<code>-></code> и <code><-</code> делают поток управления компактным и сразу заметным." },
+          { "selector": ".home-strip article:nth-child(2) h2", "text": "Реактивное ядро" },
+          { "selector": ".home-strip article:nth-child(2) p", "html": "<code>watch</code> и <code>on change</code> делают изменения состояния частью языка." },
+          { "selector": ".home-strip article:nth-child(3) h2", "text": "Видимый GC" },
+          { "selector": ".home-strip article:nth-child(3) p", "text": "Поведение mark-sweep видно как состояние рантайма, а не скрыто за декорацией." },
+          { "selector": ".split-copy .eyebrow", "text": "Короткий пример" },
+          { "selector": ".split-copy h2", "text": "Небольшая поверхность, понятный runtime feedback." },
+          { "selector": ".split-copy p:last-of-type", "text": "Главная теперь коротко показывает, что такое MKS, чем он отличается и куда идти дальше." },
+          { "selector": ".home-links a:nth-child(1) span", "text": "Читать docs" },
+          { "selector": ".home-links a:nth-child(2) span", "text": "Смотреть примеры" },
+          { "selector": ".home-links a:nth-child(3) span", "text": "Открыть roadmap" },
+          { "selector": ".home-links a:nth-child(4) span", "text": "GitHub" }
+        ]
+      }
+    },
+    "examples": {
+      "en": {
+        "title": "MKS Examples",
+        "entries": []
+      },
+      "ru": {
+        "title": "MKS Примеры",
+        "entries": [
+          { "selector": ".examples-copy .eyebrow", "text": "Примеры" },
+          { "selector": ".examples-copy h1", "text": "Практичные сниппеты MKS." },
+          { "selector": ".examples-copy .sub", "text": "Копируемые примеры для циклов, массивов, строк, entity, extend, модулей, watch/defer, тестов и стандартной библиотеки." },
+          { "selector": ".examples-search", "attr": "placeholder", "value": "Искать примеры..." },
+          { "selector": ".examples-search", "attr": "aria-label", "value": "Искать примеры" },
+          { "selector": ".filter-chip[data-filter=\"all\"]", "text": "Все" },
+          { "selector": ".filter-chip[data-filter=\"basics\"]", "text": "База" },
+          { "selector": ".filter-chip[data-filter=\"control\"]", "text": "Поток" },
+          { "selector": ".filter-chip[data-filter=\"runtime\"]", "text": "Runtime" },
+          { "selector": ".filter-chip[data-filter=\"oop\"]", "text": "Entity / Extend" },
+          { "selector": ".filter-chip[data-filter=\"modules\"]", "text": "Модули" },
+          { "selector": ".filter-chip[data-filter=\"stdlib\"]", "text": "Stdlib" },
+          { "selector": ".filter-chip[data-filter=\"repo\"]", "text": "Workflow" },
+          { "selector": ".examples-stats div:nth-child(1) p", "text": "копируемых сниппетов" },
+          { "selector": ".examples-stats div:nth-child(2) p", "text": "групп фич" },
+          { "selector": ".examples-stats div:nth-child(3) p", "text": "неподдерживаемых alias-паттернов" },
+          { "selector": ".examples-guide .eyebrow", "text": "Как читать страницу" },
+          { "selector": ".examples-guide h2", "text": "Начни с малого сниппета, потом совмещай паттерны." },
+          { "selector": ".examples-guide .sub", "text": "Каждая карточка намеренно маленькая. Сначала пойми форму, потом копируй и объединяй циклы, функции, модули и stdlib в более крупные программы." },
+          { "selector": ".guide-steps span:nth-child(1)", "text": "1. Выбери фичу" },
+          { "selector": ".guide-steps span:nth-child(2)", "text": "2. Скопируй сниппет" },
+          { "selector": ".guide-steps span:nth-child(3)", "text": "3. Измени одну строку" }
+        ]
+      }
+    },
+    "playground": {
+      "en": {
+        "title": "MKS Playground",
+        "entries": []
+      },
+      "ru": {
+        "title": "MKS Песочница",
+        "entries": [
+          { "selector": ".play-copy .eyebrow", "text": "Песочница" },
+          { "selector": ".play-copy h1", "text": "Объекты рантайма и деревья синтаксиса, которые можно потыкать." },
+          { "selector": ".play-copy .sub", "text": "Пошагово проигрывай компактную программу MKS, смотри как heap помечает достижимые объекты, собирает мусор и как AST ведёт выполнение." },
+          { "selector": ".play-actions [data-action=\"run\"]", "text": "Запустить цикл" },
+          { "selector": ".play-actions [data-action=\"mark\"]", "text": "Пометить" },
+          { "selector": ".play-actions [data-action=\"sweep\"]", "text": "Собрать" },
+          { "selector": ".play-actions [data-action=\"reset\"]", "text": "Сбросить" },
+          { "selector": ".play-status .eyebrow", "text": "Текущий проход" },
+          { "selector": "[data-detail]", "text": "Готово к просмотру корней, heap и AST." },
+          { "selector": ".editor-panel .eyebrow", "text": "Сниппет" },
+          { "selector": ".editor-panel h2", "text": "watch + churn в heap" },
+          { "selector": ".heap-panel .eyebrow", "text": "GC" },
+          { "selector": ".heap-panel h2", "text": "Карта heap" },
+          { "selector": ".ast-panel .eyebrow", "text": "Парсер" },
+          { "selector": ".ast-panel h2", "text": "Форма AST" },
+          { "selector": ".ast-panel .play-chip", "text": "live tree" },
+          { "selector": ".log-panel .eyebrow", "text": "Трасса" },
+          { "selector": ".log-panel h2", "text": "Лог рантайма" },
+          { "selector": ".log-panel .play-chip", "text": "события" }
+        ]
+      }
+    },
+    "docs": {
+      "en": {
+        "title": "MKS Docs",
+        "entries": []
+      },
+      "ru": {
+        "title": "MKS Документация",
+        "entries": [
+          { "selector": ".sidebar", "attr": "aria-label", "value": "Навигация по документации" },
+          { "selector": ".docs-loading", "text": "Загрузка документации..." }
+        ]
+      }
+    },
+    "roadmap": {
+      "en": {
+        "title": "MKS Roadmap",
+        "entries": []
+      },
+      "ru": {
+        "title": "MKS Роадмап",
+        "entries": [
+          { "selector": ".roadmap-loading .eyebrow", "text": "Роадмап" },
+          { "selector": ".roadmap-loading h1", "text": "Загрузка роадмапа…" },
+          { "selector": ".roadmap-loading .sub", "html": "Рендер из <code>assets/data/roadmap.ru.json</code>" }
+        ]
+      }
+    },
+    "changelog": {
+      "en": {
+        "title": "MKS Changelog",
+        "entries": []
+      },
+      "ru": {
+        "title": "MKS Changelog",
+        "entries": [
+          { "selector": ".changelog-loading .eyebrow", "text": "Changelog" },
+          { "selector": ".changelog-loading h1", "text": "Загрузка changelog..." },
+          { "selector": ".changelog-loading .sub", "html": "Рендер из <code>assets/data/changelog.ru.json</code>" }
+        ]
+      }
+    }
+  }
+}

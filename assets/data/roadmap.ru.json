@@ -1,0 +1,337 @@
+{
+  "hero": {
+    "eyebrow": "Роадмап",
+    "title": "Путь от 0.0.2 к 0.0.3",
+    "subtitle": "Роадмап языка сфокусирован на том, чтобы сделать MKS более пригодным для реального скриптинга и system-oriented задач: сильнее stdlib, яснее модули, лучше tooling и чище путь к компиляции.",
+    "chips": [
+      { "text": "Core syntax stable", "variant": "live" },
+      { "text": "0.0.3 active", "variant": "default" },
+      { "text": "Stdlib next", "variant": "default" },
+      { "text": "Compiler later", "variant": "ghost" }
+    ],
+    "pathBadge": {
+      "eyebrow": "Путь",
+      "from": "0.0.2",
+      "to": "0.0.3",
+      "label": "surface стабильна, дальше stdlib и tooling"
+    }
+  },
+  "terminal": {
+    "path": "/roadmap/lang-0.0.2-to-0.0.3",
+    "lines": [
+      "$ mks roadmap --advance",
+      "core syntax ..... stable",
+      "stdlib growth ... active",
+      "module rules .... active",
+      "tooling layer .... next",
+      "compiler path ... later"
+    ]
+  },
+  "metrics": [
+    { "label": "Стабильно", "value": "Core syntax" },
+    { "label": "Активно", "value": "0.0.3" },
+    { "label": "Дальше", "value": "Stdlib + tools" }
+  ],
+  "rail": [
+    { "phase": "01", "title": "Поверхность языка стабильна", "state": "done" },
+    { "phase": "02", "title": "Stdlib становится практичной", "state": "live" },
+    { "phase": "03", "title": "Tooling становится usable", "state": "next" },
+    { "phase": "04", "title": "Компилятор и системный охват", "state": "future" }
+  ],
+  "sections": [
+    {
+      "id": "core",
+      "eyebrow": "Готово",
+      "title": "Основная поверхность языка",
+      "subtitle": "Главный синтаксис и runtime-facing слой языка уже существуют. Теперь задача не раздувать этот уровень слишком рано, а сделать его понятным и предсказуемым.",
+      "cards": [
+        {
+          "step": "01",
+          "phase": "Готово",
+          "title": "Переменные и выражения",
+          "status": "stable",
+          "state": "done",
+          "progress": 100,
+          "description": "У MKS уже есть читаемая идентичность: var bindings, =: assignment, арифметика, сравнения и логический flow.",
+          "items": ["семантика var и =:", "арифметика и сравнения", "truthy flow и условия", "swap operator <-->"]
+        },
+        {
+          "step": "02",
+          "phase": "Готово",
+          "title": "Функции и поток управления",
+          "status": "stable",
+          "state": "done",
+          "progress": 96,
+          "description": "Функции, if/else, while, for, repeat, break и continue уже определяют то, как пишется код на MKS.",
+          "items": ["fnc и return", "if / else blocks", "while / for / repeat", "break / continue"]
+        },
+        {
+          "step": "03",
+          "phase": "Готово",
+          "title": "Entities и extend",
+          "status": "stable",
+          "state": "done",
+          "progress": 90,
+          "description": "Entity и extend уже задают object-like и method-oriented стиль MKS.",
+          "items": ["entity с init", "method blocks", "доступ к полям self", "extend built-ins"]
+        }
+      ]
+    },
+    {
+      "id": "stdlib",
+      "eyebrow": "Активно",
+      "title": "Рост стандартной библиотеки",
+      "subtitle": "Это главный трек 0.0.3: сделать MKS настолько практичным, чтобы на нём реально можно было писать код без борьбы с языком.",
+      "cards": [
+        {
+          "step": "04",
+          "phase": "Активно",
+          "title": "База stdlib",
+          "status": "active",
+          "state": "live",
+          "progress": 50,
+          "description": "Сделать std реальной ежедневной поверхностью языка, а не несколькими обёртками.",
+          "items": ["чистка std/math", "сильнее helper'ы std/array", "согласованность std/string", "практичный std/time"]
+        },
+        {
+          "step": "05",
+          "phase": "Активно",
+          "title": "Bool и data helper'ы",
+          "status": "active",
+          "state": "live",
+          "progress": 42,
+          "description": "Небольшие helper'ы должны убирать boilerplate и делать скрипты менее сырыми.",
+          "items": ["ясность std/bool", "безопасная работа с null", "helper'ы для edge-cases массивов", "рецепты для строк и массивов"]
+        },
+        {
+          "step": "06",
+          "phase": "Дальше",
+          "title": "Основа package-системы",
+          "status": "planned",
+          "state": "next",
+          "progress": 24,
+          "description": "Реальное направление package-системы должно стартовать с малого: импортируемые библиотеки, переиспользуемые папки и чистое соглашение до полноценного package manager.",
+          "items": ["правила package layout", "паттерн локальных библиотек", "правила имён модулей", "будущее направление registry"]
+        }
+      ]
+    },
+    {
+      "id": "modules",
+      "eyebrow": "Активно",
+      "title": "Модули и импорты",
+      "subtitle": "Поведение модулей должно ощущаться строгим и очевидным. Нечёткие правила импорта очень быстро делают язык фальшивым.",
+      "cards": [
+        {
+          "step": "07",
+          "phase": "Активно",
+          "title": "Ясность резолвера",
+          "status": "active",
+          "state": "live",
+          "progress": 44,
+          "description": "Сделать import resolution достаточно прозрачным, чтобы было понятно, откуда реально пришёл код.",
+          "items": ["правила current directory", "правила working directory", "правила std path", "поведение duplicate import"]
+        },
+        {
+          "step": "08",
+          "phase": "Дальше",
+          "title": "Семантика alias",
+          "status": "planned",
+          "state": "next",
+          "progress": 20,
+          "description": "Не делать вид, что alias imports готовы, пока runtime и evaluation не поддерживают их полностью.",
+          "items": ["parse vs runtime support", "ясные docs по статусу alias", "direct import остаётся default", "будущий namespace design"]
+        },
+        {
+          "step": "09",
+          "phase": "Дальше",
+          "title": "Структура библиотек",
+          "status": "planned",
+          "state": "next",
+          "progress": 18,
+          "description": "Переиспользуемый код на MKS должен получить чистую файловую структуру до того, как packages станут официальными.",
+          "items": ["структура std модулей", "project library folders", "public vs internal modules", "import-safe conventions"]
+        }
+      ]
+    },
+    {
+      "id": "tooling",
+      "eyebrow": "Дальше",
+      "title": "Tooling и developer workflow",
+      "subtitle": "Когда поверхность языка уже читается, повседневное использование должно перестать ощущаться сырым.",
+      "cards": [
+        {
+          "step": "10",
+          "phase": "Дальше",
+          "title": "Socrates",
+          "status": "planned",
+          "state": "next",
+          "progress": 14,
+          "description": "Официальный formatter для одного code style на блоках, entities, extend, loops и imports.",
+          "items": ["нормализация пробелов", "отступы в arrow blocks", "форматирование entity и extend", "будущий fmt CLI"]
+        },
+        {
+          "step": "11",
+          "phase": "Дальше",
+          "title": "Диагностика",
+          "status": "planned",
+          "state": "next",
+          "progress": 16,
+          "description": "Ошибки должны помогать быстрее чинить код, а не просто сообщать, что что-то взорвалось.",
+          "items": ["подсказки о missing semicolon", "подсказки о незакрытых блоках", "сообщения об import errors", "заметки о type mismatch"]
+        },
+        {
+          "step": "12",
+          "phase": "Позже",
+          "title": "Тестовый workflow",
+          "status": "planned",
+          "state": "future",
+          "progress": 12,
+          "description": "Встроенные test blocks должны вырасти в лёгкий и реальный workflow для пользователей языка.",
+          "items": ["suite output", "фильтрация по именам тестов", "ясные failure reports", "project test conventions"]
+        }
+      ]
+    },
+    {
+      "id": "runtime",
+      "eyebrow": "Позже",
+      "title": "Согласованность рантайма и производительность",
+      "subtitle": "Работа над рантаймом важна, но она должна следовать за ясной семантикой языка, а не убегать вперёд.",
+      "cards": [
+        {
+          "step": "13",
+          "phase": "Позже",
+          "title": "Согласованность методов",
+          "status": "planned",
+          "state": "future",
+          "progress": 12,
+          "description": "Нативные и extended methods должны ощущаться как одна согласованная система.",
+          "items": ["согласованные ошибки аргументов", "поведение методов массива", "поведение методов строк", "null и empty edge-cases"]
+        },
+        {
+          "step": "14",
+          "phase": "Позже",
+          "title": "Скорость evaluator",
+          "status": "planned",
+          "state": "future",
+          "progress": 8,
+          "description": "Оптимизация имеет смысл только тогда, когда пользовательская семантика перестанет меняться каждую неделю.",
+          "items": ["быстрее lookups", "меньше давления на allocation", "чистка module cache", "лучший runtime profiling"]
+        },
+        {
+          "step": "15",
+          "phase": "Позже",
+          "title": "Видимость GC",
+          "status": "planned",
+          "state": "future",
+          "progress": 7,
+          "description": "Рантайм должен стать проще для reasoning при отладке памяти и производительности.",
+          "items": ["GC debug modes", "allocation stats", "timing сборки", "stress-test workflow"]
+        }
+      ]
+    },
+    {
+      "id": "compiler",
+      "eyebrow": "Будущее",
+      "title": "Путь к компиляции",
+      "subtitle": "Компиляция важна, но только когда интерпретируемый язык уже ощущается цельным.",
+      "cards": [
+        {
+          "step": "16",
+          "phase": "Будущее",
+          "title": "Направление байткода",
+          "status": "idea",
+          "state": "future",
+          "progress": 6,
+          "description": "Понять, должен ли MKS сначала стабилизироваться через байткод, а не сразу гнаться за native output.",
+          "items": ["эскиз opcode set", "прототип execution loop", "модель вызова функций", "модель jump/control flow"]
+        },
+        {
+          "step": "17",
+          "phase": "Будущее",
+          "title": "Путь к native compiler",
+          "status": "idea",
+          "state": "future",
+          "progress": 5,
+          "description": "Двигаться к настоящим native binary только тогда, когда AST semantics и ожидания от stdlib уже зафиксированы.",
+          "items": ["AST lowering", "дизайн IR", "эксперименты с x86-64 backend", "workflow nasm/ld"]
+        },
+        {
+          "step": "18",
+          "phase": "Будущее",
+          "title": "Бенчмарки",
+          "status": "idea",
+          "state": "future",
+          "progress": 3,
+          "description": "Имеют смысл только после того, как поверхность compiler/runtime перестанет постоянно двигаться.",
+          "items": ["бенчмарки интерпретатора", "сравнения байткода", "сравнения native output", "нагрузки с heavy stdlib"]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "eyebrow": "Будущее",
+      "title": "Системное направление",
+      "subtitle": "Это более крупное видение: сделать MKS способнее в OS-facing и low-level workflow, не потеряв собственную идентичность.",
+      "cards": [
+        {
+          "step": "19",
+          "phase": "Будущее",
+          "title": "Взаимодействие с ОС",
+          "status": "planned",
+          "state": "future",
+          "progress": 6,
+          "description": "Язык со временем должен уметь больше, чем toy scripting.",
+          "items": ["доступ к файловой системе", "запуск процессов", "доступ к environment", "утилиты для путей"]
+        },
+        {
+          "step": "20",
+          "phase": "Будущее",
+          "title": "Package system",
+          "status": "planned",
+          "state": "future",
+          "progress": 4,
+          "description": "История с packages важна, если MKS должен вырасти дальше one-file experiments.",
+          "items": ["идея package manifest", "правила зависимостей", "стратегия local cache", "install workflow"]
+        },
+        {
+          "step": "21",
+          "phase": "Будущее",
+          "title": "Доступ к железу",
+          "status": "idea",
+          "state": "future",
+          "progress": 2,
+          "description": "Долгосрочное направление для low-level integrations и system-facing библиотек.",
+          "items": ["serial / device APIs", "идеи FFI или native bridge", "дизайн unsafe boundary", "слой для hardware experiments"]
+        }
+      ]
+    }
+  ],
+  "timeline": {
+    "title": "Полезные языковые вехи",
+    "subtitle": "Каждый шаг должен делать MKS проще для написания, понимания или роста.",
+    "items": [
+      { "month": "Готово", "title": "Идентичность core syntax", "text": "Переменные, поток управления, entities, extend, watch, defer и базовые imports уже формируют язык." },
+      { "month": "Активно", "title": "Трек stdlib для 0.0.3", "text": "Сделать stdlib достаточно практичной, чтобы MKS был пригоден для реальных скриптов." },
+      { "month": "Дальше", "title": "Слой tooling", "text": "Добавить MKSFmt и более сильную диагностику, чтобы писать на MKS было не так сыро." },
+      { "month": "Позже", "title": "Сила рантайма", "text": "Согласованность методов, скорость evaluator и лучшая видимость GC." },
+      { "month": "Будущее", "title": "Компилятор и системный охват", "text": "Байткод или native compiler path, package system, доступ к ОС и системное направление." }
+    ]
+  },
+  "principle": {
+    "eyebrow": "Принцип",
+    "title": "Сначала сделай язык настоящим, потом делай его большим.",
+    "text": "MKS сначала должен стать предсказуемым, практичным и приятным в написании. Больше мощности важно, но только после того, как surface, stdlib, modules и tooling перестанут бороться с пользователем.",
+    "pills": ["Сначала поверхность", "Stdlib важна", "Tooling раньше хайпа", "Системное направление позже"]
+  },
+  "versionPath": {
+    "eyebrow": "Путь версий",
+    "title": "Путь 0.0.2 -> 0.0.3",
+    "subtitle": "0.0.2 определяет core identity. 0.0.3 должен сделать MKS практичнее через рост stdlib, ясность модулей и первый реальный tooling.",
+    "items": [
+      { "version": "0.0.2", "label": "Core identity", "state": "done", "text": "Core syntax, поток управления, entities, extend и runtime-style features уже определяют то, как ощущается код на MKS." },
+      { "version": "0.0.3", "label": "Практичный скриптинг", "state": "live", "text": "Активная работа: рост stdlib, ясность imports, groundwork для MKSFmt и лучшая диагностика." },
+      { "version": "0.0.4", "label": "Форма модулей и packages", "state": "next", "text": "Более чистая структура модулей, правила для reusable libraries и groundwork для packages." },
+      { "version": "0.0.5", "label": "Путь к компиляции", "state": "future", "text": "Первое серьёзное направление к байткоду или native compilation." }
+    ]
+  }
+}

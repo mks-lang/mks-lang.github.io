@@ -2,8 +2,10 @@
   const root = document.getElementById('roadmap-root');
   if (!root) return;
 
-  try {
-    const response = await fetch('assets/data/roadmap.json?v=20260416-1', { cache: 'no-store' });
+  async function render() {
+    const lang = window.MKSSiteI18n?.getLanguage?.() || 'en';
+    const path = lang === 'ru' ? 'assets/data/roadmap.ru.json?v=20260425-i18n-1' : 'assets/data/roadmap.json?v=20260416-1';
+    const response = await fetch(path, { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`Failed to fetch roadmap.json: ${response.status} ${response.statusText}`);
     }
@@ -23,16 +25,28 @@
     animateRoadmapBars();
     initTiltCards();
     initRoadmapScrollFx();
+  }
+
+  try {
+    await render();
   } catch (err) {
     console.error('Roadmap load error:', err);
     root.innerHTML = `
       <section class="section panel glass">
         <p class="eyebrow">Roadmap</p>
-        <h1>Failed to load roadmap</h1>
+        <h1>${escapeHtml(window.MKSSiteI18n?.get('roadmap.failed', 'Failed to load roadmap'))}</h1>
         <p class="sub">${escapeHtml(err.message)}</p>
       </section>
     `;
   }
+
+  document.addEventListener('mks:language-change', async () => {
+    try {
+      await render();
+    } catch (err) {
+      console.error('Roadmap rerender error:', err);
+    }
+  });
 })();
 
 function renderHero(hero, terminal, metrics) {
@@ -62,9 +76,9 @@ function renderHero(hero, terminal, metrics) {
           </div>
 
           <div class="hero-actions">
-            <a class="btn" href="docs.html">Read docs</a>
-            <a class="btn ghost" href="examples.html">See examples</a>
-            <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">Open GitHub</a>
+            <a class="btn" href="docs.html">${escapeHtml(window.MKSSiteI18n?.get('roadmap.read_docs', 'Read docs'))}</a>
+            <a class="btn ghost" href="examples.html">${escapeHtml(window.MKSSiteI18n?.get('roadmap.see_examples', 'See examples'))}</a>
+            <a class="btn ghost" href="https://github.com/mks-lang/MKS-interpreter" target="_blank" rel="noreferrer">${escapeHtml(window.MKSSiteI18n?.get('roadmap.open_github', 'Open GitHub'))}</a>
           </div>
         </div>
 
@@ -100,14 +114,14 @@ function renderPathBadge(badge) {
   if (!badge) return '';
 
   return `
-    <div class="path-badge" aria-label="${escapeHtml(badge.eyebrow || 'Path')} ${escapeHtml(badge.from || '')} to ${escapeHtml(badge.to || '')}">
+    <div class="path-badge" aria-label="${escapeHtml(badge.eyebrow || window.MKSSiteI18n?.get('roadmap.path', 'Path'))} ${escapeHtml(badge.from || '')} to ${escapeHtml(badge.to || '')}">
       <div class="path-ring">
         <span>${escapeHtml(badge.from || '')}</span>
         <i></i>
         <span>${escapeHtml(badge.to || '')}</span>
       </div>
       <div>
-        <p class="eyebrow">${escapeHtml(badge.eyebrow || 'Path')}</p>
+        <p class="eyebrow">${escapeHtml(badge.eyebrow || window.MKSSiteI18n?.get('roadmap.path', 'Path'))}</p>
         <strong>${escapeHtml(badge.label || '')}</strong>
       </div>
     </div>
@@ -121,8 +135,8 @@ function renderVersionPath(versionPath) {
     <section class="section version-path-section">
       <div class="section-head">
         <div>
-          <p class="eyebrow">${escapeHtml(versionPath?.eyebrow || 'Version path')}</p>
-          <h2>${escapeHtml(versionPath?.title || 'Where MKS is heading')}</h2>
+          <p class="eyebrow">${escapeHtml(versionPath?.eyebrow || window.MKSSiteI18n?.get('roadmap.version_path', 'Version path'))}</p>
+          <h2>${escapeHtml(versionPath?.title || window.MKSSiteI18n?.get('roadmap.where_heading', 'Where MKS is heading'))}</h2>
         </div>
         <p class="sub">${escapeHtml(versionPath?.subtitle || '')}</p>
       </div>
@@ -216,7 +230,7 @@ function renderTimeline(timeline) {
     <section class="section roadmap-band">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Timeline</p>
+          <p class="eyebrow">${escapeHtml(window.MKSSiteI18n?.get('roadmap.timeline', 'Timeline'))}</p>
           <h2>${escapeHtml(timeline?.title || '')}</h2>
         </div>
         <p class="sub">${escapeHtml(timeline?.subtitle || '')}</p>

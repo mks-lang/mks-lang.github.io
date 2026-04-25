@@ -3,6 +3,17 @@
   const body = document.querySelector('[data-docs-body]');
   if (!sidebar || !body) return;
 
+  const defaultIcon = 'hgi-book-open-01';
+
+  function iconMarkup(name) {
+    const icon = name || defaultIcon;
+    return `<i class="hgi-stroke ${icon}" aria-hidden="true"></i>`;
+  }
+
+  function unstableBadge() {
+    return `<span class="docs-status docs-status-unstable">${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</span>`;
+  }
+
   const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
 
   function makeCodeBlock(code, withCopy = true) {
@@ -14,7 +25,7 @@
       const copy = document.createElement('button');
       copy.className = 'copy-btn';
       copy.type = 'button';
-      copy.textContent = 'Copy';
+      copy.textContent = window.MKSSiteI18n?.get('copy.default', 'Copy');
       block.append(copy);
     }
 
@@ -72,6 +83,10 @@
     eyebrow.className = 'eyebrow';
     eyebrow.textContent = hero.eyebrow || 'Docs';
 
+    const meta = document.createElement('div');
+    meta.className = 'docs-hero-meta';
+    meta.innerHTML = `${iconMarkup(hero.icon)}<span>${hero.meta || 'Reference based on current interpreter branch'}</span>`;
+
     const title = document.createElement('h1');
     title.textContent = hero.title || 'Docs';
 
@@ -97,7 +112,7 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, title, description, pills, terminal);
+    header.append(scene, eyebrow, meta, title, description, pills, terminal);
     return header;
   }
 
@@ -107,8 +122,15 @@
     el.id = section.id;
     el.dataset.docsCard = '';
 
-    const title = document.createElement('h2');
-    title.textContent = section.title;
+    const title = document.createElement('div');
+    title.className = 'docs-section-head';
+    title.innerHTML = `
+      <div class="docs-section-title">
+        ${iconMarkup(section.icon)}
+        <h2>${section.title}</h2>
+      </div>
+      ${section.unstable ? unstableBadge() : ''}
+    `;
 
     const description = document.createElement('p');
     description.className = 'sub';
@@ -188,8 +210,15 @@
     el.id = section.id;
     el.dataset.docsCard = '';
 
-    const title = document.createElement('h2');
-    title.textContent = section.title;
+    const title = document.createElement('div');
+    title.className = 'docs-section-head';
+    title.innerHTML = `
+      <div class="docs-section-title">
+        ${iconMarkup(section.icon)}
+        <h2>${section.title}</h2>
+      </div>
+      ${section.unstable ? unstableBadge() : ''}
+    `;
 
     const description = document.createElement('p');
     description.className = 'sub';
@@ -234,8 +263,10 @@
     });
   }
 
-  try {
-    const response = await fetch('assets/data/docs.json?v=20260415-4', { cache: 'no-store' });
+  async function render() {
+    const lang = window.MKSSiteI18n?.getLanguage?.() || 'en';
+    const path = lang === 'ru' ? 'assets/data/docs.ru.json?v=20260426-docs-ru-1' : 'assets/data/docs.json?v=20260423-docs-data-1';
+    const response = await fetch(path, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Docs data request failed: ${response.status}`);
 
     const docs = await response.json();
@@ -246,7 +277,7 @@
 
     const overview = document.createElement('a');
     overview.href = `#${docs.hero?.id || 'overview'}`;
-    overview.textContent = 'Overview';
+    overview.innerHTML = `${iconMarkup(docs.hero?.icon)}<span>${escapeHtml(window.MKSSiteI18n?.get('docs.overview', 'Overview'))}</span>`;
     sidebar.append(overview);
 
     const sectionById = new Map(sections.map((section) => [section.id, section]));
@@ -270,7 +301,7 @@
       groupSections.forEach((section) => {
         const link = document.createElement('a');
         link.href = `#${section.id}`;
-        link.textContent = section.nav || section.title;
+        link.innerHTML = `${iconMarkup(section.icon)}<span>${section.nav || section.title}</span>${section.unstable ? `<em>${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</em>` : ''}`;
         sidebar.append(link);
       });
     });
@@ -282,8 +313,29 @@
 
     renderTabs();
     window.dispatchEvent(new CustomEvent('docs:ready'));
+  }
+
+  try {
+    await render();
   } catch (error) {
-    body.innerHTML = '<section class="panel glimmer docs-loading">Docs failed to load.</section>';
+    body.innerHTML = `<section class="panel glimmer docs-loading">${escapeHtml(window.MKSSiteI18n?.get('docs.failed', 'Docs failed to load.'))}</section>`;
     console.error(error);
+  }
+
+  document.addEventListener('mks:language-change', async () => {
+    try {
+      await render();
+    } catch (error) {
+      console.error('Docs rerender error:', error);
+    }
+  });
+
+  function escapeHtml(str) {
+    return String(str ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
   }
 })();

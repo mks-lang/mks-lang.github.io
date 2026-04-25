@@ -2,8 +2,10 @@
   const root = document.getElementById('changelog-root');
   if (!root) return;
 
-  try {
-    const response = await fetch('assets/data/changelog.json?v=20260416-1', { cache: 'no-store' });
+  async function render() {
+    const lang = window.MKSSiteI18n?.getLanguage?.() || 'en';
+    const path = lang === 'ru' ? 'assets/data/changelog.ru.json?v=20260425-i18n-1' : 'assets/data/changelog.json?v=20260423-1';
+    const response = await fetch(path, { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`Failed to fetch changelog.json: ${response.status} ${response.statusText}`);
     }
@@ -17,16 +19,28 @@
 
     initFilters();
     initChangelogFx();
+  }
+
+  try {
+    await render();
   } catch (err) {
     console.error('Changelog load error:', err);
     root.innerHTML = `
       <section class="section panel glass">
         <p class="eyebrow">Changelog</p>
-        <h1>Failed to load changelog</h1>
+        <h1>${escapeHtml(window.MKSSiteI18n?.get('changelog.failed', 'Failed to load changelog'))}</h1>
         <p class="sub">${escapeHtml(err.message)}</p>
       </section>
     `;
   }
+
+  document.addEventListener('mks:language-change', async () => {
+    try {
+      await render();
+    } catch (err) {
+      console.error('Changelog rerender error:', err);
+    }
+  });
 })();
 
 function renderHero(hero, stats) {
@@ -76,12 +90,13 @@ function renderHero(hero, stats) {
 }
 
 function renderFilters(releases) {
-  const tags = ['all', ...new Set((releases || []).map(item => item.tag).filter(Boolean))];
+  const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
+  const tags = [allLabel, ...new Set((releases || []).map(item => item.tag).filter(Boolean))];
 
   return `
     <section class="section change-filter-shell">
       <div class="change-filters panel glass" data-change-filters>
-        <input class="change-search" type="search" placeholder="Search changelog..." aria-label="Search changelog" data-change-search>
+        <input class="change-search" type="search" placeholder="${escapeHtml(window.MKSSiteI18n?.get('changelog.search', 'Search changelog...'))}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('changelog.search', 'Search changelog...'))}" data-change-search>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
             <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}">
@@ -131,12 +146,13 @@ function initFilters() {
   const search = document.querySelector('[data-change-search]');
   if (!filters || !cards.length) return;
 
-  let activeFilter = 'all';
+  let activeFilter = window.MKSSiteI18n?.get('filters.all', 'all');
   let query = '';
 
   function applyFilters() {
     cards.forEach((card) => {
-      const matchesFilter = activeFilter === 'all' || card.dataset.tag === activeFilter;
+      const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
+      const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       card.hidden = !(matchesFilter && matchesQuery);
     });

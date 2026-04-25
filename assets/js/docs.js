@@ -1,45 +1,79 @@
+const docsEnhancementState = {
+  cleanup: null,
+};
+
 function initDocsEnhancements() {
+  if (typeof docsEnhancementState.cleanup === 'function') {
+    docsEnhancementState.cleanup();
+    docsEnhancementState.cleanup = null;
+  }
+
   document.querySelectorAll('.panel').forEach((panel, idx) => {
     panel.style.animationDelay = `${(idx % 5) * 0.08}s`;
   });
 
+  const cardCleanups = [];
+
   document.querySelectorAll('[data-docs-card]').forEach((panel) => {
-    panel.addEventListener('pointermove', (event) => {
+    const onPointerMove = (event) => {
       const rect = panel.getBoundingClientRect();
       const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
       const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
 
       panel.style.setProperty('--mx', `${x}px`);
       panel.style.setProperty('--my', `${y}px`);
-    });
+    };
 
-    panel.addEventListener('pointerleave', () => {
+    const onPointerLeave = () => {
       panel.style.setProperty('--mx', '50%');
       panel.style.setProperty('--my', '18%');
+    };
+
+    panel.addEventListener('pointermove', onPointerMove);
+    panel.addEventListener('pointerleave', onPointerLeave);
+
+    cardCleanups.push(() => {
+      panel.removeEventListener('pointermove', onPointerMove);
+      panel.removeEventListener('pointerleave', onPointerLeave);
     });
   });
 
   const cards = Array.from(document.querySelectorAll('[data-docs-card]'));
-  if (!cards.length || !('IntersectionObserver' in window)) return;
+  let observer = null;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      entry.target.classList.toggle('docs-card-live', entry.isIntersecting);
+  if (cards.length && 'IntersectionObserver' in window) {
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle('docs-card-live', entry.isIntersecting);
+      });
+    }, {
+      rootMargin: '-32% 0px -50% 0px',
+      threshold: 0,
     });
-  }, {
-    rootMargin: '-32% 0px -50% 0px',
-    threshold: 0,
-  });
 
-  cards.forEach((card) => observer.observe(card));
+    cards.forEach((card) => observer.observe(card));
+  }
+
+  docsEnhancementState.cleanup = () => {
+    cardCleanups.forEach((cleanup) => cleanup());
+    if (observer) observer.disconnect();
+  };
 }
 
 (function bootDocsEnhancements() {
   window.addEventListener('docs:ready', initDocsEnhancements);
 })();
 
+const docsSidebarState = {
+  cleanup: null,
+};
 
 function initSidebarLinks() {
+  if (typeof docsSidebarState.cleanup === 'function') {
+    docsSidebarState.cleanup();
+    docsSidebarState.cleanup = null;
+  }
+
   const sidebar = document.querySelector('.sidebar');
   const links = Array.from(document.querySelectorAll('.sidebar a'));
   if (!sidebar || !links.length) return;
@@ -121,18 +155,12 @@ function initSidebarLinks() {
 
     if (linkTop < visibleTop + padding) {
       const nextTop = Math.max(0, linkTop - padding);
-      if (smooth) {
-        smoothSidebarScrollTo(nextTop);
-      } else {
-        sidebar.scrollTop = nextTop;
-      }
+      if (smooth) smoothSidebarScrollTo(nextTop);
+      else sidebar.scrollTop = nextTop;
     } else if (linkBottom > visibleBottom - padding) {
       const nextTop = linkBottom - sidebar.clientHeight + padding;
-      if (smooth) {
-        smoothSidebarScrollTo(nextTop);
-      } else {
-        sidebar.scrollTop = nextTop;
-      }
+      if (smooth) smoothSidebarScrollTo(nextTop);
+      else sidebar.scrollTop = nextTop;
     }
   }
 
@@ -148,9 +176,7 @@ function initSidebarLinks() {
 
     if (activeLink) {
       moveIndicator(activeLink);
-      if (Date.now() > userSidebarLockUntil) {
-        keepLinkVisible(activeLink, true);
-      }
+      if (Date.now() > userSidebarLockUntil) keepLinkVisible(activeLink, true);
     }
   }
 
@@ -188,15 +214,27 @@ function initSidebarLinks() {
     });
   }
 
-  sidebar.addEventListener('pointerdown', () => lockSidebarAutoScroll(1800));
-  sidebar.addEventListener('mousedown', () => lockSidebarAutoScroll(1800));
-  sidebar.addEventListener('wheel', () => lockSidebarAutoScroll(900), { passive: true });
+  const onPointerDown = () => lockSidebarAutoScroll(1800);
+  const onMouseDown = () => lockSidebarAutoScroll(1800);
+  const onWheel = () => lockSidebarAutoScroll(900);
+  const onScroll = () => requestSync();
+  const onResize = () => requestSync();
+  const onHashChange = () => {
+    sync();
+    const activeLink = links.find((link) => link.classList.contains('active'));
+    if (activeLink) keepLinkVisible(activeLink, true);
+  };
 
-  window.addEventListener('scroll', requestSync, { passive: true });
-  window.addEventListener('resize', requestSync);
+  sidebar.addEventListener('pointerdown', onPointerDown);
+  sidebar.addEventListener('mousedown', onMouseDown);
+  sidebar.addEventListener('wheel', onWheel, { passive: true });
 
-  links.forEach((link) => {
-    link.addEventListener('click', (event) => {
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onResize);
+  window.addEventListener('hashchange', onHashChange);
+
+  const linkCleanups = links.map((link) => {
+    const onClick = (event) => {
       const section = document.querySelector(link.getAttribute('href'));
       if (!section) return;
 
@@ -204,16 +242,28 @@ function initSidebarLinks() {
       section.scrollIntoView({ block: 'center', behavior: 'smooth' });
       history.pushState(null, '', link.getAttribute('href'));
       setActive(section.id);
-    });
-  });
+    };
 
-  window.addEventListener('hashchange', () => {
-    sync();
-    const activeLink = links.find((link) => link.classList.contains('active'));
-    if (activeLink) keepLinkVisible(activeLink, true);
+    link.addEventListener('click', onClick);
+    return () => link.removeEventListener('click', onClick);
   });
 
   sync();
+
+  docsSidebarState.cleanup = () => {
+    if (sidebarScrollFrame) {
+      cancelAnimationFrame(sidebarScrollFrame);
+      sidebarScrollFrame = null;
+    }
+
+    sidebar.removeEventListener('pointerdown', onPointerDown);
+    sidebar.removeEventListener('mousedown', onMouseDown);
+    sidebar.removeEventListener('wheel', onWheel);
+    window.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onResize);
+    window.removeEventListener('hashchange', onHashChange);
+    linkCleanups.forEach((cleanup) => cleanup());
+  };
 }
 
 (function bootSidebarLinks() {

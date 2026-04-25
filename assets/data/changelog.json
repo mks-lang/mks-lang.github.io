@@ -29,18 +29,33 @@
   "stats": [
     {
       "label": "Latest",
-      "value": "2026-04-16"
+      "value": "2026-04-23"
     },
     {
       "label": "Focus",
-      "value": "Site polish"
+      "value": "Docs sync"
     },
     {
       "label": "Mode",
-      "value": "Static release"
+      "value": "Prerelease prep"
     }
   ],
   "releases": [
+    {
+      "date": "2026-04-23",
+      "title": "Docs synced to not-stable and prerelease readiness checked",
+      "tag": "docs",
+      "status": "latest",
+      "summary": "Documentation and release messaging now reflect the actual state of the MKS interpreter not-stable branch, with unstable areas marked directly in the docs and local build checks recorded.",
+      "items": [
+        "Reworked Docs around the current not-stable branch instead of the older public copy, including updated import examples, package flow, and branch-specific guidance.",
+        "Added red Not-Stable badges to sections where semantics are still moving, especially imports, pointers, and package-level behavior.",
+        "Added Hugeicons-based visual markers to the Docs sidebar and section metadata so unstable and reference sections scan faster.",
+        "Updated the Docs hero and section data to reference README, REFERENCE, USER_GUIDE, PACKAGES, and local verification against the interpreter repository.",
+        "Verified the interpreter branch locally with a successful CMake configure, a successful build, passing ctest, and passing ./tests.sh integration coverage.",
+        "Positioned the current branch as suitable for a GitHub prerelease rather than a stable release because the repository still describes the surface as experimental and subject to change."
+      ]
+    },
     {
       "date": "2026-04-16",
       "title": "Site-wide redesign and roadmap advance",

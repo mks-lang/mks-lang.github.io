@@ -1,0 +1,102 @@
+{
+  "hero": {
+    "eyebrow": "Changelog",
+    "title": "Последние изменения сайта MKS.",
+    "subtitle": "Короткий журнал релизов по редизайнам страниц, структуре docs, прогрессу roadmap и обновлениям статического сайта.",
+    "chips": [
+      { "text": "последнее", "variant": "live" },
+      { "text": "редизайн", "variant": "default" },
+      { "text": "docs", "variant": "default" },
+      { "text": "roadmap", "variant": "default" },
+      { "text": "site", "variant": "ghost" }
+    ]
+  },
+  "stats": [
+    { "label": "Последнее", "value": "2026-04-23" },
+    { "label": "Фокус", "value": "Синхронизация docs" },
+    { "label": "Режим", "value": "Подготовка prerelease" }
+  ],
+  "releases": [
+    {
+      "date": "2026-04-23",
+      "title": "Docs синхронизированы с not-stable, готовность к prerelease проверена",
+      "tag": "docs",
+      "status": "latest",
+      "summary": "Документация и release-месседжи теперь отражают реальное состояние ветки `not-stable`, а нестабильные участки языка отмечены прямо в docs и подтверждены локальной проверкой сборки.",
+      "items": [
+        "Пересобраны Docs вокруг актуальной ветки not-stable вместо старой публичной копии, включая обновлённые примеры импортов, package flow и branch-specific guidance.",
+        "Добавлены красные плашки Not-Stable для секций, где semantics ещё двигаются, особенно imports, pointers и package-level behavior.",
+        "Добавлены Hugeicons в sidebar и section metadata Docs, чтобы reference и нестабильные участки читались быстрее.",
+        "Обновлены hero и section data в Docs со ссылкой на README, REFERENCE, USER_GUIDE, PACKAGES и локальную проверку interpreter repo.",
+        "Ветка локально проверена: успешные CMake configure, build, passing ctest и passing ./tests.sh.",
+        "Текущая ветка позиционируется как подходящая для GitHub prerelease, но не для stable release, потому что сам репозиторий всё ещё описывает surface как experimental и subject to change."
+      ]
+    },
+    {
+      "date": "2026-04-16",
+      "title": "Редизайн всего сайта и продвижение roadmap",
+      "tag": "site",
+      "status": "shipped",
+      "summary": "Большой визуальный и структурный проход по статическому сайту: общий header, более чистые docs, более понятный roadmap и спокойный дизайн страниц.",
+      "items": [
+        "Header вынесен в общий компонент, чтобы все страницы использовали одну и ту же навигацию и active-state поведение.",
+        "Глобальный header переделан в единый стек для Home, Docs, Roadmap, Examples, Playground и Changelog.",
+        "Навигация в Docs пересобрана из данных, убраны дубли секций и сгруппирован sidebar без изменения смысла оставшейся документации.",
+        "Карточки Docs получили более читаемый текстовый шрифт, а синхронизация active-link больше не дёргает ручной скролл sidebar.",
+        "Roadmap продвинут от 0.0.2 к 0.0.3, cookbook work отмечен как выполненный, а stdlib и playground workflow выделены как ближайшие активные треки.",
+        "Визуал roadmap стал спокойнее: path badge, мягче карточки, яснее done/live/next состояния, без переписывания содержания.",
+        "Подняты cache-busting query strings для изменённых CSS, JS и JSON-страниц, чтобы GitHub Pages раздавал актуальные assets."
+      ]
+    },
+    {
+      "date": "2026-04-15",
+      "title": "Редизайн docs и examples",
+      "tag": "site",
+      "status": "shipped",
+      "summary": "Крупный проход по сайту с фокусом на practical English docs, улучшенный browsing examples, покрытие stdlib и более чистый roadmap.",
+      "items": [
+        "Docs собраны в 50 практических секций с cookbook-style объяснениями и использованием std/math, std/array, std/string, std/bool и std/time.",
+        "Examples page переделана в searchable snippet browser с 48 карточками, 2 featured examples, более сильной фильтрацией и без неподдерживаемых alias-import patterns.",
+        "Roadmap переписан вокруг реально полезных следующиx шагов: learning surface, stdlib UX, playground workflow, tooling и runtime strength.",
+        "Changelog переделан в более чистую release feed с поиском, фильтрами, stats и более ясной визуальной иерархией.",
+        "Русский пользовательский copy был убран; публичный сайт стал English-first."
+      ]
+    },
+    {
+      "date": "2026-04-14",
+      "title": "GC playground",
+      "tag": "runtime",
+      "status": "shipped",
+      "summary": "Отдельный GC visualizer с sweep-анимацией, светлой темой по умолчанию в тот момент и inline error highlights.",
+      "items": [
+        "интерактивный mark/sweep visualizer",
+        "inline подсветка ошибок",
+        "более ясная runtime diagnostics"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "title": "Чистка docs",
+      "tag": "docs",
+      "status": "shipped",
+      "summary": "Документация была собрана в более короткие примеры, с добавленными заметками по stdlib и contribution guidance.",
+      "items": [
+        "reference examples ужаты",
+        "stdlib notes расширены",
+        "contribution path прояснён"
+      ]
+    },
+    {
+      "date": "2026-04-12",
+      "title": "Полировка roadmap",
+      "tag": "site",
+      "status": "shipped",
+      "summary": "Страница roadmap получила более точные карточки, упрощённый контент и более читаемый путь от текущих задач к будущим compiler ideas.",
+      "items": [
+        "структура roadmap упрощена",
+        "progress cards обновлены",
+        "future track стало легче сканировать"
+      ]
+    }
+  ]
+}

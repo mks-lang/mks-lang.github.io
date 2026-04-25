@@ -1,17 +1,17 @@
 {
   "hero": {
     "id": "overview",
-    "eyebrow": "Docs",
-    "title": "MKS reference for the not-stable branch",
-    "description": "Practical syntax, control flow, pointers, namespace imports, packages, stdlib, runtime helpers, and cookbook examples checked against the current interpreter branch, repo docs, and passing tests.",
+    "eyebrow": "Документация",
+    "title": "Справочник MKS для ветки not-stable",
+    "description": "Практический синтаксис, поток управления, pointers, namespace imports, packages, stdlib, runtime helper'ы и cookbook-примеры, проверенные по текущей ветке интерпретатора, документации репозитория и зелёным тестам.",
     "icon": "hgi-book-open-01",
-    "meta": "Synced with README, REFERENCE, USER_GUIDE, PACKAGES, and local green test runs",
+    "meta": "Синхронизировано с README, REFERENCE, USER_GUIDE, PACKAGES и локальными зелёными прогонами тестов",
     "tags": [
-      "syntax",
-      "control-flow",
-      "functions",
-      "arrays",
-      "strings",
+      "синтаксис",
+      "поток-управления",
+      "функции",
+      "массивы",
+      "строки",
       "entities",
       "extend",
       "imports",
@@ -22,7 +22,7 @@
       "defer",
       "read",
       {
-        "label": "experimental",
+        "label": "экспериментально",
         "live": true
       }
     ]
@@ -30,10 +30,10 @@
   "sections": [
     {
       "id": "hello",
-      "nav": "Hello",
-      "title": "Hello, MKS",
-      "description": "Small first example using variables, stdlib, watch, and output.",
-      "source": "Checked against README examples and std/math usage.",
+      "nav": "Привет",
+      "title": "Привет, MKS",
+      "description": "Небольшой первый пример с переменными, stdlib, watch и выводом.",
+      "source": "Проверено по примерам из README и использованию std/math.",
       "icon": "hgi-code",
       "tabs": [
         {
@@ -70,9 +70,9 @@
     },
     {
       "id": "comments",
-      "nav": "Comments",
-      "title": "Comments",
-      "description": "Single-line comments use //.",
+      "nav": "Комментарии",
+      "title": "Комментарии",
+      "description": "Однострочные комментарии используют //.",
       "code": [
         "// one line comment",
         "var x =: 10; // inline comment",
@@ -86,15 +86,15 @@
     },
     {
       "id": "values",
-      "nav": "Values",
-      "title": "Values & variables",
-      "description": "Core values are numbers, strings, arrays, and null. Variables use var for binding and =: for reassignment.",
+      "nav": "Значения",
+      "title": "Значения и переменные",
+      "description": "Базовые значения — это числа, строки, массивы и null. Для привязки используется var, для повторного присваивания — =:.",
       "icon": "hgi-square-lock-02",
       "points": [
-        "Create variables with var.",
-        "Reassign with =:.",
-        "Swap with <-->.",
-        "Arrays are indexed with [index]."
+        "Создавайте переменные через var.",
+        "Переприсваивайте через =:.",
+        "Меняйте значения местами через <--> .",
+        "Индексация массивов идёт через [index]."
       ],
       "tabs": [
         {
@@ -135,16 +135,16 @@
     },
     {
       "id": "pointers",
-      "nav": "Pointers",
-      "title": "Pointers",
-      "description": "The current branch supports address-of and dereference for variables, array elements, and object fields.",
+      "nav": "Указатели",
+      "title": "Указатели",
+      "description": "Текущая ветка поддерживает взятие адреса и разыменование для переменных, элементов массивов и полей объектов.",
       "icon": "hgi-link-03",
       "unstable": true,
-      "warning": "Pointer semantics are documented in the branch reference, but the repository still labels the language experimental. Treat this as branch functionality, not a stability promise.",
+      "warning": "Семантика указателей описана в branch reference, но сам репозиторий всё ещё помечает язык как experimental. Считай это функциональностью ветки, а не обещанием стабильности.",
       "points": [
-        "Use <code>&amp;value</code> to take an address.",
-        "Use <code>*ptr</code> to read or write through a pointer.",
-        "Taking the address of a temporary expression is rejected."
+        "Используй <code>&amp;value</code>, чтобы взять адрес.",
+        "Используй <code>*ptr</code>, чтобы читать или писать через указатель.",
+        "Взятие адреса у временного выражения отклоняется."
       ],
       "tabs": [
         {
@@ -178,21 +178,37 @@
     },
     {
       "id": "operators",
-      "nav": "Operators",
-      "title": "Expressions & operators",
-      "description": "Arithmetic, comparisons, and logic.",
+      "nav": "Операторы",
+      "title": "Выражения и операторы",
+      "description": "Арифметика, сравнения и логика.",
       "groups": [
         {
-          "title": "Arithmetic",
-          "items": ["+", "-", "*", "/", "%"]
+          "title": "Арифметика",
+          "items": [
+            "+",
+            "-",
+            "*",
+            "/",
+            "%"
+          ]
         },
         {
-          "title": "Comparison",
-          "items": ["?=", "!?", "<", ">", "<=", ">="]
+          "title": "Сравнение",
+          "items": [
+            "?=",
+            "!?",
+            "<",
+            ">",
+            "<=",
+            ">="
+          ]
         },
         {
-          "title": "Logic",
-          "items": ["&&", "||"]
+          "title": "Логика",
+          "items": [
+            "&&",
+            "||"
+          ]
         }
       ],
       "tabs": [
@@ -242,9 +258,9 @@
     },
     {
       "id": "precedence",
-      "nav": "Precedence",
-      "title": "Expression grouping",
-      "description": "Parentheses and operator precedence behave as expected.",
+      "nav": "Приоритет",
+      "title": "Группировка выражений",
+      "description": "Скобки и приоритет операторов работают ожидаемо.",
       "tabs": [
         {
           "id": "mks",
@@ -266,9 +282,9 @@
     },
     {
       "id": "bools",
-      "nav": "Booleans",
-      "title": "Booleans via std/bool",
-      "description": "The std/bool module exposes true, false, not, and, and or as MKS values/functions.",
+      "nav": "Булевы",
+      "title": "Булевы значения через std/bool",
+      "description": "Модуль std/bool предоставляет true, false, not, and и or как значения/функции MKS.",
       "tabs": [
         {
           "id": "mks",
@@ -300,9 +316,9 @@
     },
     {
       "id": "output",
-      "nav": "Output",
-      "title": "Write & Writeln",
-      "description": "Basic built-in output helpers.",
+      "nav": "Вывод",
+      "title": "Write и Writeln",
+      "description": "Базовые встроенные helper'ы для вывода.",
       "code": [
         "Write(\"same line: \");",
         "Writeln(123);",
@@ -318,14 +334,14 @@
     },
     {
       "id": "read-input",
-      "nav": "Read",
-      "title": "Read input",
-      "description": "Read is a native helper registered by the interpreter.",
+      "nav": "Ввод",
+      "title": "Чтение ввода",
+      "description": "Read — это native helper, зарегистрированный интерпретатором.",
       "points": [
-        "Read() reads one line and returns it as a string.",
-        "Read(\"prompt\") prints the prompt first.",
-        "Read(0) returns only the first whitespace-separated word.",
-        "If input cannot be read, current behavior returns an empty string."
+        "Read() читает одну строку и возвращает её как строку.",
+        "Read(\"prompt\") сначала выводит приглашение.",
+        "Read(0) возвращает только первое слово, разделённое пробелами.",
+        "Если ввод прочитать нельзя, текущее поведение возвращает пустую строку."
       ],
       "tabs": [
         {
@@ -362,7 +378,7 @@
       "id": "if-else",
       "nav": "If / else",
       "title": "if / else",
-      "description": "Branch with arrow blocks.",
+      "description": "Ветвление на стрелочных блоках.",
       "code": [
         "if (x > 0) ->",
         "  Writeln(\"positive\");",
@@ -380,8 +396,8 @@
     {
       "id": "while",
       "nav": "While",
-      "title": "while loops",
-      "description": "State-driven loops.",
+      "title": "Циклы while",
+      "description": "Циклы, завязанные на состоянии.",
       "tabs": [
         {
           "id": "mks",
@@ -410,8 +426,8 @@
     {
       "id": "for",
       "nav": "For",
-      "title": "for loops",
-      "description": "Classic init / condition / step loop header.",
+      "title": "Циклы for",
+      "description": "Классический заголовок init / condition / step.",
       "tabs": [
         {
           "id": "mks",
@@ -435,8 +451,8 @@
     {
       "id": "repeat",
       "nav": "Repeat",
-      "title": "repeat loops",
-      "description": "Fixed-count loops, with or without an iterator variable.",
+      "title": "Циклы repeat",
+      "description": "Циклы с фиксированным количеством повторений, с итератором или без него.",
       "tabs": [
         {
           "id": "mks",
@@ -466,9 +482,9 @@
     },
     {
       "id": "break-continue",
-      "nav": "Loop control",
-      "title": "break & continue",
-      "description": "Control the nearest loop.",
+      "nav": "Управление циклом",
+      "title": "break и continue",
+      "description": "Управляют ближайшим циклом.",
       "tabs": [
         {
           "id": "mks",
@@ -509,9 +525,9 @@
     },
     {
       "id": "functions",
-      "nav": "Functions",
-      "title": "Functions",
-      "description": "Define and call functions with fnc.",
+      "nav": "Функции",
+      "title": "Функции",
+      "description": "Определяй и вызывай функции через fnc.",
       "tabs": [
         {
           "id": "mks",
@@ -538,9 +554,9 @@
     },
     {
       "id": "returns",
-      "nav": "Returns",
-      "title": "Early return",
-      "description": "Return from inside conditionals.",
+      "nav": "Возврат",
+      "title": "Ранний return",
+      "description": "Возврат изнутри условных блоков.",
       "tabs": [
         {
           "id": "mks",
@@ -575,9 +591,9 @@
     },
     {
       "id": "recursion",
-      "nav": "Recursion",
-      "title": "Recursion",
-      "description": "Functions can call themselves.",
+      "nav": "Рекурсия",
+      "title": "Рекурсия",
+      "description": "Функции могут вызывать сами себя.",
       "tabs": [
         {
           "id": "mks",
@@ -610,11 +626,11 @@
     },
     {
       "id": "tests",
-      "nav": "Tests",
-      "title": "Tests with test / expect",
-      "description": "Executable checks inside MKS source files, with repo-level golden tests run through ./tests.sh.",
+      "nav": "Тесты",
+      "title": "Тесты через test / expect",
+      "description": "Исполняемые проверки прямо в MKS-файлах, плюс repo-level golden tests через ./tests.sh.",
       "icon": "hgi-checkmark-badge-01",
-      "source": "Verified against README, tests/unit/README.md, ctest, and a local passing run of ./tests.sh on the cloned not-stable branch.",
+      "source": "Проверено по README, tests/unit/README.md, ctest и локальному успешному прогону ./tests.sh на клонированной ветке not-stable.",
       "tabs": [
         {
           "id": "mks",
@@ -651,9 +667,9 @@
     },
     {
       "id": "arrays",
-      "nav": "Arrays",
-      "title": "Arrays & indexing",
-      "description": "Create arrays, index into them, mutate elements, and inspect length.",
+      "nav": "Массивы",
+      "title": "Массивы и индексация",
+      "description": "Создавай массивы, индексируй их, меняй элементы и смотри длину.",
       "tabs": [
         {
           "id": "mks",
@@ -681,9 +697,9 @@
     },
     {
       "id": "empty-arrays",
-      "nav": "Empty arrays",
-      "title": "Empty arrays",
-      "description": "Create empty arrays and grow them.",
+      "nav": "Пустые массивы",
+      "title": "Пустые массивы",
+      "description": "Создание пустых массивов и их рост.",
       "tabs": [
         {
           "id": "mks",
@@ -711,9 +727,9 @@
     },
     {
       "id": "nested-arrays",
-      "nav": "Nested arrays",
-      "title": "Nested arrays",
-      "description": "Arrays can contain arrays.",
+      "nav": "Вложенные массивы",
+      "title": "Вложенные массивы",
+      "description": "Массивы могут содержать другие массивы.",
       "tabs": [
         {
           "id": "mks",
@@ -737,21 +753,40 @@
     },
     {
       "id": "array-methods-core",
-      "nav": "Array methods",
-      "title": "Core array methods",
-      "description": "Common built-in array methods used in tests and std/array.",
+      "nav": "Методы массива",
+      "title": "Базовые методы массива",
+      "description": "Частые встроенные методы массива, используемые в тестах и std/array.",
       "groups": [
         {
-          "title": "Mutation",
-          "items": ["inject", "eject", "exclude", "purge"]
+          "title": "Изменение",
+          "items": [
+            "inject",
+            "eject",
+            "exclude",
+            "purge"
+          ]
         },
         {
-          "title": "Access",
-          "items": ["offset", "len"]
+          "title": "Доступ",
+          "items": [
+            "offset",
+            "len"
+          ]
         },
         {
-          "title": "Std wrappers",
-          "items": ["push", "pop", "first", "last", "slice", "reverse", "map", "filter", "reduce", "sum"]
+          "title": "Обёртки std",
+          "items": [
+            "push",
+            "pop",
+            "first",
+            "last",
+            "slice",
+            "reverse",
+            "map",
+            "filter",
+            "reduce",
+            "sum"
+          ]
         }
       ],
       "tabs": [
@@ -783,9 +818,9 @@
     },
     {
       "id": "strings",
-      "nav": "Strings",
-      "title": "Strings",
-      "description": "Strings are first-class values with built-in methods and std/string wrappers.",
+      "nav": "Строки",
+      "title": "Строки",
+      "description": "Строки — это полноценные значения со встроенными методами и обёртками std/string.",
       "tabs": [
         {
           "id": "mks",
@@ -816,8 +851,8 @@
     {
       "id": "std-string",
       "nav": "std/string",
-      "title": "Stdlib string helpers",
-      "description": "std/string wraps native string methods in plain MKS functions.",
+      "title": "String-helper'ы stdlib",
+      "description": "std/string оборачивает native string methods в обычные функции MKS.",
       "tabs": [
         {
           "id": "mks",
@@ -859,7 +894,7 @@
       "id": "entities",
       "nav": "Entities",
       "title": "Entities",
-      "description": "Lightweight object-style values with fields and methods.",
+      "description": "Лёгкие object-style значения с полями и методами.",
       "tabs": [
         {
           "id": "mks",
@@ -912,8 +947,8 @@
     {
       "id": "extend",
       "nav": "Extend",
-      "title": "Extend built-ins",
-      "description": "Attach new methods to built-in array values.",
+      "title": "Расширение built-in типов",
+      "description": "Подключай новые методы к встроенным значениям массива.",
       "tabs": [
         {
           "id": "mks",
@@ -970,17 +1005,17 @@
     },
     {
       "id": "imports",
-      "nav": "Imports",
-      "title": "Imports with using",
-      "description": "Load one module namespace object with using. In the current branch, imports do not spill exported names directly into local scope.",
+      "nav": "Импорты",
+      "title": "Импорты через using",
+      "description": "Загружай один namespace object модуля через using. В текущей ветке импорты не разливают exported names напрямую в локальную область видимости.",
       "icon": "hgi-package-open",
       "unstable": true,
       "points": [
-        "using works with relative files, std modules, and dotted package imports.",
-        "A module binds as one namespace value, usually through an alias.",
-        "Duplicate imports are skipped, and imported modules load declarations once."
+        "using работает с относительными файлами, std-модулями и dotted package imports.",
+        "Модуль привязывается как одно namespace-значение, обычно через alias.",
+        "Повторные импорты пропускаются, а импортированные модули загружают объявления один раз."
       ],
-      "source": "Checked against README.md, docs/REFERENCE.md, and docs/PACKAGES.md in not-stable.",
+      "source": "Проверено по README.md, docs/REFERENCE.md и docs/PACKAGES.md в not-stable.",
       "tabs": [
         {
           "id": "mks",
@@ -1025,16 +1060,16 @@
     },
     {
       "id": "packages",
-      "nav": "Packages",
-      "title": "Packages, mks.toml, and export",
-      "description": "The not-stable branch documents package roots, dotted imports, and exported declarations through mks.toml.",
+      "nav": "Пакеты",
+      "title": "Пакеты, mks.toml и export",
+      "description": "Ветка not-stable документирует корни пакетов, dotted imports и экспортируемые объявления через mks.toml.",
       "icon": "hgi-package-search",
       "unstable": true,
-      "warning": "Package resolution is documented in the branch and covered by tests, but the repository still labels the language experimental and branch APIs may change.",
+      "warning": "Разрешение пакетов описано в ветке и покрыто тестами, но репозиторий всё ещё помечает язык как experimental, а branch API может измениться.",
       "points": [
-        "The runtime searches upward for the nearest <code>mks.toml</code>.",
-        "Current-package imports resolve through <code>src/main.mks</code> or <code>src/&lt;submodule&gt;.mks</code>.",
-        "External packages resolve from <code>packages/&lt;package-name&gt;/mks.toml</code>."
+        "Рантайм ищет ближайший <code>mks.toml</code> вверх по директориям.",
+        "Импорты текущего пакета резолвятся через <code>src/main.mks</code> или <code>src/&lt;submodule&gt;.mks</code>.",
+        "Внешние пакеты резолвятся из <code>packages/&lt;package-name&gt;/mks.toml</code>."
       ],
       "tabs": [
         {
@@ -1072,7 +1107,7 @@
       "id": "std-math",
       "nav": "std/math",
       "title": "Stdlib: math",
-      "description": "Small math helpers and wrappers.",
+      "description": "Небольшие математические helper'ы и обёртки.",
       "tabs": [
         {
           "id": "mks",
@@ -1121,7 +1156,7 @@
       "id": "std-array",
       "nav": "std/array",
       "title": "Stdlib: array",
-      "description": "Plain-MKS helper functions built on array methods and loops.",
+      "description": "Функции-хелперы на обычном MKS, построенные поверх методов массива и циклов.",
       "tabs": [
         {
           "id": "mks",
@@ -1168,7 +1203,7 @@
       "id": "std-time",
       "nav": "std/time",
       "title": "Stdlib: time",
-      "description": "Simple wrappers for current time and sleeping.",
+      "description": "Простые обёртки для текущего времени и сна.",
       "tabs": [
         {
           "id": "mks",
@@ -1199,7 +1234,7 @@
       "id": "watch",
       "nav": "Watch",
       "title": "watch / on change",
-      "description": "Watch a named variable and run code when it changes.",
+      "description": "Следи за именованной переменной и запускай код, когда она меняется.",
       "tabs": [
         {
           "id": "mks",
@@ -1234,7 +1269,7 @@
       "id": "defer",
       "nav": "Defer",
       "title": "defer",
-      "description": "Register cleanup-like work to run when leaving the scope.",
+      "description": "Регистрируй cleanup-подобную работу, которая выполнится при выходе из области видимости.",
       "tabs": [
         {
           "id": "mks",
@@ -1264,25 +1299,25 @@
     },
     {
       "id": "errors",
-      "nav": "Errors",
-      "title": "Errors",
-      "description": "The docs describe file:line errors plus hints for common mistakes.",
+      "nav": "Ошибки",
+      "title": "Ошибки",
+      "description": "В docs описаны ошибки вида file:line и подсказки для частых промахов.",
       "code": [
         "Error: unknown symbol `y`",
         "at main.mks:3:5"
       ],
       "tips": [
-        "Check missing semicolons.",
-        "Check missing <- block ends.",
-        "Check typos in keywords and names.",
-        "Check wrong value types."
+        "Проверь пропущенные точki с запятой.",
+        "Проверь незакрытые концы блоков <-.",
+        "Проверь опечатки в ключевых словах и именах.",
+        "Проверь неправильные типы значений."
       ]
     },
     {
       "id": "cookbook-sum-array",
-      "nav": "Sum array",
-      "title": "Cookbook: sum numbers",
-      "description": "Classic accumulator loop.",
+      "nav": "Сумма массива",
+      "title": "Cookbook: сумма чисел",
+      "description": "Классический цикл с аккумулятором.",
       "code": [
         "var nums =: [3, 5, 8];",
         "var total =: 0;",
@@ -1298,9 +1333,9 @@
     },
     {
       "id": "cookbook-safe-last",
-      "nav": "Safe last",
-      "title": "Cookbook: safe last item",
-      "description": "Return null for empty arrays.",
+      "nav": "Безопасный last",
+      "title": "Cookbook: безопасный последний элемент",
+      "description": "Возвращай null для пустых массивов.",
       "code": [
         "fnc last_safe(arr) ->",
         "  if (arr.len() ?= 0) ->",
@@ -1315,9 +1350,9 @@
     },
     {
       "id": "cookbook-extend-array",
-      "nav": "Custom array method",
-      "title": "Cookbook: custom array method",
-      "description": "Attach a reusable method with extend array.",
+      "nav": "Свой метод массива",
+      "title": "Cookbook: собственный метод массива",
+      "description": "Подключи переиспользуемый метод через extend array.",
       "code": [
         "extend array ->",
         "  method first() ->",
@@ -1334,9 +1369,9 @@
     },
     {
       "id": "cookbook-entity-counter",
-      "nav": "Entity counter",
-      "title": "Cookbook: mutable entity state",
-      "description": "Entity methods can update self fields.",
+      "nav": "Entity-счётчик",
+      "title": "Cookbook: изменяемое состояние entity",
+      "description": "Методы entity могут обновлять поля self.",
       "code": [
         "entity Counter(value) ->",
         "  init ->",
@@ -1356,9 +1391,9 @@
     },
     {
       "id": "cookbook-module-math",
-      "nav": "Module split",
-      "title": "Cookbook: split code into a module",
-      "description": "Move reusable helpers into another .mks file.",
+      "nav": "Разделение модулей",
+      "title": "Cookbook: вынеси код в модуль",
+      "description": "Перемести переиспользуемые helper'ы в отдельный .mks-файл.",
       "code": [
         "// math.mks",
         "using \"std/math\";",
@@ -1374,9 +1409,9 @@
     },
     {
       "id": "cookbook-watch-counter",
-      "nav": "Watched counter",
-      "title": "Cookbook: watched counter",
-      "description": "Print whenever a value changes.",
+      "nav": "Наблюдаемый счётчик",
+      "title": "Cookbook: счётчик с watch",
+      "description": "Печатай каждый раз, когда значение меняется.",
       "code": [
         "var score =: 0;",
         "watch score;",
@@ -1391,9 +1426,9 @@
     },
     {
       "id": "cookbook-cli-input",
-      "nav": "Prompt input",
-      "title": "Cookbook: prompt for a name",
-      "description": "Tiny interactive script using Read.",
+      "nav": "Ввод с prompt",
+      "title": "Cookbook: спросить имя",
+      "description": "Небольшой интерактивный скрипт на Read.",
       "code": [
         "var name =: Read(\"Your name: \");",
         "Writeln(\"Welcome,\", name);"
@@ -1401,9 +1436,9 @@
     },
     {
       "id": "cookbook-tests",
-      "nav": "Mini test suite",
-      "title": "Cookbook: tiny test suite",
-      "description": "Keep examples executable as checks.",
+      "nav": "Мини test suite",
+      "title": "Cookbook: маленький набор тестов",
+      "description": "Держи примеры исполняемыми как проверки.",
       "code": [
         "fnc add(a, b) ->",
         "  return a + b;",
@@ -1421,7 +1456,7 @@
   ],
   "navigation": [
     {
-      "title": "Getting started",
+      "title": "Быстрый старт",
       "sections": [
         "hello",
         "comments",
@@ -1435,7 +1470,7 @@
       ]
     },
     {
-      "title": "Control flow",
+      "title": "Поток управления",
       "sections": [
         "if-else",
         "while",
@@ -1449,7 +1484,7 @@
       ]
     },
     {
-      "title": "Data types",
+      "title": "Типы данных",
       "sections": [
         "arrays",
         "empty-arrays",
@@ -1462,7 +1497,7 @@
       ]
     },
     {
-      "title": "Modules & stdlib",
+      "title": "Модули и stdlib",
       "sections": [
         "imports",
         "packages",
@@ -1472,7 +1507,7 @@
       ]
     },
     {
-      "title": "Runtime behavior",
+      "title": "Поведение рантайма",
       "sections": [
         "watch",
         "defer",
