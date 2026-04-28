@@ -2,10 +2,10 @@
   "hero": {
     "id": "overview",
     "eyebrow": "Документация",
-    "title": "Справочник MKS для ветки not-stable",
-    "description": "Практический синтаксис, поток управления, pointers, namespace imports, packages, stdlib, runtime helper'ы и cookbook-примеры, проверенные по текущей ветке интерпретатора, документации репозитория и зелёным тестам.",
+    "title": "Справочник MKS для релиза 0.2 beta",
+    "description": "Практический синтаксис, поток управления, pointers, namespace imports, packages, stdlib, runtime helper'ы и cookbook-примеры, проверенные по текущей ветке интерпретатора, документации репозитория и зелёным тестам. NOTE: Some examples may be erroneous or non-functional; this will be fixed in future updates.",
     "icon": "hgi-book-open-01",
-    "meta": "Синхронизировано с README, REFERENCE, USER_GUIDE, PACKAGES и локальными зелёными прогонами тестов",
+    "meta": "Синхронизировано с README, REFERENCE, USER_GUIDE, PACKAGES, std/process, std/tty, std/io, std/path и std/json",
     "tags": [
       "синтаксис",
       "поток-управления",
@@ -16,11 +16,15 @@
       "extend",
       "imports",
       "packages",
+      "mkspkg",
       "pointers",
       "stdlib",
+      "process",
+      "tty",
+      "json",
+      "path",
       "watch",
       "defer",
-      "read",
       {
         "label": "экспериментально",
         "live": true
@@ -129,6 +133,150 @@
             "a = 1",
             "b = 2",
             "a, b = b, a"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "assignment-model",
+      "nav": "Алиасинг",
+      "title": "Модель присваивания и алиасинг",
+      "description": "В MKS есть скаляры (копируются по значению) и объекты (копируются по ссылке/хэндлу). Это важно при передаче в функции или присваивании.",
+      "icon": "hgi-git-compare",
+      "unstable": true,
+      "points": [
+        "Числа, булевы значения и null ведут себя как копируемые скаляры.",
+        "Строки, массивы, объекты, модули, функции и указатели ведут себя как копируемые хэндлы.",
+        "Перепривязка параметра функции не меняет переменную вызывающего кода.",
+        "Мутация общего массива/объекта или запись через указатель видна через все алиасы."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var a =: [1, 2];",
+            "var b =: a;",
+            "",
+            "b[0] =: 99;",
+            "Writeln(a[0]); // 99",
+            "",
+            "fnc rebind(x) ->",
+            "  x =: [7, 8];",
+            "<-",
+            "",
+            "rebind(a);",
+            "Writeln(a[0]); // still 99"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "a = [1, 2]",
+            "b = a",
+            "b[0] = 99",
+            "print(a[0])",
+            "",
+            "def rebind(x):",
+            "    x = [7, 8]",
+            "",
+            "rebind(a)",
+            "print(a[0])"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "null",
+      "nav": "Null",
+      "title": "null",
+      "description": "null представляет отсутствие значения. Полезно для отсутствующих полей, неудачных поисков и безопасных фоллбеков.",
+      "points": [
+        "Литерал — <code>null</code>.",
+        "null считается ложным (falsy) в условиях.",
+        "<code>null ?= null</code> — true.",
+        "<code>null !? null</code> — false.",
+        "String(null) дает \"null\", Int(null) дает 0.",
+        "Избегайте арифметики и сравнений порядка для null, если это не оговорено в документации."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var value =: null;",
+            "",
+            "if (value) ->",
+            "  Writeln(\"has value\");",
+            "<- else ->",
+            "  Writeln(\"empty\");",
+            "<-",
+            "",
+            "Writeln(null ?= null);",
+            "Writeln(String(null));",
+            "Writeln(Int(null));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "value = None",
+            "",
+            "if value:",
+            "    print(\"has value\")",
+            "else:",
+            "    print(\"empty\")",
+            "",
+            "print(None is None)",
+            "print(str(None))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conversions",
+      "nav": "Приведение",
+      "title": "Преобразования через Int и String",
+      "description": "Используйте вспомогательные функции, когда нужно привести значение к определенному представлению.",
+      "points": [
+        "String(value) преобразует значение в текст для вывода или конкатенации.",
+        "Int(value) преобразует поддерживаемые значения в целые числа.",
+        "Булевы значения преобразуются в 1 или 0.",
+        "null преобразуется в 0 для Int и в \"null\" для String.",
+        "Некорректные преобразования могут вызвать ошибки выполнения."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "Writeln(String(123));",
+            "Writeln(String(true));",
+            "Writeln(String(null));",
+            "",
+            "Writeln(Int(true));",
+            "Writeln(Int(false));",
+            "Writeln(Int(null));",
+            "",
+            "var code =: 7;",
+            "Writeln(\"exit code: \" + String(code));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "print(str(123))",
+            "print(str(True))",
+            "print(str(None))",
+            "",
+            "print(int(True))",
+            "print(int(False))",
+            "",
+            "code = 7",
+            "print(\"exit code: \" + str(code))"
           ]
         }
       ]
@@ -391,6 +539,94 @@
         "    print(\"positive\")",
         "else:",
         "    print(\"non-positive\")"
+      ]
+    },
+    {
+      "id": "else-if",
+      "nav": "Else if",
+      "title": "цепочки else if",
+      "description": "Используйте else if, когда несколько веток взаимно исключают друг друга.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var score =: 75;",
+            "",
+            "if (score >= 90) ->",
+            "  Writeln(\"A\");",
+            "<- else if (score >= 70) ->",
+            "  Writeln(\"B\");",
+            "<- else ->",
+            "  Writeln(\"C\");",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "score = 75",
+            "",
+            "if score >= 90:",
+            "    print(\"A\")",
+            "elif score >= 70:",
+            "    print(\"B\")",
+            "else:",
+            "    print(\"C\")"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "switch",
+      "nav": "Switch",
+      "title": "switch / case / default",
+      "description": "switch вычисляет выражение один раз и переходит к первому совпавшему case. Проваливания нет.",
+      "icon": "hgi-git-branch",
+      "points": [
+        "switch(value) сравнивает значение с каждым case.",
+        "Выполняется тело первого совпавшего case.",
+        "default выполняется, если ни один case не подошел.",
+        "Проваливания (fallthrough) нет, поэтому break между кейсами не нужен."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var cmd =: \"run\";",
+            "",
+            "switch (cmd) ->",
+            "  case \"build\" ->",
+            "    Writeln(\"building\");",
+            "  <-",
+            "",
+            "  case \"run\" ->",
+            "    Writeln(\"running\");",
+            "  <-",
+            "",
+            "  default ->",
+            "    Writeln(\"unknown\");",
+            "  <-",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "cmd = \"run\"",
+            "",
+            "match cmd:",
+            "    case \"build\":",
+            "        print(\"building\")",
+            "    case \"run\":",
+            "        print(\"running\")",
+            "    case _:",
+            "        print(\"unknown\")"
+          ]
+        }
       ]
     },
     {
@@ -1104,6 +1340,195 @@
       ]
     },
     {
+      "id": "packages-init",
+      "nav": "pkg init",
+      "title": "Создание пакетов через mks pkg init",
+      "description": "mks pkg init создает начальную структуру пакета, чтобы вам не пришлось создавать все файлы вручную.",
+      "icon": "hgi-package-add",
+      "isNew": true,
+      "unstable": true,
+      "points": [
+        "<code>mks pkg init name</code> создает новую папку пакета.",
+        "Сгенерированный пакет использует package.pkg.",
+        "Корневой модуль пакета обычно находится в src/lib.mks.",
+        "Для приложений добавьте или оставьте src/main.mks."
+      ],
+      "tabs": [
+        {
+          "id": "shell",
+          "label": "Shell",
+          "code": [
+            "mks pkg init cool.lib",
+            "cd cool.lib",
+            "cat package.pkg",
+            "cat src/lib.mks"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packages-build",
+      "nav": "Сборка пакетов",
+      "title": "Сборка .mkspkg артефактов",
+      "description": ".mkspkg — это формат устанавливаемого артефакта пакета, используемый механизмом разрешения пакетов MKS.",
+      "icon": "hgi-package-process",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>mks pkg build</code> читает package.pkg.",
+        "Он копирует package.pkg, модули исходного кода, пути из манифеста и опциональные README/LICENSE в архив.",
+        "Создает версионированный артефакт в папке dist/.",
+        "Создает готовый к установке артефакт, который можно скопировать в другое приложение.",
+        "Разрешение пакетов предпочитает .mkspkg артефакты распакованным папкам разработки."
+      ],
+      "tabs": [
+        {
+          "id": "shell",
+          "label": "Shell",
+          "code": [
+            "cd cool.lib",
+            "mks pkg build",
+            "",
+            "mkdir -p ../my-app/mks_modules",
+            "cp dist/modules/cool.lib.mkspkg ../my-app/mks_modules/",
+            "",
+            "cd ../my-app",
+            "mks src/main.mks"
+          ]
+        },
+        {
+          "id": "mks",
+          "label": "MKS import",
+          "code": [
+            "using cool.lib as cool;",
+            "",
+            "Writeln(cool.hello());"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packages-flat-install",
+      "nav": "Flat install",
+      "title": "Плоская установка пакетов",
+      "description": "Для небольших приложений .mkspkg может лежать рядом со скриптом, а не в mks_modules.",
+      "icon": "hgi-folder-shared-02",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "mks_modules/name.mkspkg — чистая структура установки.",
+        "Плоская установка означает размещение name.mkspkg рядом со скриптом приложения.",
+        "Полезно для быстрых демо и переносимых папок.",
+        "mks_modules лучше подходит для крупных проектов с множеством зависимостей."
+      ],
+      "tabs": [
+        {
+          "id": "flat",
+          "label": "Flat layout",
+          "code": [
+            "app/",
+            "  main.mks",
+            "  cool.lib.mkspkg"
+          ]
+        },
+        {
+          "id": "modules",
+          "label": "mks_modules layout",
+          "code": [
+            "app/",
+            "  main.mks",
+            "  mks_modules/",
+            "    cool.lib.mkspkg"
+          ]
+        },
+        {
+          "id": "mks",
+          "label": "Import",
+          "code": [
+            "using cool.lib as cool;",
+            "",
+            "Writeln(cool.hello());"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packages-submodules",
+      "nav": "Подмодули",
+      "title": "Подмодули пакета",
+      "description": "Точечный импорт позволяет загружать подмодули внутри пакета.",
+      "icon": "hgi-node-move-down",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>using cool.lib as lib</code> загружает корень пакета.",
+        "<code>using cool.lib.http.client as client</code> загружает подмодуль.",
+        "Подмодули отображаются на файлы вида src/http/client.mks.",
+        "Относительные импорты внутри архива пакета остаются внутри архива."
+      ],
+      "tabs": [
+        {
+          "id": "layout",
+          "label": "Layout",
+          "code": [
+            "cool.lib/",
+            "  package.pkg",
+            "  src/",
+            "    lib.mks",
+            "    http/",
+            "      client.mks"
+          ]
+        },
+        {
+          "id": "import",
+          "label": "Import",
+          "code": [
+            "using cool.lib as lib;",
+            "using cool.lib.http.client as client;",
+            "",
+            "Writeln(lib.VERSION);",
+            "Writeln(client.get(\"/status\"));"
+          ]
+        },
+        {
+          "id": "relative",
+          "label": "Inside package",
+          "code": [
+            "// src/lib.mks inside cool.lib.mkspkg",
+            "using \"./http/client\" as client;",
+            "",
+            "export var http =: client;"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mkspkg-format",
+      "nav": "Формат .mkspkg",
+      "title": "Формат архива .mkspkg",
+      "description": "Артефакт пакета в данный момент представляет собой простой несжатый архив.",
+      "icon": "hgi-archive",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Магический заголовок архива — <code>MKSPKG1\n</code>.",
+        "Каждая запись хранит длину пути, размер содержимого, байты пути и байты содержимого.",
+        "Нулевая длина пути завершает архив.",
+        "Сжатие пока не поддерживается.",
+        "Простой формат обеспечивает легкость и предсказуемость загрузки."
+      ],
+      "code": [
+        "MKSPKG1\\n",
+        "entry:",
+        "  path_len u32",
+        "  size u64",
+        "  path bytes",
+        "  content bytes",
+        "terminator:",
+        "  path_len = 0"
+      ]
+    },
+    {
       "id": "std-math",
       "nav": "std/math",
       "title": "Stdlib: math",
@@ -1285,6 +1710,474 @@
       ]
     },
     {
+      "id": "std-process",
+      "nav": "std/process",
+      "title": "Stdlib: process",
+      "description": "Запуск внешних программ, чтение аргументов CLI, получение текущей рабочей директории и захват вывода команд.",
+      "icon": "hgi-terminal",
+      "unstable": true,
+      "isNew": true,
+      "source": "Checked against std/process.c and release 0.2 beta behavior.",
+      "points": [
+        "Используйте <code>process.cwd()</code> для получения текущей рабочей директории.",
+        "Используйте <code>process.args()</code> или <code>process.argv()</code> для получения аргументов CLI.",
+        "Используйте <code>process.exec(cmd, args)</code>, если вам нужен только код выхода.",
+        "Используйте <code>process.shell(command)</code> для выполнения команд оболочки (нужен только код выхода).",
+        "Используйте <code>process.capture(cmd, args)</code>, если вам нужны stdout и stderr в виде строк.",
+        "Используйте <code>process.capture_shell(command)</code> для конвейеров оболочки вида <code>ls -la | head</code>.",
+        "Используйте <code>process.exit(code)</code> для завершения текущего процесса MKS с кодом выхода."
+      ],
+      "warning": "Вспомогательные функции shell работают через /bin/sh -c. Не передавайте непроверенные пользовательские данные напрямую в process.shell или process.capture_shell.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.process as process;",
+            "",
+            "Writeln(\"cwd\", process.cwd());",
+            "Writeln(\"args\", process.args());",
+            "",
+            "var code =: process.exec(\"uname\", [\"-a\"]);",
+            "Writeln(\"exit code\", code);",
+            "",
+            "var result =: process.capture(\"whoami\", []);",
+            "Writeln(\"code\", result.code);",
+            "Writeln(\"out\", result.out);",
+            "Writeln(\"err\", result.err);"
+          ],
+          "note": "process.exec starts a program directly with an argv array. process.capture does the same, but returns an object with code, out, and err."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import os",
+            "import sys",
+            "import subprocess",
+            "",
+            "print(\"cwd\", os.getcwd())",
+            "print(\"args\", sys.argv)",
+            "",
+            "code = subprocess.call([\"uname\", \"-a\"])",
+            "print(\"exit code\", code)",
+            "",
+            "result = subprocess.run([\"whoami\"], capture_output=True, text=True)",
+            "print(\"code\", result.returncode)",
+            "print(\"out\", result.stdout)",
+            "print(\"err\", result.stderr)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-process-capture",
+      "nav": "Захват",
+      "title": "Захват процесса",
+      "description": "Функции захвата позволяют MKS запускать команду и сохранять её вывод внутри программы, не выводя его напрямую в терминал.",
+      "icon": "hgi-terminal-box",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Возвращаемое значение — объект с полями <code>code</code>, <code>out</code> и <code>err</code>.",
+        "<code>code</code> — код выхода процесса. Обычно <code>0</code> означает успех.",
+        "<code>out</code> — стандартный вывод (stdout).",
+        "<code>err</code> — стандартный поток ошибок (stderr).",
+        "Захват — правильный выбор для TUI-приложений, так как сырой вывод команд может разрушить разметку терминала."
+      ],
+      "warning": "Захваченный вывод может содержать символы новой строки. Рисуйте его с помощью многострочного виджета или разбивайте на строки перед рендерингом в TUI.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.process as process;",
+            "",
+            "var r =: process.capture(\"ls\", [\"-la\"]);",
+            "",
+            "if (r.code ?= 0) ->",
+            "  Writeln(\"success\");",
+            "  Writeln(r.out);",
+            "<- else ->",
+            "  Writeln(\"failed\");",
+            "  Writeln(r.err);",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import subprocess",
+            "",
+            "r = subprocess.run([\"ls\", \"-la\"], capture_output=True, text=True)",
+            "",
+            "if r.returncode == 0:",
+            "    print(\"success\")",
+            "    print(r.stdout)",
+            "else:",
+            "    print(\"failed\")",
+            "    print(r.stderr)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-process-exit",
+      "nav": "Выход",
+      "title": "Завершение процесса",
+      "description": "process.exit останавливает текущую программу MKS с кодом выхода.",
+      "icon": "hgi-logout-03",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>process.exit()</code> выходит с кодом 0.",
+        "<code>process.exit(code)</code> выходит с указанным кодом.",
+        "Используйте ненулевые коды для индикации ошибок в скриптах и CI-задачах."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.process as process;",
+            "",
+            "var ok =: 0;",
+            "",
+            "if (ok ?= 0) ->",
+            "  process.exit(1);",
+            "<-",
+            "",
+            "process.exit(0);"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import sys",
+            "",
+            "ok = False",
+            "",
+            "if not ok:",
+            "    sys.exit(1)",
+            "",
+            "sys.exit(0)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-tty",
+      "nav": "std/tty",
+      "title": "Stdlib: tty",
+      "description": "Низкоуровневое управление терминалом для создания TUI-приложений: перемещение курсора, мгновенный ввод, альтернативный экран, цвета, рамки, окна, кнопки и отрисовка текста.",
+      "icon": "hgi-layout-top",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Используйте <code>tty.alt_screen()</code> для отрисовки на временном экране терминала.",
+        "Используйте <code>tty.raw()</code> для мгновенного чтения клавиш без ожидания Enter.",
+        "Используйте <code>tty.clear()</code> для очистки экрана.",
+        "Используйте <code>tty.move(x, y)</code> или <code>tty.write_at(x, y, text)</code> для позиционированного вывода.",
+        "Используйте <code>tty.window</code>, <code>tty.box</code>, <code>tty.button</code> и <code>tty.input_box</code> как примитивы виджетов.",
+        "Всегда вызывайте <code>tty.restore()</code> перед выходом."
+      ],
+      "warning": "Если программа аварийно завершается после включения raw-режима или скрытия курсора, терминал может выглядеть сломанным. Выполните reset в оболочке или убедитесь, что tty.restore() вызывается.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.tty as tty;",
+            "",
+            "tty.alt_screen();",
+            "tty.hide_cursor();",
+            "tty.raw();",
+            "tty.clear();",
+            "",
+            "tty.window(4, 2, 50, 12, \" TTY Demo \", 2);",
+            "tty.write_at(7, 5, \"Hello from std.tty\");",
+            "tty.button(7, 8, 16, \"OK\", 1);",
+            "tty.button(26, 8, 16, \"Cancel\", 0);",
+            "",
+            "tty.flush();",
+            "tty.read_key();",
+            "",
+            "tty.restore();"
+          ],
+          "note": "tty is intentionally low-level. A package like ggui can build panels, lists, inputs, dialogs, and layouts on top of it."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "# Rough mental model using curses",
+            "import curses",
+            "",
+            "def main(stdscr):",
+            "    stdscr.clear()",
+            "    stdscr.addstr(2, 4, \"+ TTY Demo +\")",
+            "    stdscr.addstr(5, 7, \"Hello from curses\")",
+            "    stdscr.getch()",
+            "",
+            "curses.wrapper(main)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-tty-keys",
+      "nav": "TTY клавиши",
+      "title": "Клавиатурный ввод в tty",
+      "description": "Raw-режим позволяет MKS читать события клавиатуры напрямую, что необходимо для интерактивных терминальных приложений.",
+      "icon": "hgi-keyboard",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>tty.read_key()</code> ожидает нажатия и возвращает строку.",
+        "<code>tty.read_key_timeout(ms)</code> ожидает в течение таймаута и может вернуть null.",
+        "Клавиши-стрелки возвращают имена: <code>up</code>, <code>down</code>, <code>left</code>, <code>right</code>.",
+        "Enter возвращает <code>enter</code>.",
+        "Backspace возвращает <code>backspace</code>.",
+        "Ctrl-C возвращает <code>ctrl_c</code> вместо завершения процесса при активном raw-режиме."
+      ],
+      "tabs": [
+        {
+          "id": "blocking",
+          "label": "Blocking",
+          "code": [
+            "using std.tty as tty;",
+            "",
+            "tty.raw();",
+            "tty.clear();",
+            "",
+            "var running =: 1;",
+            "",
+            "while (running) ->",
+            "  var k =: tty.read_key();",
+            "",
+            "  tty.clear();",
+            "  tty.write_at(2, 2, \"key: \" + k);",
+            "  tty.write_at(2, 4, \"press Esc or Ctrl-C to exit\");",
+            "  tty.flush();",
+            "",
+            "  if (k ?= \"esc\" || k ?= \"ctrl_c\") ->",
+            "    running =: 0;",
+            "  <-",
+            "<-",
+            "",
+            "tty.restore();"
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "Timeout",
+          "code": [
+            "using std.tty as tty;",
+            "",
+            "tty.raw();",
+            "tty.clear();",
+            "",
+            "var ticks =: 0;",
+            "var running =: 1;",
+            "",
+            "while (running) ->",
+            "  var k =: tty.read_key_timeout(100);",
+            "  ticks =: ticks + 1;",
+            "",
+            "  tty.clear();",
+            "  tty.write_at(2, 2, \"ticks: \" + String(ticks));",
+            "",
+            "  if (k ?= \"esc\" || k ?= \"ctrl_c\") ->",
+            "    running =: 0;",
+            "  <-",
+            "",
+            "  tty.flush();",
+            "<-",
+            "",
+            "tty.restore();"
+          ],
+          "note": "Timeout input is useful for animations, clocks, spinners, and event loops that should keep drawing even when the user does not press a key."
+        }
+      ]
+    },
+    {
+      "id": "std-tty-layout",
+      "nav": "TTY разметка",
+      "title": "Размер терминала и фоллбеки",
+      "description": "TUI-приложениям нужны размеры терминала. size_or полезен, когда программа запускается вне реального терминала или в CI.",
+      "icon": "hgi-layout-04",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>tty.size()</code> возвращает объект с <code>w</code> и <code>h</code>.",
+        "<code>tty.size_or(w, h)</code> возвращает размер терминала или заданные значения по умолчанию.",
+        "Используйте это при отрисовке демо, тестов или CI-безопасного вывода."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.tty as tty;",
+            "",
+            "var s =: tty.size_or(80, 24);",
+            "",
+            "tty.clear();",
+            "tty.window(2, 2, s.w - 4, s.h - 4, \" App \", 2);",
+            "tty.write_at(4, 4, \"size: \" + String(s.w) + \"x\" + String(s.h));",
+            "tty.flush();"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-tty-text-wrap",
+      "nav": "Перенос текста",
+      "title": "Перенос текста в терминальных интерфейсах",
+      "description": "Используйте перенос текста для многострочного контента: вывода команд, логов, справок и сообщений об ошибках.",
+      "icon": "hgi-text-wrap",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Функции для однострочного текста не должны получать большие многострочные строки.",
+        "Захваченный вывод процессов часто содержит символы новой строки.",
+        "<code>tty.text_wrap</code> предназначен для отрисовки текста в прямоугольной области.",
+        "Это предотвращает разрушение разметки окон/боксов выводом команд."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.tty as tty;",
+            "using std.process as process;",
+            "",
+            "tty.alt_screen();",
+            "tty.raw();",
+            "tty.clear();",
+            "",
+            "var r =: process.capture_shell(\"ls -la | head\");",
+            "",
+            "tty.window(2, 2, 70, 16, \" Output \", 2);",
+            "tty.text_wrap(4, 4, 66, 12, r.out);",
+            "tty.flush();",
+            "tty.read_key();",
+            "tty.restore();"
+          ]
+        }
+      ],
+      "warning": "Не выводите многострочный вывод команд через кнопки или однострочные хелперы. Используйте text_wrap или разбивайте на строки."
+    },
+    {
+      "id": "std-path",
+      "nav": "std/path",
+      "title": "Stdlib: path",
+      "description": "Вспомогательные функции для построения и анализа путей к файлам без ручной манипуляции строками.",
+      "icon": "hgi-folder-01",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Используйте <code>path.join</code> для объединения частей пути.",
+        "Используйте <code>path.basename</code> для получения имени файла или папки.",
+        "Используйте <code>path.dirname</code> для получения пути к родителю.",
+        "Используйте <code>path.extname</code> для получения расширения.",
+        "Используйте <code>path.stem</code> для получения имени файла без расширения.",
+        "Используйте <code>path.normalize</code> для очистки строки пути."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.path as path;",
+            "",
+            "var file =: path.join(\"src\", \"widgets\", \"button.mks\");",
+            "",
+            "Writeln(file);",
+            "Writeln(path.basename(file));",
+            "Writeln(path.dirname(file));",
+            "Writeln(path.extname(file));",
+            "Writeln(path.stem(file));",
+            "Writeln(path.normalize(\"src/../src/main.mks\"));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "from pathlib import Path",
+            "",
+            "file = Path(\"src\") / \"widgets\" / \"button.mks\"",
+            "",
+            "print(file)",
+            "print(file.name)",
+            "print(file.parent)",
+            "print(file.suffix)",
+            "print(file.stem)",
+            "print(Path(\"src/../src/main.mks\"))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-json",
+      "nav": "std/json",
+      "title": "Stdlib: json",
+      "description": "Парсинг JSON-текста в значения MKS и сериализация значений MKS обратно в JSON.",
+      "icon": "hgi-code-square",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Используйте <code>json.parse(text)</code> для преобразования JSON в значения MKS.",
+        "JSON-массивы становятся массивами MKS.",
+        "JSON-объекты становятся объектами MKS.",
+        "JSON-строки становятся строками MKS.",
+        "JSON null становится null в MKS.",
+        "Используйте <code>json.stringify(value)</code> для преобразования значений MKS обратно в JSON."
+      ],
+      "warning": "Поддержка Unicode-последовательностей (\\uXXXX) может быть ограничена. Предпочитайте обычные UTF-8 строки.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.json as json;",
+            "",
+            "var data =: json.parse(\"{\\\"name\\\":\\\"mks\\\",\\\"stars\\\":10}\");",
+            "",
+            "Writeln(data.name);",
+            "Writeln(data.stars);",
+            "",
+            "var arr =: json.parse(\"[1, 2, 3]\");",
+            "Writeln(arr[0]);",
+            "Writeln(arr.len());",
+            "",
+            "Writeln(json.stringify(arr));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import json",
+            "",
+            "data = json.loads('{\"name\":\"mks\",\"stars\":10}')",
+            "",
+            "print(data[\"name\"])",
+            "print(data[\"stars\"])",
+            "",
+            "arr = json.loads(\"[1, 2, 3]\")",
+            "print(arr[0])",
+            "print(len(arr))",
+            "",
+            "print(json.dumps(arr))"
+          ]
+        }
+      ]
+    },
+    {
       "id": "watch",
       "nav": "Watch",
       "title": "watch / on change",
@@ -1347,6 +2240,66 @@
             "print(\"body\")",
             "print(\"d2\")",
             "print(\"d1\")"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cli",
+      "nav": "CLI",
+      "title": "Командная строка MKS",
+      "description": "Исполняемый файл mks может запускать скрипты, запускать REPL, показывать версию и собирать пакеты.",
+      "icon": "hgi-terminal",
+      "isNew": true,
+      "points": [
+        "<code>mks file.mks</code> запускает скрипт.",
+        "<code>mks --repl</code> запускает интерактивный режим (если доступен).",
+        "<code>mks --version</code> выводит версию.",
+        "<code>mks pkg init</code> и <code>mks pkg build</code> управляют пакетами.",
+        "Файлы стандартной библиотеки ищутся по путям установки или через MKS_STD_PATH."
+      ],
+      "tabs": [
+        {
+          "id": "shell",
+          "label": "Shell",
+          "code": [
+            "mks main.mks",
+            "mks --version",
+            "mks --repl",
+            "mks pkg init cool.lib",
+            "mks pkg build"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "performance",
+      "nav": "Производительность",
+      "title": "Заметки о производительности",
+      "description": "MKS экспериментален, поэтому советы по производительности в основном касаются избегания лишних накладных расходов интерпретатора.",
+      "icon": "hgi-dashboard-speed-02",
+      "unstable": true,
+      "points": [
+        "Предпочитайте циклы очень глубокой рекурсии.",
+        "Избегайте создания лишних временных массивов/строк в горячих циклах.",
+        "Держите импорты пакетов и stdlib на верхнем уровне модуля.",
+        "Используйте нативные хелперы stdlib, когда они существуют.",
+        "Бенчмаркайте релизные сборки, а не отладочные."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var i =: 0;",
+            "var total =: 0;",
+            "",
+            "while (i < 100000) ->",
+            "  total =: total + i;",
+            "  i =: i + 1;",
+            "<-",
+            "",
+            "Writeln(total);"
           ]
         }
       ]
@@ -1462,6 +2415,92 @@
       ]
     },
     {
+      "id": "cookbook-package",
+      "nav": "Мини-пакет",
+      "title": "Cookbook: создание небольшого пакета",
+      "description": "Создание, сборка и использование устанавливаемой библиотеки .mkspkg.",
+      "code": [
+        "# package.pkg",
+        "package \"hello.lib\";",
+        "version \"0.1.0\";",
+        "lib \"src/lib.mks\";",
+        "",
+        "# src/lib.mks",
+        "export fnc hello(name) ->",
+        "  return \"hello \" + name;",
+        "<-",
+        "",
+        "# build",
+        "mks pkg build",
+        "",
+        "# use from another app",
+        "using hello.lib as hello;",
+        "Writeln(hello.hello(\"MKS\"));"
+      ]
+    },
+    {
+      "id": "cookbook-process-capture",
+      "nav": "Захват вывода",
+      "title": "Cookbook: захват вывода команды",
+      "description": "Запуск системной команды и сохранение stdout/stderr внутри MKS.",
+      "code": [
+        "using std.process as process;",
+        "",
+        "var r =: process.capture(\"uname\", [\"-a\"]);",
+        "",
+        "if (r.code ?= 0) ->",
+        "  Writeln(r.out);",
+        "<- else ->",
+        "  Writeln(\"failed\", r.err);",
+        "<-"
+      ]
+    },
+    {
+      "id": "cookbook-tty-window",
+      "nav": "TTY окно",
+      "title": "Cookbook: терминальное окно",
+      "description": "Отрисовка небольшого окна TUI и ожидание нажатия клавиши.",
+      "code": [
+        "using std.tty as tty;",
+        "",
+        "tty.alt_screen();",
+        "tty.hide_cursor();",
+        "tty.raw();",
+        "tty.clear();",
+        "",
+        "tty.floating_window(5, 3, 50, 10, \" MKS \", 2);",
+        "tty.write_at(8, 6, \"Hello from a terminal UI\");",
+        "tty.button(8, 9, 16, \"OK\", 1);",
+        "tty.flush();",
+        "",
+        "tty.read_key();",
+        "tty.restore();"
+      ]
+    },
+    {
+      "id": "cookbook-tty-output",
+      "nav": "TTY вывод команды",
+      "title": "Cookbook: вывод команды в TUI",
+      "description": "Захват вывода команды и его отрисовка в окне терминала без разрушения разметки.",
+      "code": [
+        "using std.tty as tty;",
+        "using std.process as process;",
+        "",
+        "tty.alt_screen();",
+        "tty.raw();",
+        "tty.clear();",
+        "",
+        "var r =: process.capture_shell(\"ls -la | head\");",
+        "",
+        "tty.window(2, 2, 70, 16, \" ls output \", 2);",
+        "tty.text_wrap(4, 4, 66, 12, r.out);",
+        "tty.flush();",
+        "",
+        "tty.read_key();",
+        "tty.restore();"
+      ]
+    },
+    {
       "id": "cookbook-watch-counter",
       "nav": "Наблюдаемый счётчик",
       "title": "Cookbook: счётчик с watch",
@@ -1515,6 +2554,9 @@
         "hello",
         "comments",
         "values",
+        "assignment-model",
+        "null",
+        "conversions",
         "pointers",
         "operators",
         "precedence",
@@ -1527,6 +2569,8 @@
       "title": "Поток управления",
       "sections": [
         "if-else",
+        "else-if",
+        "switch",
         "while",
         "for",
         "repeat",
@@ -1551,14 +2595,33 @@
       ]
     },
     {
-      "title": "Модули и stdlib",
+      "title": "Модули и пакеты",
       "sections": [
         "imports",
         "packages",
+        "packages-init",
+        "packages-build",
+        "packages-flat-install",
+        "packages-submodules",
+        "mkspkg-format"
+      ]
+    },
+    {
+      "title": "Стандартная библиотека",
+      "sections": [
         "std-math",
         "std-array",
         "std-time",
-        "std-io"
+        "std-io",
+        "std-process",
+        "std-process-capture",
+        "std-process-exit",
+        "std-tty",
+        "std-tty-keys",
+        "std-tty-layout",
+        "std-tty-text-wrap",
+        "std-path",
+        "std-json"
       ]
     },
     {
@@ -1566,6 +2629,8 @@
       "sections": [
         "watch",
         "defer",
+        "cli",
+        "performance",
         "errors"
       ]
     },
@@ -1577,6 +2642,10 @@
         "cookbook-extend-array",
         "cookbook-entity-counter",
         "cookbook-module-math",
+        "cookbook-package",
+        "cookbook-process-capture",
+        "cookbook-tty-window",
+        "cookbook-tty-output",
         "cookbook-watch-counter",
         "cookbook-cli-input",
         "cookbook-tests"

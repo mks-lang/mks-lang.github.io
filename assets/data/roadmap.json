@@ -167,11 +167,11 @@
         },
         {
           "step": "06",
-          "phase": "Next",
+          "phase": "Done",
           "title": "Package groundwork",
-          "status": "planned",
-          "state": "next",
-          "progress": 24,
+          "status": "stable",
+          "state": "done",
+          "progress": 100,
           "description": "A real package direction should start small: importable libraries, reusable folders, and a clean convention before a full package manager.",
           "items": [
             "package layout rules",
