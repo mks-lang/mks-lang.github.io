@@ -289,7 +289,7 @@
       "description": "Текущая ветка поддерживает взятие адреса и разыменование для переменных, элементов массивов и полей объектов.",
       "icon": "hgi-link-03",
       "unstable": true,
-      "warning": "Семантика указателей описана в branch reference, но сам репозиторий всё ещё помечает язык как experimental. Считай это функциональностью ветки, а не обещанием стабильности.",
+      "warning": "Семантика указателей описана в справочнике ветки (branch reference), но сам репозиторий всё ещё помечает язык как экспериментальный (experimental). Считайте это функциональностью ветки, а не обещанием стабильности.",
       "points": [
         "Используйте <code>&amp;value</code>, чтобы взять адрес.",
         "Используйте <code>*ptr</code>, чтобы прочитать значение по указателю.",
@@ -333,7 +333,7 @@
       "description": "Арифметика, сравнения и логика.",
       "groups": [
         {
-          "title": "Arithmetic",
+          "title": "Арифметика",
           "items": [
             "+",
             "-",
@@ -343,7 +343,7 @@
           ]
         },
         {
-          "title": "Comparison",
+          "title": "Сравнение",
           "items": [
             "?=",
             "!?",
@@ -354,7 +354,7 @@
           ]
         },
         {
-          "title": "Logic",
+          "title": "Логика",
           "items": [
             "&&",
             "||"
@@ -1280,7 +1280,7 @@
         "Доступ к экспортированным именам осуществляется через точку, например math.square(4).",
         "Импортированные модули загружают объявления и экспорты. Обычный исполняемый код верхнего уровня пропускается при импорте."
       ],
-      "source": "Проверено по README.md, docs/REFERENCE.md и docs/PACKAGES.md в not-stable.",
+      "source": "Проверено по README.md, docs/REFERENCE.md и docs/PACKAGES.md в ветке not-stable.",
       "tabs": [
         {
           "id": "mks",
@@ -1497,7 +1497,7 @@
         },
         {
           "id": "mks",
-          "label": "Import",
+          "label": "Импорт",
           "code": [
             "using cool.lib as cool;",
             "",
@@ -1535,7 +1535,7 @@
         },
         {
           "id": "import",
-          "label": "Import",
+          "label": "Импорт",
           "code": [
             "using cool.lib as lib;",
             "using cool.lib.http.client as client;",
@@ -1746,7 +1746,7 @@
             "io.writeln(io.stdout, \"word\", word);",
             "io.writeln(io.stdout, \"rest\", rest);"
           ],
-          "note": "This is more explicit than Writeln because the first argument chooses the stream."
+          "note": "Это более явно, чем Writeln, потому что первый аргумент выбирает поток."
         },
         {
           "id": "py",
@@ -1776,13 +1776,13 @@
       "isNew": true,
       "source": "Проверено по std/process.c и поведению версии 0.2 beta.",
       "points": [
-        "Use <code>process.cwd()</code> to get the current working directory.",
-        "Use <code>process.args()</code> or <code>process.argv()</code> to get CLI arguments.",
-        "Use <code>process.exec(cmd, args)</code> when you only need the exit code.",
-        "Use <code>process.shell(command)</code> when you want to run a shell command and only need the exit code.",
-        "Use <code>process.capture(cmd, args)</code> when you need stdout and stderr as strings.",
-        "Use <code>process.capture_shell(command)</code> for shell pipelines like <code>ls -la | head</code>.",
-        "Use <code>process.exit(code)</code> to abort the current MKS run with an exit code."
+        "Используйте <code>process.cwd()</code> для получения текущей рабочей директории.",
+        "Используйте <code>process.args()</code> или <code>process.argv()</code> для получения аргументов CLI.",
+        "Используйте <code>process.exec(cmd, args)</code>, когда вам нужен только код выхода.",
+        "Используйте <code>process.shell(command)</code>, когда нужно запустить шелл-команду и нужен только код выхода.",
+        "Используйте <code>process.capture(cmd, args)</code>, когда нужны stdout и stderr в виде строк.",
+        "Используйте <code>process.capture_shell(command)</code> для шелл-конвейеров вида <code>ls -la | head</code>.",
+        "Используйте <code>process.exit(code)</code> для прерывания работы MKS с кодом выхода."
       ],
       "warning": "Вспомогательные функции shell работают через /bin/sh -c. Не передавайте непроверенные пользовательские данные напрямую в process.shell или process.capture_shell.",
       "tabs": [
@@ -1803,7 +1803,7 @@
             "Writeln(\"out\", result.out);",
             "Writeln(\"err\", result.err);"
           ],
-          "note": "process.exec starts a program directly with an argv array. process.capture does the same, but returns an object with code, out, and err."
+          "note": "process.exec запускает программу напрямую с массивом argv. process.capture делает то же самое, но возвращает объект с code, out и err."
         },
         {
           "id": "py",
@@ -1963,7 +1963,7 @@
             "",
             "tty.restore();"
           ],
-          "note": "tty is intentionally low-level. A package like ggui can build panels, lists, inputs, dialogs, and layouts on top of it."
+          "note": "tty намеренно низкоуровневый. Пакеты вроде ggui могут строить панели, списки, поля ввода, диалоги и разметку поверх него."
         },
         {
           "id": "py",
@@ -2055,7 +2055,7 @@
             "",
             "tty.restore();"
           ],
-          "note": "Timeout input is useful for animations, clocks, spinners, and event loops that should keep drawing even when the user does not press a key."
+          "note": "Ввод с таймаутом полезен для анимаций, часов, спиннеров и циклов событий, которые должны продолжать отрисовку, даже если пользователь не нажимает клавиши."
         }
       ]
     },
