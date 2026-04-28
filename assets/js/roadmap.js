@@ -19,6 +19,10 @@
       ${renderSections(data.sections)}
       ${renderTimeline(data.timeline)}
       ${renderPrinciple(data.principle)}
+      <div class="roadmap-footer-status">
+        <div class="reworking-text">${escapeHtml(window.MKSSiteI18n?.get('roadmap.reworking', 'Reworking...'))}</div>
+        <div class="soft-spinner"></div>
+      </div>
     `;
 
     initRoadmapTerminal(data.terminal?.lines || []);
