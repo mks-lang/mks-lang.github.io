@@ -1400,3 +1400,43 @@ body[data-theme="dark"] {
   .road-hero-inner,
   .section { width: min(100% - 32px, 1180px); }
 }
+
+.roadmap-footer-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 64px;
+  padding-bottom: 80px;
+  text-align: center;
+}
+
+.reworking-text {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: #d8b4fe;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: pulseOpacity 2s ease-in-out infinite;
+}
+
+.soft-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(216, 180, 254, 0.1);
+  border-top-color: #a855f7;
+  border-radius: 50%;
+  animation: softSpin 1.4s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes softSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

@@ -322,6 +322,17 @@
       });
     });
 
+    const alertBanner = document.createElement('div');
+    alertBanner.className = 'docs-warning-banner';
+    alertBanner.innerHTML = `
+      <i class="hgi-stroke hgi-alert-01" aria-hidden="true"></i>
+      <div>
+        <strong>${escapeHtml(window.MKSSiteI18n?.get('docs.warning.title', 'Note'))}</strong>
+        ${escapeHtml(window.MKSSiteI18n?.get('docs.warning.text', 'Some examples currently may be erroneous and non-working, this will be fixed soon.'))}
+      </div>
+    `;
+    body.append(alertBanner);
+
     body.append(renderHero(docs.hero || {}));
     sections.forEach((section) => {
       body.append(section.tabs ? renderTabbedSection(section) : renderPlainSection(section));

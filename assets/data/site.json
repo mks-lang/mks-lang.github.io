@@ -26,7 +26,10 @@
       "roadmap.timeline": "Timeline",
       "roadmap.version_path": "Version path",
       "roadmap.where_heading": "Where MKS is heading",
-      "roadmap.path": "Path"
+      "roadmap.path": "Path",
+      "roadmap.reworking": "Reworking...",
+      "docs.warning.title": "Note",
+      "docs.warning.text": "Some examples currently may be erroneous and non-working, this will be fixed soon."
     },
     "ru": {
       "brand.language": "язык",
@@ -54,7 +57,10 @@
       "roadmap.timeline": "Таймлайн",
       "roadmap.version_path": "Путь версий",
       "roadmap.where_heading": "Куда движется MKS",
-      "roadmap.path": "Путь"
+      "roadmap.path": "Путь",
+      "roadmap.reworking": "В процессе переработки...",
+      "docs.warning.title": "Примечание",
+      "docs.warning.text": "Некоторые примеры в данный момент могут быть ошибочными и нерабочими, это будет исправлено в ближайшее время."
     }
   },
   "pages": {
