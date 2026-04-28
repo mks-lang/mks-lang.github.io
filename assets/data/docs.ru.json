@@ -1231,6 +1231,60 @@
       ]
     },
     {
+      "id": "std-io",
+      "nav": "std/io",
+      "title": "Stdlib: io",
+      "description": "Новый branch-only модуль для потоков stdin/stdout/stderr и функций ввода с prompt-строкой.",
+      "icon": "hgi-file-02",
+      "unstable": true,
+      "isNew": true,
+      "source": "Проверено по std/io.c и docs/USER_GUIDE.md в локальном дереве интерпретатора not-stable.",
+      "points": [
+        "Импортируй как namespace, обычно через <code>using std.io as io;</code>.",
+        "Модуль экспортирует <code>stdin</code>, <code>stdout</code> и <code>stderr</code> как имена потоков.",
+        "Есть <code>write</code>, <code>writeln</code>, <code>flush</code>, <code>read_line</code> и <code>read_word</code>.",
+        "Сохранены и C-style алиасы: <code>fputs</code>, <code>puts</code>, <code>fflush</code> и <code>fgets</code>."
+      ],
+      "warning": "API новое и пока живёт только в ветке not-stable. Закладывайся на возможные переименования и мелкие семантические правки.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.io as io;",
+            "",
+            "io.fputs(io.stdout, \"hello\", 42);",
+            "io.puts(io.stdout, \" ok\");",
+            "io.puts(io.stderr, \"err\", true);",
+            "io.fflush(io.stdout);",
+            "io.fflush(io.stderr);",
+            "",
+            "var word =: io.read_word(\"One word: \");",
+            "var rest =: io.fgets(\"Rest: \");",
+            "io.writeln(io.stdout, \"word\", word);",
+            "io.writeln(io.stdout, \"rest\", rest);"
+          ],
+          "note": "Функции записи ждут первым аргументом поток вроде <code>io.stdout</code>. <code>read_line</code>/<code>fgets</code> убирают завершающий перевод строки, а на EOF возвращается пустая строка."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import sys",
+            "",
+            "print(\"hello\", 42, True, file=sys.stdout)",
+            "print(\"warn:\", \"disk almost full\", end=\"\", file=sys.stderr)",
+            "sys.stderr.flush()",
+            "",
+            "word = input(\"One word: \").split()[0]",
+            "rest = input(\"Rest: \")",
+            "print(\"word\", word)",
+            "print(\"rest\", rest)"
+          ]
+        }
+      ]
+    },
+    {
       "id": "watch",
       "nav": "Watch",
       "title": "watch / on change",
@@ -1503,7 +1557,8 @@
         "packages",
         "std-math",
         "std-array",
-        "std-time"
+        "std-time",
+        "std-io"
       ]
     },
     {

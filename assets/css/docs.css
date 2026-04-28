@@ -149,6 +149,14 @@ body[data-theme="dark"] {
   text-transform: uppercase;
 }
 
+.sidebar a .sidebar-badge-new {
+  color: #dcfce7;
+  background: rgba(34, 197, 94, 0.16);
+  border: 1px solid rgba(34, 197, 94, 0.34);
+  border-radius: 999px;
+  padding: 3px 7px;
+}
+
 .sidebar a:hover,
 .sidebar a.active {
   color: #fbf7ff;
@@ -359,6 +367,10 @@ body[data-theme="dark"] {
   margin-bottom: 12px;
 }
 
+.docs-section-head .docs-status + .docs-status {
+  margin-left: 8px;
+}
+
 .docs-section-title {
   display: flex;
   align-items: center;
@@ -388,6 +400,12 @@ body[data-theme="dark"] {
   border: 1px solid rgba(251, 113, 133, 0.28);
   color: #fecdd3;
   background: rgba(251, 113, 133, 0.12);
+}
+
+.docs-status-new {
+  border: 1px solid rgba(34, 197, 94, 0.32);
+  color: #dcfce7;
+  background: rgba(34, 197, 94, 0.16);
 }
 
 [data-docs-card] .sub {

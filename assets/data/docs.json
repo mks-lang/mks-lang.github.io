@@ -2,10 +2,10 @@
   "hero": {
     "id": "overview",
     "eyebrow": "Docs",
-    "title": "MKS reference for the not-stable branch",
-    "description": "Practical syntax, control flow, pointers, namespace imports, packages, stdlib, runtime helpers, and cookbook examples checked against the current interpreter branch, repo docs, and passing tests.",
+    "title": "MKS reference for release 0.2 beta",
+    "description": "Practical syntax, control flow, pointers, namespace imports, package.pkg packages, .mkspkg artifacts, stdlib modules, terminal UI helpers, process capture, runtime behavior, and cookbook examples.",
     "icon": "hgi-book-open-01",
-    "meta": "Synced with README, REFERENCE, USER_GUIDE, PACKAGES, and local green test runs",
+    "meta": "Synced with README, REFERENCE, USER_GUIDE, PACKAGES, std/process, std/tty, std/io, std/path, and std/json",
     "tags": [
       "syntax",
       "control-flow",
@@ -16,11 +16,15 @@
       "extend",
       "imports",
       "packages",
+      "mkspkg",
       "pointers",
       "stdlib",
+      "process",
+      "tty",
+      "json",
+      "path",
       "watch",
       "defer",
-      "read",
       {
         "label": "experimental",
         "live": true
@@ -88,13 +92,14 @@
       "id": "values",
       "nav": "Values",
       "title": "Values & variables",
-      "description": "Core values are numbers, strings, arrays, and null. Variables use var for binding and =: for reassignment.",
+      "description": "Core values are numbers, strings, arrays, objects, modules, functions, booleans, pointers, and null. Variables use var for binding and =: for reassignment.",
       "icon": "hgi-square-lock-02",
       "points": [
         "Create variables with var.",
-        "Reassign with =:.",
-        "Swap with <-->.",
-        "Arrays are indexed with [index]."
+        "Reassign existing variables with =:.",
+        "Swap two variables with <-->.",
+        "Arrays are indexed with [index].",
+        "Object and module fields are accessed with dot syntax."
       ],
       "tabs": [
         {
@@ -134,16 +139,161 @@
       ]
     },
     {
+      "id": "assignment-model",
+      "nav": "Aliasing",
+      "title": "Assignment model & aliasing",
+      "description": "MKS has value-like scalars and handle-like runtime objects. This matters when you pass values to functions or assign them to another variable.",
+      "icon": "hgi-git-compare",
+      "unstable": true,
+      "points": [
+        "Numbers, booleans, and null behave like copied scalar values.",
+        "Strings, arrays, objects, modules, functions, blueprints, and pointers behave like copied handles.",
+        "Rebinding a function parameter does not rebind the caller's variable.",
+        "Mutating a shared array/object or writing through a pointer is visible through other aliases."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var a =: [1, 2];",
+            "var b =: a;",
+            "",
+            "b[0] =: 99;",
+            "Writeln(a[0]); // 99",
+            "",
+            "fnc rebind(x) ->",
+            "  x =: [7, 8];",
+            "<-",
+            "",
+            "rebind(a);",
+            "Writeln(a[0]); // still 99"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "a = [1, 2]",
+            "b = a",
+            "b[0] = 99",
+            "print(a[0])",
+            "",
+            "def rebind(x):",
+            "    x = [7, 8]",
+            "",
+            "rebind(a)",
+            "print(a[0])"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "null",
+      "nav": "Null",
+      "title": "null",
+      "description": "null represents the absence of a value. It is useful for missing fields, failed lookups, and safe fallback returns.",
+      "points": [
+        "The literal is <code>null</code>.",
+        "null is falsy in conditions.",
+        "<code>null ?= null</code> is true.",
+        "<code>null !? null</code> is false.",
+        "String(null) produces \"null\" and Int(null) produces 0.",
+        "Avoid arithmetic or ordering comparisons on null unless the docs explicitly define that behavior."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var value =: null;",
+            "",
+            "if (value) ->",
+            "  Writeln(\"has value\");",
+            "<- else ->",
+            "  Writeln(\"empty\");",
+            "<-",
+            "",
+            "Writeln(null ?= null);",
+            "Writeln(String(null));",
+            "Writeln(Int(null));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "value = None",
+            "",
+            "if value:",
+            "    print(\"has value\")",
+            "else:",
+            "    print(\"empty\")",
+            "",
+            "print(None is None)",
+            "print(str(None))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conversions",
+      "nav": "Conversions",
+      "title": "Conversions with Int and String",
+      "description": "Use conversion helpers when you need to turn runtime values into a specific representation.",
+      "points": [
+        "String(value) converts a value to text for display or concatenation.",
+        "Int(value) converts supported values to integer form.",
+        "Booleans convert to 1 or 0.",
+        "null converts to 0 for Int and \"null\" for String.",
+        "Invalid conversions may raise runtime errors."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "Writeln(String(123));",
+            "Writeln(String(true));",
+            "Writeln(String(null));",
+            "",
+            "Writeln(Int(true));",
+            "Writeln(Int(false));",
+            "Writeln(Int(null));",
+            "",
+            "var code =: 7;",
+            "Writeln(\"exit code: \" + String(code));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "print(str(123))",
+            "print(str(True))",
+            "print(str(None))",
+            "",
+            "print(int(True))",
+            "print(int(False))",
+            "",
+            "code = 7",
+            "print(\"exit code: \" + str(code))"
+          ]
+        }
+      ]
+    },
+    {
       "id": "pointers",
       "nav": "Pointers",
       "title": "Pointers",
-      "description": "The current branch supports address-of and dereference for variables, array elements, and object fields.",
+      "description": "MKS supports address-of and dereference for variables, array elements, and object fields.",
       "icon": "hgi-link-03",
       "unstable": true,
-      "warning": "Pointer semantics are documented in the branch reference, but the repository still labels the language experimental. Treat this as branch functionality, not a stability promise.",
+      "warning": "Pointer semantics are useful for low-level experiments, but the language is still experimental. Treat pointer-heavy code carefully.",
       "points": [
         "Use <code>&amp;value</code> to take an address.",
-        "Use <code>*ptr</code> to read or write through a pointer.",
+        "Use <code>*ptr</code> to read through a pointer.",
+        "Use <code>*ptr =: value</code> to write through a pointer.",
         "Taking the address of a temporary expression is rejected."
       ],
       "tabs": [
@@ -161,7 +311,8 @@
             "  *ptr =: *ptr + 1;",
             "<-",
             "",
-            "inc(&x);"
+            "inc(&x);",
+            "Writeln(x);"
           ]
         },
         {
@@ -184,15 +335,31 @@
       "groups": [
         {
           "title": "Arithmetic",
-          "items": ["+", "-", "*", "/", "%"]
+          "items": [
+            "+",
+            "-",
+            "*",
+            "/",
+            "%"
+          ]
         },
         {
           "title": "Comparison",
-          "items": ["?=", "!?", "<", ">", "<=", ">="]
+          "items": [
+            "?=",
+            "!?",
+            "<",
+            ">",
+            "<=",
+            ">="
+          ]
         },
         {
           "title": "Logic",
-          "items": ["&&", "||"]
+          "items": [
+            "&&",
+            "||"
+          ]
         }
       ],
       "tabs": [
@@ -267,8 +434,13 @@
     {
       "id": "bools",
       "nav": "Booleans",
-      "title": "Booleans via std/bool",
-      "description": "The std/bool module exposes true, false, not, and, and or as MKS values/functions.",
+      "title": "Booleans",
+      "description": "MKS supports true and false values. std/bool also exposes helper functions.",
+      "points": [
+        "true and false are boolean values.",
+        "Booleans can be printed, compared, and used in conditions.",
+        "std/bool exposes helpers such as not, and, and or."
+      ],
       "tabs": [
         {
           "id": "mks",
@@ -320,11 +492,12 @@
       "id": "read-input",
       "nav": "Read",
       "title": "Read input",
-      "description": "Read is a native helper registered by the interpreter.",
+      "description": "Read, ReadLine, and ReadWord are native helpers for simple terminal input.",
       "points": [
-        "Read() reads one line and returns it as a string.",
+        "Read() and ReadLine() read one line and return it as a string.",
         "Read(\"prompt\") prints the prompt first.",
-        "Read(0) returns only the first whitespace-separated word.",
+        "ReadWord() reads the first whitespace-separated word.",
+        "Read(0) is a shortcut for first-word behavior.",
         "If input cannot be read, current behavior returns an empty string."
       ],
       "tabs": [
@@ -335,11 +508,14 @@
             "var name =: Read(\"name: \");",
             "Writeln(\"hello\", name);",
             "",
-            "var line =: Read();",
+            "var line =: ReadLine();",
             "Writeln(\"line\", line);",
             "",
-            "var first =: Read(0);",
-            "Writeln(\"first\", first);"
+            "var first =: ReadWord(\"word: \");",
+            "Writeln(\"first\", first);",
+            "",
+            "var first2 =: Read(0);",
+            "Writeln(\"first2\", first2);"
           ]
         },
         {
@@ -352,7 +528,7 @@
             "line = input()",
             "print(\"line\", line)",
             "",
-            "first = input().split()[0]",
+            "first = input(\"word: \").split()[0]",
             "print(\"first\", first)"
           ]
         }
@@ -375,6 +551,94 @@
         "    print(\"positive\")",
         "else:",
         "    print(\"non-positive\")"
+      ]
+    },
+    {
+      "id": "else-if",
+      "nav": "Else if",
+      "title": "else if chains",
+      "description": "Use else if when several branches are mutually exclusive.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var score =: 75;",
+            "",
+            "if (score >= 90) ->",
+            "  Writeln(\"A\");",
+            "<- else if (score >= 70) ->",
+            "  Writeln(\"B\");",
+            "<- else ->",
+            "  Writeln(\"C\");",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "score = 75",
+            "",
+            "if score >= 90:",
+            "    print(\"A\")",
+            "elif score >= 70:",
+            "    print(\"B\")",
+            "else:",
+            "    print(\"C\")"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "switch",
+      "nav": "Switch",
+      "title": "switch / case / default",
+      "description": "switch evaluates one value once and runs the first matching case. There is no fallthrough.",
+      "icon": "hgi-git-branch",
+      "points": [
+        "switch(value) compares the switch value against each case.",
+        "The first matching case body runs.",
+        "default runs if no case matches.",
+        "There is no fallthrough, so break is not needed between cases."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var cmd =: \"run\";",
+            "",
+            "switch (cmd) ->",
+            "  case \"build\" ->",
+            "    Writeln(\"building\");",
+            "  <-",
+            "",
+            "  case \"run\" ->",
+            "    Writeln(\"running\");",
+            "  <-",
+            "",
+            "  default ->",
+            "    Writeln(\"unknown\");",
+            "  <-",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "cmd = \"run\"",
+            "",
+            "match cmd:",
+            "    case \"build\":",
+            "        print(\"building\")",
+            "    case \"run\":",
+            "        print(\"running\")",
+            "    case _:",
+            "        print(\"unknown\")"
+          ]
+        }
       ]
     },
     {
@@ -577,7 +841,8 @@
       "id": "recursion",
       "nav": "Recursion",
       "title": "Recursion",
-      "description": "Functions can call themselves.",
+      "description": "Functions can call themselves. The runtime also has recursion safety limits to prevent runaway calls.",
+      "warning": "Deep recursion can hit the runtime recursion guard. Prefer loops for huge workloads.",
       "tabs": [
         {
           "id": "mks",
@@ -612,9 +877,8 @@
       "id": "tests",
       "nav": "Tests",
       "title": "Tests with test / expect",
-      "description": "Executable checks inside MKS source files, with repo-level golden tests run through ./tests.sh.",
+      "description": "Executable checks inside MKS source files.",
       "icon": "hgi-checkmark-badge-01",
-      "source": "Verified against README, tests/unit/README.md, ctest, and a local passing run of ./tests.sh on the cloned not-stable branch.",
       "tabs": [
         {
           "id": "mks",
@@ -743,15 +1007,34 @@
       "groups": [
         {
           "title": "Mutation",
-          "items": ["inject", "eject", "exclude", "purge"]
+          "items": [
+            "inject",
+            "eject",
+            "exclude",
+            "purge"
+          ]
         },
         {
           "title": "Access",
-          "items": ["offset", "len"]
+          "items": [
+            "offset",
+            "len"
+          ]
         },
         {
           "title": "Std wrappers",
-          "items": ["push", "pop", "first", "last", "slice", "reverse", "map", "filter", "reduce", "sum"]
+          "items": [
+            "push",
+            "pop",
+            "first",
+            "last",
+            "slice",
+            "reverse",
+            "map",
+            "filter",
+            "reduce",
+            "sum"
+          ]
         }
       ],
       "tabs": [
@@ -816,7 +1099,7 @@
     {
       "id": "std-string",
       "nav": "std/string",
-      "title": "Stdlib string helpers",
+      "title": "Stdlib: string",
       "description": "std/string wraps native string methods in plain MKS functions.",
       "tabs": [
         {
@@ -913,11 +1196,17 @@
       "id": "extend",
       "nav": "Extend",
       "title": "Extend built-ins",
-      "description": "Attach new methods to built-in array values.",
+      "description": "Attach new methods to built-in runtime types.",
+      "points": [
+        "Stable extension targets include array, string, and number.",
+        "Methods are called with normal dot syntax.",
+        "Duplicate method names for the same target are rejected.",
+        "Repeated imports of the same module should not re-register the same extension."
+      ],
       "tabs": [
         {
-          "id": "mks",
-          "label": "MKS",
+          "id": "array",
+          "label": "Array",
           "code": [
             "extend array ->",
             "  method sum() ->",
@@ -931,39 +1220,35 @@
             "",
             "    return total;",
             "  <-",
-            "",
-            "  method last() ->",
-            "    if (self.len() ?= 0) ->",
-            "      return null;",
-            "    <-",
-            "",
-            "    return self[self.len() - 1];",
-            "  <-",
             "<-",
             "",
-            "var nums =: [1, 2, 3];",
-            "Writeln(nums.sum());",
-            "Writeln(nums.last());"
+            "Writeln([1, 2, 3].sum());"
           ]
         },
         {
-          "id": "py",
-          "label": "Python",
+          "id": "string",
+          "label": "String",
           "code": [
-            "def sum_list(xs):",
-            "    total = 0",
-            "    for x in xs:",
-            "        total += x",
-            "    return total",
+            "extend string ->",
+            "  method shout() ->",
+            "    return self.upper() + \"!\";",
+            "  <-",
+            "<-",
             "",
-            "def last(xs):",
-            "    if len(xs) == 0:",
-            "        return None",
-            "    return xs[-1]",
+            "Writeln(\"mks\".shout());"
+          ]
+        },
+        {
+          "id": "number",
+          "label": "Number",
+          "code": [
+            "extend number ->",
+            "  method double() ->",
+            "    return self * 2;",
+            "  <-",
+            "<-",
             "",
-            "nums = [1, 2, 3]",
-            "print(sum_list(nums))",
-            "print(last(nums))"
+            "Writeln(21.double());"
           ]
         }
       ]
@@ -972,15 +1257,15 @@
       "id": "imports",
       "nav": "Imports",
       "title": "Imports with using",
-      "description": "Load one module namespace object with using. In the current branch, imports do not spill exported names directly into local scope.",
+      "description": "using loads one namespace object. Exported names stay inside that namespace instead of being copied into the current scope.",
       "icon": "hgi-package-open",
       "unstable": true,
       "points": [
-        "using works with relative files, std modules, and dotted package imports.",
+        "using works with std modules, relative files, and dotted package imports.",
         "A module binds as one namespace value, usually through an alias.",
-        "Duplicate imports are skipped, and imported modules load declarations once."
+        "Access exports with dot syntax, for example math.square(4).",
+        "Imported modules load declarations and exports. Normal top-level executable code is skipped during import."
       ],
-      "source": "Checked against README.md, docs/REFERENCE.md, and docs/PACKAGES.md in not-stable.",
       "tabs": [
         {
           "id": "mks",
@@ -1026,46 +1311,257 @@
     {
       "id": "packages",
       "nav": "Packages",
-      "title": "Packages, mks.toml, and export",
-      "description": "The not-stable branch documents package roots, dotted imports, and exported declarations through mks.toml.",
+      "title": "Packages, package.pkg, and .mkspkg",
+      "description": "Packages are namespace modules. They let you split MKS code into reusable libraries and install them into other projects.",
       "icon": "hgi-package-search",
       "unstable": true,
-      "warning": "Package resolution is documented in the branch and covered by tests, but the repository still labels the language experimental and branch APIs may change.",
+      "isNew": true,
+      "source": "Checked against docs/PACKAGES.md and release 0.2 package behavior.",
       "points": [
-        "The runtime searches upward for the nearest <code>mks.toml</code>.",
-        "Current-package imports resolve through <code>src/main.mks</code> or <code>src/&lt;submodule&gt;.mks</code>.",
-        "External packages resolve from <code>packages/&lt;package-name&gt;/mks.toml</code>."
+        "A package is described by <code>package.pkg</code>.",
+        "<code>package \"name\";</code> defines the import name.",
+        "<code>lib \"src/lib.mks\";</code> defines the root module loaded by <code>using package.name</code>.",
+        "<code>main \"src/main.mks\";</code> defines the application entrypoint when present.",
+        "<code>mks pkg build</code> creates a <code>.mkspkg</code> artifact.",
+        "using imports the package as a namespace object, not as global names."
       ],
+      "warning": "Legacy mks.toml / packages/ resolution can still exist as compatibility fallback, but new packages should use package.pkg, src/lib.mks, and mks_modules/ or flat .mkspkg installs.",
       "tabs": [
         {
-          "id": "mks",
-          "label": "MKS",
+          "id": "layout",
+          "label": "Package layout",
           "code": [
-            "// mks.toml",
-            "name = \"my.app\"",
-            "version = \"0.1.0\"",
-            "entry = \"src/main.mks\"",
-            "",
-            "// src/main.mks",
-            "using my.app.util.strings as strings;",
-            "using cool.lib.http.client as client;",
-            "",
-            "Writeln(strings.trim(\" hi \"));",
-            "Writeln(client.VERSION);"
+            "my-app/",
+            "  package.pkg",
+            "  src/",
+            "    main.mks",
+            "    lib.mks",
+            "    util/strings.mks",
+            "  mks_modules/",
+            "    cool.lib.mkspkg"
           ]
         },
         {
-          "id": "py",
-          "label": "Python",
+          "id": "manifest",
+          "label": "package.pkg",
           "code": [
-            "# Rough mental model only:",
-            "import my_app.util.strings as strings",
-            "import cool.lib.http.client as client",
+            "package \"cool.lib\";",
+            "version \"0.1.0\";",
             "",
-            "print(strings.trim(\" hi \"))",
-            "print(client.VERSION)"
+            "main \"src/main.mks\";",
+            "lib \"src/lib.mks\";"
+          ]
+        },
+        {
+          "id": "lib",
+          "label": "src/lib.mks",
+          "code": [
+            "export var VERSION =: \"0.1.0\";",
+            "",
+            "export fnc hello() ->",
+            "  return \"hello from cool.lib\";",
+            "<-"
+          ]
+        },
+        {
+          "id": "use",
+          "label": "Use package",
+          "code": [
+            "using cool.lib as cool;",
+            "",
+            "Writeln(cool.VERSION);",
+            "Writeln(cool.hello());"
           ]
         }
+      ]
+    },
+    {
+      "id": "packages-init",
+      "nav": "pkg init",
+      "title": "Create packages with mks pkg init",
+      "description": "mks pkg init creates the starter package layout so you do not have to write every file by hand.",
+      "icon": "hgi-package-add",
+      "isNew": true,
+      "unstable": true,
+      "points": [
+        "<code>mks pkg init name</code> creates a new package folder.",
+        "The generated package uses package.pkg.",
+        "The package root is usually src/lib.mks.",
+        "For app packages, add or keep src/main.mks."
+      ],
+      "tabs": [
+        {
+          "id": "shell",
+          "label": "Shell",
+          "code": [
+            "mks pkg init cool.lib",
+            "cd cool.lib",
+            "cat package.pkg",
+            "cat src/lib.mks"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packages-build",
+      "nav": "Build packages",
+      "title": "Building .mkspkg artifacts",
+      "description": ".mkspkg is the installable package artifact format used by MKS package resolution.",
+      "icon": "hgi-package-process",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>mks pkg build</code> reads package.pkg.",
+        "It copies package.pkg, source modules, custom manifest paths, and optional README/LICENSE into the archive.",
+        "It creates a versioned artifact under dist/.",
+        "It creates an install-ready artifact that can be copied into another app.",
+        "Package resolution prefers .mkspkg artifacts over unpacked development folders."
+      ],
+      "tabs": [
+        {
+          "id": "shell",
+          "label": "Shell",
+          "code": [
+            "cd cool.lib",
+            "mks pkg build",
+            "",
+            "mkdir -p ../my-app/mks_modules",
+            "cp dist/modules/cool.lib.mkspkg ../my-app/mks_modules/",
+            "",
+            "cd ../my-app",
+            "mks src/main.mks"
+          ]
+        },
+        {
+          "id": "mks",
+          "label": "MKS import",
+          "code": [
+            "using cool.lib as cool;",
+            "",
+            "Writeln(cool.hello());"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packages-flat-install",
+      "nav": "Flat install",
+      "title": "Flat package installs",
+      "description": "For small apps, a .mkspkg can live next to the script instead of inside mks_modules.",
+      "icon": "hgi-folder-shared-02",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "mks_modules/name.mkspkg is the clean package install layout.",
+        "Flat install means putting name.mkspkg next to your app script.",
+        "Flat install is useful for quick demos and portable folders.",
+        "mks_modules is better for larger projects with many dependencies."
+      ],
+      "tabs": [
+        {
+          "id": "flat",
+          "label": "Flat layout",
+          "code": [
+            "app/",
+            "  main.mks",
+            "  cool.lib.mkspkg"
+          ]
+        },
+        {
+          "id": "modules",
+          "label": "mks_modules layout",
+          "code": [
+            "app/",
+            "  main.mks",
+            "  mks_modules/",
+            "    cool.lib.mkspkg"
+          ]
+        },
+        {
+          "id": "mks",
+          "label": "Import",
+          "code": [
+            "using cool.lib as cool;",
+            "",
+            "Writeln(cool.hello());"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packages-submodules",
+      "nav": "Submodules",
+      "title": "Package submodules",
+      "description": "Dotted imports can load submodules inside a package.",
+      "icon": "hgi-node-move-down",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>using cool.lib as lib</code> loads the package root module.",
+        "<code>using cool.lib.http.client as client</code> loads a submodule.",
+        "Submodules map to files like src/http/client.mks.",
+        "Relative imports inside a package archive stay inside that archive."
+      ],
+      "tabs": [
+        {
+          "id": "layout",
+          "label": "Layout",
+          "code": [
+            "cool.lib/",
+            "  package.pkg",
+            "  src/",
+            "    lib.mks",
+            "    http/",
+            "      client.mks"
+          ]
+        },
+        {
+          "id": "import",
+          "label": "Import",
+          "code": [
+            "using cool.lib as lib;",
+            "using cool.lib.http.client as client;",
+            "",
+            "Writeln(lib.VERSION);",
+            "Writeln(client.get(\"/status\"));"
+          ]
+        },
+        {
+          "id": "relative",
+          "label": "Inside package",
+          "code": [
+            "// src/lib.mks inside cool.lib.mkspkg",
+            "using \"./http/client\" as client;",
+            "",
+            "export var http =: client;"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mkspkg-format",
+      "nav": ".mkspkg format",
+      "title": ".mkspkg archive format",
+      "description": "The package artifact is currently a simple uncompressed archive.",
+      "icon": "hgi-archive",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "The archive magic header is <code>MKSPKG1\\n</code>.",
+        "Each entry stores path length, content size, path bytes, and content bytes.",
+        "A zero path length terminates the archive.",
+        "There is no compression yet.",
+        "This simple format keeps loading easy and predictable."
+      ],
+      "code": [
+        "MKSPKG1\\n",
+        "entry:",
+        "  path_len u32",
+        "  size u64",
+        "  path bytes",
+        "  content bytes",
+        "terminator:",
+        "  path_len = 0"
       ]
     },
     {
@@ -1196,22 +1692,557 @@
       ]
     },
     {
-      "id": "watch",
-      "nav": "Watch",
-      "title": "watch / on change",
-      "description": "Watch a named variable and run code when it changes.",
+      "id": "std-io",
+      "nav": "std/io",
+      "title": "Stdlib: io",
+      "description": "Stream-based input and output helpers for stdin, stdout, and stderr.",
+      "icon": "hgi-file-02",
+      "unstable": true,
+      "isNew": true,
+      "source": "Checked against std/io.c.",
+      "points": [
+        "Use <code>io.stdout</code> for normal output.",
+        "Use <code>io.stderr</code> for errors, warnings, and diagnostics.",
+        "Use <code>io.write(stream, ...)</code> to write without a newline.",
+        "Use <code>io.writeln(stream, ...)</code> to write with a newline.",
+        "Use <code>io.flush(stream)</code> to force buffered output to appear.",
+        "Use <code>io.read_line(prompt)</code> to read a full line.",
+        "Use <code>io.read_word(prompt)</code> to read only the first word."
+      ],
       "tabs": [
         {
           "id": "mks",
           "label": "MKS",
           "code": [
+            "using std.io as io;",
+            "",
+            "io.write(io.stdout, \"same line: \");",
+            "io.writeln(io.stdout, 123);",
+            "",
+            "io.writeln(io.stderr, \"warning:\", \"something happened\");",
+            "io.flush(io.stderr);",
+            "",
+            "var name =: io.read_line(\"name: \");",
+            "var cmd =: io.read_word(\"command: \");",
+            "",
+            "io.writeln(io.stdout, \"hello\", name);",
+            "io.writeln(io.stdout, \"cmd\", cmd);"
+          ],
+          "note": "This is more explicit than Writeln because the first argument chooses the stream."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import sys",
+            "",
+            "print(\"same line: \", end=\"\", file=sys.stdout)",
+            "print(123, file=sys.stdout)",
+            "",
+            "print(\"warning:\", \"something happened\", file=sys.stderr)",
+            "sys.stderr.flush()",
+            "",
+            "name = input(\"name: \")",
+            "cmd = input(\"command: \").split()[0]",
+            "",
+            "print(\"hello\", name)",
+            "print(\"cmd\", cmd)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-process",
+      "nav": "std/process",
+      "title": "Stdlib: process",
+      "description": "Run external programs, read CLI arguments, get the current working directory, and capture command output.",
+      "icon": "hgi-terminal",
+      "unstable": true,
+      "isNew": true,
+      "source": "Checked against std/process.c and release 0.2 beta behavior.",
+      "points": [
+        "Use <code>process.cwd()</code> to get the current working directory.",
+        "Use <code>process.args()</code> or <code>process.argv()</code> to get CLI arguments.",
+        "Use <code>process.exec(cmd, args)</code> when you only need the exit code.",
+        "Use <code>process.shell(command)</code> when you want to run a shell command and only need the exit code.",
+        "Use <code>process.capture(cmd, args)</code> when you need stdout and stderr as strings.",
+        "Use <code>process.capture_shell(command)</code> for shell pipelines like <code>ls -la | head</code>.",
+        "Use <code>process.exit(code)</code> to abort the current MKS run with an exit code."
+      ],
+      "warning": "Shell helpers run through /bin/sh -c. Do not pass untrusted user input directly into process.shell or process.capture_shell.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.process as process;",
+            "",
+            "Writeln(\"cwd\", process.cwd());",
+            "Writeln(\"args\", process.args());",
+            "",
+            "var code =: process.exec(\"uname\", [\"-a\"]);",
+            "Writeln(\"exit code\", code);",
+            "",
+            "var result =: process.capture(\"whoami\", []);",
+            "Writeln(\"code\", result.code);",
+            "Writeln(\"out\", result.out);",
+            "Writeln(\"err\", result.err);"
+          ],
+          "note": "process.exec starts a program directly with an argv array. process.capture does the same, but returns an object with code, out, and err."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import os",
+            "import sys",
+            "import subprocess",
+            "",
+            "print(\"cwd\", os.getcwd())",
+            "print(\"args\", sys.argv)",
+            "",
+            "code = subprocess.call([\"uname\", \"-a\"])",
+            "print(\"exit code\", code)",
+            "",
+            "result = subprocess.run([\"whoami\"], capture_output=True, text=True)",
+            "print(\"code\", result.returncode)",
+            "print(\"out\", result.stdout)",
+            "print(\"err\", result.stderr)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-process-capture",
+      "nav": "Capture",
+      "title": "Process capture",
+      "description": "Capture helpers let MKS run a command and keep its output inside the program instead of printing directly to the terminal.",
+      "icon": "hgi-terminal-box",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "The return value is an object with <code>code</code>, <code>out</code>, and <code>err</code>.",
+        "<code>code</code> is the process exit code. Usually <code>0</code> means success.",
+        "<code>out</code> is stdout.",
+        "<code>err</code> is stderr.",
+        "Capture is the right choice for TUI apps, because raw command output can destroy the terminal layout."
+      ],
+      "warning": "Captured output can contain newlines. Draw it with a multiline text widget or split it before rendering in a TUI.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.process as process;",
+            "",
+            "var r =: process.capture(\"ls\", [\"-la\"]);",
+            "",
+            "if (r.code ?= 0) ->",
+            "  Writeln(\"success\");",
+            "  Writeln(r.out);",
+            "<- else ->",
+            "  Writeln(\"failed\");",
+            "  Writeln(r.err);",
+            "<-"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import subprocess",
+            "",
+            "r = subprocess.run([\"ls\", \"-la\"], capture_output=True, text=True)",
+            "",
+            "if r.returncode == 0:",
+            "    print(\"success\")",
+            "    print(r.stdout)",
+            "else:",
+            "    print(\"failed\")",
+            "    print(r.stderr)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-process-exit",
+      "nav": "Exit",
+      "title": "Process exit",
+      "description": "process.exit stops the current MKS program with an exit code.",
+      "icon": "hgi-logout-03",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>process.exit()</code> exits with code 0.",
+        "<code>process.exit(code)</code> exits with the provided code.",
+        "Use nonzero codes for failures in scripts and CI tasks."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.process as process;",
+            "",
+            "var ok =: 0;",
+            "",
+            "if (ok ?= 0) ->",
+            "  process.exit(1);",
+            "<-",
+            "",
+            "process.exit(0);"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import sys",
+            "",
+            "ok = False",
+            "",
+            "if not ok:",
+            "    sys.exit(1)",
+            "",
+            "sys.exit(0)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-tty",
+      "nav": "std/tty",
+      "title": "Stdlib: tty",
+      "description": "Low-level terminal control for building TUI apps: cursor movement, raw keyboard input, alternate screen, colors, boxes, windows, buttons, and text drawing.",
+      "icon": "hgi-layout-top",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Use <code>tty.alt_screen()</code> to draw on a temporary terminal screen.",
+        "Use <code>tty.raw()</code> to read keys instantly without waiting for Enter.",
+        "Use <code>tty.clear()</code> to clear the screen.",
+        "Use <code>tty.move(x, y)</code> or <code>tty.write_at(x, y, text)</code> for positioned output.",
+        "Use <code>tty.window</code>, <code>tty.box</code>, <code>tty.button</code>, and <code>tty.input_box</code> as widget primitives.",
+        "Always call <code>tty.restore()</code> before exiting."
+      ],
+      "warning": "If a program crashes after raw mode or cursor hiding, the terminal can look broken. Run reset in the shell or make sure tty.restore() is called.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.tty as tty;",
+            "",
+            "tty.alt_screen();",
+            "tty.hide_cursor();",
+            "tty.raw();",
+            "tty.clear();",
+            "",
+            "tty.window(4, 2, 50, 12, \" TTY Demo \", 2);",
+            "tty.write_at(7, 5, \"Hello from std.tty\");",
+            "tty.button(7, 8, 16, \"OK\", 1);",
+            "tty.button(26, 8, 16, \"Cancel\", 0);",
+            "",
+            "tty.flush();",
+            "tty.read_key();",
+            "",
+            "tty.restore();"
+          ],
+          "note": "tty is intentionally low-level. A package like ggui can build panels, lists, inputs, dialogs, and layouts on top of it."
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "# Rough mental model using curses",
+            "import curses",
+            "",
+            "def main(stdscr):",
+            "    stdscr.clear()",
+            "    stdscr.addstr(2, 4, \"+ TTY Demo +\")",
+            "    stdscr.addstr(5, 7, \"Hello from curses\")",
+            "    stdscr.getch()",
+            "",
+            "curses.wrapper(main)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-tty-keys",
+      "nav": "TTY keys",
+      "title": "Keyboard input with tty",
+      "description": "Raw mode lets MKS read keyboard events directly, which is required for interactive terminal apps.",
+      "icon": "hgi-keyboard",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>tty.read_key()</code> waits for a key and returns a string.",
+        "<code>tty.read_key_timeout(ms)</code> waits up to the timeout and can return null/no key.",
+        "Arrow keys return names like <code>up</code>, <code>down</code>, <code>left</code>, and <code>right</code>.",
+        "Enter returns <code>enter</code>.",
+        "Backspace returns <code>backspace</code>.",
+        "Ctrl-C returns <code>ctrl_c</code> instead of killing the process when raw mode is active."
+      ],
+      "tabs": [
+        {
+          "id": "blocking",
+          "label": "Blocking",
+          "code": [
+            "using std.tty as tty;",
+            "",
+            "tty.raw();",
+            "tty.clear();",
+            "",
+            "var running =: 1;",
+            "",
+            "while (running) ->",
+            "  var k =: tty.read_key();",
+            "",
+            "  tty.clear();",
+            "  tty.write_at(2, 2, \"key: \" + k);",
+            "  tty.write_at(2, 4, \"press Esc or Ctrl-C to exit\");",
+            "  tty.flush();",
+            "",
+            "  if (k ?= \"esc\" || k ?= \"ctrl_c\") ->",
+            "    running =: 0;",
+            "  <-",
+            "<-",
+            "",
+            "tty.restore();"
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "Timeout",
+          "code": [
+            "using std.tty as tty;",
+            "",
+            "tty.raw();",
+            "tty.clear();",
+            "",
+            "var ticks =: 0;",
+            "var running =: 1;",
+            "",
+            "while (running) ->",
+            "  var k =: tty.read_key_timeout(100);",
+            "  ticks =: ticks + 1;",
+            "",
+            "  tty.clear();",
+            "  tty.write_at(2, 2, \"ticks: \" + String(ticks));",
+            "",
+            "  if (k ?= \"esc\" || k ?= \"ctrl_c\") ->",
+            "    running =: 0;",
+            "  <-",
+            "",
+            "  tty.flush();",
+            "<-",
+            "",
+            "tty.restore();"
+          ],
+          "note": "Timeout input is useful for animations, clocks, spinners, and event loops that should keep drawing even when the user does not press a key."
+        }
+      ]
+    },
+    {
+      "id": "std-tty-layout",
+      "nav": "TTY layout",
+      "title": "Terminal size and layout fallbacks",
+      "description": "TTY apps need terminal dimensions. size_or is useful when the program runs outside a real terminal or inside CI.",
+      "icon": "hgi-layout-04",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "<code>tty.size()</code> returns an object with <code>w</code> and <code>h</code>.",
+        "<code>tty.size_or(w, h)</code> returns terminal size or fallback dimensions.",
+        "Use this when drawing demos, tests, or CI-safe output."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.tty as tty;",
+            "",
+            "var s =: tty.size_or(80, 24);",
+            "",
+            "tty.clear();",
+            "tty.window(2, 2, s.w - 4, s.h - 4, \" App \", 2);",
+            "tty.write_at(4, 4, \"size: \" + String(s.w) + \"x\" + String(s.h));",
+            "tty.flush();"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-tty-text-wrap",
+      "nav": "Text wrap",
+      "title": "Wrapping text in terminal UIs",
+      "description": "Use text wrapping for multiline content such as command output, logs, help text, and error messages.",
+      "icon": "hgi-text-wrap",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Single-line text helpers should not receive large multiline strings.",
+        "Captured process output often contains newlines.",
+        "<code>tty.text_wrap</code> is designed for drawing text inside a rectangular area.",
+        "This prevents command output from destroying your box/window layout."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.tty as tty;",
+            "using std.process as process;",
+            "",
+            "tty.alt_screen();",
+            "tty.raw();",
+            "tty.clear();",
+            "",
+            "var r =: process.capture_shell(\"ls -la | head\");",
+            "",
+            "tty.window(2, 2, 70, 16, \" Output \", 2);",
+            "tty.text_wrap(4, 4, 66, 12, r.out);",
+            "tty.flush();",
+            "tty.read_key();",
+            "tty.restore();"
+          ]
+        }
+      ],
+      "warning": "Do not draw multiline command output through button/input/single-line text helpers. Use text_wrap or split it into lines."
+    },
+    {
+      "id": "std-path",
+      "nav": "std/path",
+      "title": "Stdlib: path",
+      "description": "Helpers for building and inspecting file paths without manually slicing strings.",
+      "icon": "hgi-folder-01",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Use <code>path.join</code> to combine path parts.",
+        "Use <code>path.basename</code> to get the final file or directory name.",
+        "Use <code>path.dirname</code> to get the parent path.",
+        "Use <code>path.extname</code> to get the extension.",
+        "Use <code>path.stem</code> to get the file name without extension.",
+        "Use <code>path.normalize</code> to clean a path string."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.path as path;",
+            "",
+            "var file =: path.join(\"src\", \"widgets\", \"button.mks\");",
+            "",
+            "Writeln(file);",
+            "Writeln(path.basename(file));",
+            "Writeln(path.dirname(file));",
+            "Writeln(path.extname(file));",
+            "Writeln(path.stem(file));",
+            "Writeln(path.normalize(\"src/../src/main.mks\"));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "from pathlib import Path",
+            "",
+            "file = Path(\"src\") / \"widgets\" / \"button.mks\"",
+            "",
+            "print(file)",
+            "print(file.name)",
+            "print(file.parent)",
+            "print(file.suffix)",
+            "print(file.stem)",
+            "print(Path(\"src/../src/main.mks\"))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "std-json",
+      "nav": "std/json",
+      "title": "Stdlib: json",
+      "description": "Parse JSON text into MKS values and stringify MKS values back into JSON.",
+      "icon": "hgi-code-square",
+      "unstable": true,
+      "isNew": true,
+      "points": [
+        "Use <code>json.parse(text)</code> to convert JSON text into MKS values.",
+        "JSON arrays become MKS arrays.",
+        "JSON objects become MKS objects.",
+        "JSON strings become MKS strings.",
+        "JSON null becomes MKS null.",
+        "Use <code>json.stringify(value)</code> to convert MKS values back into JSON text."
+      ],
+      "warning": "Unicode escape support such as \\uXXXX may be limited in the current preview. Prefer plain UTF-8 strings when possible.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "using std.json as json;",
+            "",
+            "var data =: json.parse(\"{\\\"name\\\":\\\"mks\\\",\\\"stars\\\":10}\");",
+            "",
+            "Writeln(data.name);",
+            "Writeln(data.stars);",
+            "",
+            "var arr =: json.parse(\"[1, 2, 3]\");",
+            "Writeln(arr[0]);",
+            "Writeln(arr.len());",
+            "",
+            "Writeln(json.stringify(arr));"
+          ]
+        },
+        {
+          "id": "py",
+          "label": "Python",
+          "code": [
+            "import json",
+            "",
+            "data = json.loads('{\"name\":\"mks\",\"stars\":10}')",
+            "",
+            "print(data[\"name\"])",
+            "print(data[\"stars\"])",
+            "",
+            "arr = json.loads(\"[1, 2, 3]\")",
+            "print(arr[0])",
+            "print(len(arr))",
+            "",
+            "print(json.dumps(arr))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "watch",
+      "nav": "Watch",
+      "title": "watch / on change",
+      "description": "Watch a named variable and run code when it changes.",
+      "points": [
+        "watch registers interest in a variable name.",
+        "on change runs after that variable is updated.",
+        "Handlers are synchronous.",
+        "Deep object/array mutation and pointer-mediated writes are not the same as direct variable reassignment."
+      ],
+      "warning": "Do not treat watch as a full reactive deep-state system yet. It currently tracks named variable changes, not every nested mutation.",
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var x =: 1;",
             "watch x;",
             "",
             "on change x ->",
             "  Writeln(\"x changed\", x);",
             "<-",
             "",
-            "var x =: 1;",
             "x =: 2;"
           ]
         },
@@ -1263,19 +2294,83 @@
       ]
     },
     {
+      "id": "cli",
+      "nav": "CLI",
+      "title": "MKS command line",
+      "description": "The mks executable can run scripts, start a REPL, show version information, and build packages.",
+      "icon": "hgi-terminal",
+      "isNew": true,
+      "points": [
+        "<code>mks file.mks</code> runs a script.",
+        "<code>mks --repl</code> starts interactive mode when available.",
+        "<code>mks --version</code> prints the installed version.",
+        "<code>mks pkg init</code> and <code>mks pkg build</code> manage packages.",
+        "Installed standard library files may be found through install paths or MKS_STD_PATH depending on your setup."
+      ],
+      "tabs": [
+        {
+          "id": "shell",
+          "label": "Shell",
+          "code": [
+            "mks main.mks",
+            "mks --version",
+            "mks --repl",
+            "mks pkg init cool.lib",
+            "mks pkg build"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "performance",
+      "nav": "Performance",
+      "title": "Performance notes",
+      "description": "MKS is experimental, so performance guidance is mostly about avoiding avoidable interpreter overhead.",
+      "icon": "hgi-dashboard-speed-02",
+      "unstable": true,
+      "points": [
+        "Prefer loops over extremely deep recursion.",
+        "Avoid repeatedly creating unnecessary temporary arrays/strings in hot loops.",
+        "Keep package and stdlib imports at module top level.",
+        "Use native stdlib helpers when they exist.",
+        "Benchmark release builds, not sanitizer/debug builds."
+      ],
+      "tabs": [
+        {
+          "id": "mks",
+          "label": "MKS",
+          "code": [
+            "var i =: 0;",
+            "var total =: 0;",
+            "",
+            "while (i < 100000) ->",
+            "  total =: total + i;",
+            "  i =: i + 1;",
+            "<-",
+            "",
+            "Writeln(total);"
+          ]
+        }
+      ]
+    },
+    {
       "id": "errors",
       "nav": "Errors",
       "title": "Errors",
-      "description": "The docs describe file:line errors plus hints for common mistakes.",
+      "description": "MKS reports syntax, runtime, and module-resolution errors with file, line, column, help text, and examples.",
       "code": [
-        "Error: unknown symbol `y`",
-        "at main.mks:3:5"
+        "[MKS Runtime Error]",
+        "code: MKS-R3001",
+        "kind: name resolution",
+        "error: Undefined variable 'x'",
+        " --> main.mks:3:5"
       ],
       "tips": [
         "Check missing semicolons.",
         "Check missing <- block ends.",
         "Check typos in keywords and names.",
-        "Check wrong value types."
+        "Check wrong value types.",
+        "Check package names and mks_modules/ when using packages."
       ]
     },
     {
@@ -1363,13 +2458,99 @@
         "// math.mks",
         "using \"std/math\";",
         "",
-        "fnc area_square(x) ->",
+        "export fnc area_square(x) ->",
         "  return square(x);",
         "<-",
         "",
         "// main.mks",
-        "using \"math.mks\";",
-        "Writeln(area_square(5));"
+        "using \"./math.mks\" as math;",
+        "Writeln(math.area_square(5));"
+      ]
+    },
+    {
+      "id": "cookbook-package",
+      "nav": "Mini package",
+      "title": "Cookbook: create a tiny package",
+      "description": "Create, build, and use an installable .mkspkg library.",
+      "code": [
+        "# package.pkg",
+        "package \"hello.lib\";",
+        "version \"0.1.0\";",
+        "lib \"src/lib.mks\";",
+        "",
+        "# src/lib.mks",
+        "export fnc hello(name) ->",
+        "  return \"hello \" + name;",
+        "<-",
+        "",
+        "# build",
+        "mks pkg build",
+        "",
+        "# use from another app",
+        "using hello.lib as hello;",
+        "Writeln(hello.hello(\"MKS\"));"
+      ]
+    },
+    {
+      "id": "cookbook-process-capture",
+      "nav": "Capture command",
+      "title": "Cookbook: capture command output",
+      "description": "Run a system command and keep stdout/stderr inside MKS.",
+      "code": [
+        "using std.process as process;",
+        "",
+        "var r =: process.capture(\"uname\", [\"-a\"]);",
+        "",
+        "if (r.code ?= 0) ->",
+        "  Writeln(r.out);",
+        "<- else ->",
+        "  Writeln(\"failed\", r.err);",
+        "<-"
+      ]
+    },
+    {
+      "id": "cookbook-tty-window",
+      "nav": "TTY window",
+      "title": "Cookbook: terminal window",
+      "description": "Draw a small terminal UI window and wait for a key.",
+      "code": [
+        "using std.tty as tty;",
+        "",
+        "tty.alt_screen();",
+        "tty.hide_cursor();",
+        "tty.raw();",
+        "tty.clear();",
+        "",
+        "tty.floating_window(5, 3, 50, 10, \" MKS \", 2);",
+        "tty.write_at(8, 6, \"Hello from a terminal UI\");",
+        "tty.button(8, 9, 16, \"OK\", 1);",
+        "tty.flush();",
+        "",
+        "tty.read_key();",
+        "tty.restore();"
+      ]
+    },
+    {
+      "id": "cookbook-tty-output",
+      "nav": "TTY command output",
+      "title": "Cookbook: draw command output in a TUI",
+      "description": "Capture command output and draw it inside a terminal window without breaking the layout.",
+      "code": [
+        "using std.tty as tty;",
+        "using std.process as process;",
+        "",
+        "tty.alt_screen();",
+        "tty.raw();",
+        "tty.clear();",
+        "",
+        "var r =: process.capture_shell(\"ls -la | head\");",
+        "",
+        "tty.window(2, 2, 70, 16, \" ls output \", 2);",
+        "tty.text_wrap(4, 4, 66, 12, r.out);",
+        "tty.flush();",
+        "",
+        "tty.read_key();",
+        "tty.restore();"
       ]
     },
     {
@@ -1426,6 +2607,9 @@
         "hello",
         "comments",
         "values",
+        "assignment-model",
+        "null",
+        "conversions",
         "pointers",
         "operators",
         "precedence",
@@ -1438,6 +2622,8 @@
       "title": "Control flow",
       "sections": [
         "if-else",
+        "else-if",
+        "switch",
         "while",
         "for",
         "repeat",
@@ -1462,13 +2648,33 @@
       ]
     },
     {
-      "title": "Modules & stdlib",
+      "title": "Modules & packages",
       "sections": [
         "imports",
         "packages",
+        "packages-init",
+        "packages-build",
+        "packages-flat-install",
+        "packages-submodules",
+        "mkspkg-format"
+      ]
+    },
+    {
+      "title": "Stdlib",
+      "sections": [
         "std-math",
         "std-array",
-        "std-time"
+        "std-time",
+        "std-io",
+        "std-process",
+        "std-process-capture",
+        "std-process-exit",
+        "std-tty",
+        "std-tty-keys",
+        "std-tty-layout",
+        "std-tty-text-wrap",
+        "std-path",
+        "std-json"
       ]
     },
     {
@@ -1476,6 +2682,8 @@
       "sections": [
         "watch",
         "defer",
+        "cli",
+        "performance",
         "errors"
       ]
     },
@@ -1487,6 +2695,10 @@
         "cookbook-extend-array",
         "cookbook-entity-counter",
         "cookbook-module-math",
+        "cookbook-package",
+        "cookbook-process-capture",
+        "cookbook-tty-window",
+        "cookbook-tty-output",
         "cookbook-watch-counter",
         "cookbook-cli-input",
         "cookbook-tests"

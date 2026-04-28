@@ -14,6 +14,17 @@
     return `<span class="docs-status docs-status-unstable">${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</span>`;
   }
 
+  function newBadge() {
+    return `<span class="docs-status docs-status-new">${escapeHtml(window.MKSSiteI18n?.get('docs.new', 'New'))}</span>`;
+  }
+
+  function statusBadges(section) {
+    return [
+      section.unstable ? unstableBadge() : '',
+      section.isNew ? newBadge() : '',
+    ].join('');
+  }
+
   const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
 
   function makeCodeBlock(code, withCopy = true) {
@@ -129,7 +140,7 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${section.unstable ? unstableBadge() : ''}
+      ${statusBadges(section)}
     `;
 
     const description = document.createElement('p');
@@ -217,7 +228,7 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${section.unstable ? unstableBadge() : ''}
+      ${statusBadges(section)}
     `;
 
     const description = document.createElement('p');
@@ -301,7 +312,12 @@
       groupSections.forEach((section) => {
         const link = document.createElement('a');
         link.href = `#${section.id}`;
-        link.innerHTML = `${iconMarkup(section.icon)}<span>${section.nav || section.title}</span>${section.unstable ? `<em>${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</em>` : ''}`;
+        const sidebarBadge = section.isNew
+          ? `<em class="sidebar-badge sidebar-badge-new">${escapeHtml(window.MKSSiteI18n?.get('docs.new', 'New'))}</em>`
+          : section.unstable
+            ? `<em>${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</em>`
+            : '';
+        link.innerHTML = `${iconMarkup(section.icon)}<span>${section.nav || section.title}</span>${sidebarBadge}`;
         sidebar.append(link);
       });
     });
