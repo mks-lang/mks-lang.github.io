@@ -2181,7 +2181,7 @@
     {
       "id": "std-json",
       "nav": "std/json",
-      "title": "Stdlib: json (JSON)",
+      "title": "Стандартная библиотека: json (JSON)",
       "description": "Парсинг JSON-текста в значения MKS и сериализация значений MKS обратно в JSON.",
       "icon": "hgi-code-square",
       "unstable": true,
@@ -2279,7 +2279,7 @@
     {
       "id": "defer",
       "nav": "Defer",
-      "title": "defer",
+      "title": "Отложенный вызов (defer)",
       "description": "Регистрируй cleanup-подобную работу, которая выполнится при выходе из области видимости.",
       "tabs": [
         {
