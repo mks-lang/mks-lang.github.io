@@ -6,8 +6,8 @@
     const text = window.MKSSiteI18n?.get('roadmap.reworking', 'Reworking...') || 'Reworking...';
     root.innerHTML = `
       <div class="reworking-container">
+        <div class="reworking-icon"></div>
         <div class="reworking-text">${text}</div>
-        <div class="soft-spinner"></div>
       </div>
     `;
   }
