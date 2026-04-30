@@ -1,0 +1,3 @@
+## 2026-04-26 - Focus Visibility & Navigation Semantics
+**Learning:** In dark-themed, high-contrast UIs, relying on default browser focus rings is insufficient as they may be suppressed by component-level resets (like `outline: none`) or have poor contrast against deep backgrounds. Explicitly styling `:focus-visible` with a theme-consistent accent color ensures accessibility without compromising visual design. Additionally, `aria-current="page"` is vital for screen reader users to identify their location in a JS-active navigation menu.
+**Action:** Always include a global `:focus-visible` ring using `var(--accent)` and programmatically manage `aria-current` when updating active states in navigation.
