@@ -2051,3 +2051,232 @@ body::after,
     bottom: max(12px, env(safe-area-inset-bottom));
   }
 }
+
+/* =============================================
+   macOS Dock nav animation
+   ============================================= */
+
+.nav-links a {
+  transform-origin: 50% 100%;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease,
+    transform 200ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  will-change: transform;
+}
+
+/* =============================================
+   Mobile menu: full animated rework
+   ============================================= */
+
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 38;
+  background: rgba(9, 3, 18, 0.54);
+  backdrop-filter: blur(3px) saturate(0.9);
+  -webkit-backdrop-filter: blur(3px) saturate(0.9);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 260ms ease, visibility 260ms;
+}
+
+@media (max-width: 960px) {
+  .mobile-menu {
+    display: flex !important;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(18px) scale(0.96);
+    transform-origin: 50% 100%;
+    transition:
+      opacity 260ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 260ms;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(216, 180, 254, 0.18) !important;
+    background: rgba(12, 5, 22, 0.97) !important;
+    backdrop-filter: blur(28px) saturate(1.3) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(1.3) !important;
+    box-shadow:
+      0 28px 64px rgba(4, 0, 10, 0.6),
+      0 0 0 1px rgba(216, 180, 254, 0.07) inset !important;
+  }
+
+  .nav-open .mobile-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .mobile-menu-header {
+    padding: 4px 10px 8px;
+    border-bottom: 1px solid rgba(216, 180, 254, 0.1);
+    margin-bottom: 4px;
+  }
+
+  .mobile-menu-title {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(216, 180, 254, 0.38);
+    font-family: var(--font-mono);
+  }
+
+  .mobile-menu-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mobile-menu-nav a {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+    border: 1px solid transparent !important;
+    color: rgba(216, 180, 254, 0.65) !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    background: transparent !important;
+    transition: color 140ms ease, background 140ms ease, border-color 140ms ease !important;
+  }
+
+  .mobile-menu-nav a i {
+    font-size: 18px;
+    width: 22px;
+    flex-shrink: 0;
+    opacity: 0.65;
+    transition: opacity 140ms ease;
+  }
+
+  .mobile-menu-nav a span {
+    flex: 1;
+  }
+
+  .mobile-menu-nav a:hover {
+    color: rgba(255, 247, 255, 0.95) !important;
+    background: rgba(216, 180, 254, 0.09) !important;
+    border-color: rgba(216, 180, 254, 0.14) !important;
+  }
+
+  .mobile-menu-nav a:hover i {
+    opacity: 1;
+  }
+
+  .mobile-menu-nav a.active {
+    color: #fbf7ff !important;
+    background: rgba(168, 85, 247, 0.2) !important;
+    border-color: rgba(216, 180, 254, 0.26) !important;
+  }
+
+  .mobile-menu-nav a.active i {
+    opacity: 1;
+    color: #d8b4fe;
+  }
+
+  .mobile-menu-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 4px 2px;
+    margin-top: 4px;
+    border-top: 1px solid rgba(216, 180, 254, 0.1);
+  }
+
+  .mobile-menu-footer .nav-language {
+    flex: 1;
+  }
+
+  .mobile-menu-footer .nav-language select,
+  .mobile-menu-footer .nav-language::after {
+    display: none;
+  }
+
+  .mobile-menu-footer .mobile-language {
+    display: flex;
+  }
+
+  .mobile-menu-footer .mobile-language select {
+    display: flex;
+    width: 100%;
+    min-height: 40px;
+    appearance: none;
+    background: rgba(216, 180, 254, 0.06) !important;
+    border: 1px solid rgba(216, 180, 254, 0.14) !important;
+    border-radius: 10px !important;
+    color: rgba(216, 180, 254, 0.7) !important;
+    font-size: 13px;
+    padding: 0 12px;
+    cursor: pointer;
+  }
+
+  .mobile-github-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-height: 40px;
+    padding: 0 14px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(216, 180, 254, 0.16) !important;
+    background: rgba(216, 180, 254, 0.06) !important;
+    color: rgba(216, 180, 254, 0.7) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
+    transition: color 140ms ease, background 140ms ease, border-color 140ms ease !important;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .mobile-github-btn i {
+    font-size: 16px;
+  }
+
+  .mobile-github-btn:hover {
+    color: #fbf7ff !important;
+    background: rgba(216, 180, 254, 0.12) !important;
+    border-color: rgba(216, 180, 254, 0.26) !important;
+  }
+
+  /* Staggered entrance */
+  .mobile-menu-header,
+  .mobile-menu-nav a,
+  .mobile-menu-footer {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease,
+      color 140ms ease,
+      background 140ms ease,
+      border-color 140ms ease;
+  }
+
+  .nav-open .mobile-menu-header            { opacity: 1; transform: none; transition-delay: 45ms; }
+  .nav-open .mobile-menu-nav a:nth-child(1) { opacity: 1; transform: none; transition-delay: 75ms; }
+  .nav-open .mobile-menu-nav a:nth-child(2) { opacity: 1; transform: none; transition-delay: 100ms; }
+  .nav-open .mobile-menu-nav a:nth-child(3) { opacity: 1; transform: none; transition-delay: 125ms; }
+  .nav-open .mobile-menu-nav a:nth-child(4) { opacity: 1; transform: none; transition-delay: 150ms; }
+  .nav-open .mobile-menu-nav a:nth-child(5) { opacity: 1; transform: none; transition-delay: 175ms; }
+  .nav-open .mobile-menu-nav a:nth-child(6) { opacity: 1; transform: none; transition-delay: 200ms; }
+  .nav-open .mobile-menu-footer             { opacity: 1; transform: none; transition-delay: 225ms; }
+}
+
+.nav-open .burger {
+  background: rgba(168, 85, 247, 0.18) !important;
+  border-color: rgba(216, 180, 254, 0.3) !important;
+}
+
+/* hide old mobile-menu-controls — replaced by new footer */
+.mobile-menu-controls {
+  display: none !important;
+}

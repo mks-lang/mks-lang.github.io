@@ -132,7 +132,7 @@
 
 (function initActiveNav() {
   const path = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-links a, .mobile-menu a').forEach((a) => {
+  document.querySelectorAll('.nav-links a, .mobile-menu-nav a').forEach((a) => {
     if (a.getAttribute('href') === path) {
       a.classList.add('active');
       a.setAttribute('aria-current', 'page');
@@ -276,11 +276,22 @@
   const mobileMenu = document.querySelector('.mobile-menu');
   if (!nav || !burger || !mobileMenu) return;
 
+  const backdrop = document.createElement('div');
+  backdrop.className = 'nav-backdrop';
+  document.body.appendChild(backdrop);
+
+  function setBackdrop(open) {
+    backdrop.style.opacity = open ? '1' : '';
+    backdrop.style.visibility = open ? 'visible' : '';
+    backdrop.style.pointerEvents = open ? 'auto' : '';
+  }
+
   function closeMenu() {
     nav.classList.remove('nav-open');
     navbar?.classList.remove('nav-menu-open');
     burger.setAttribute('aria-expanded', 'false');
     mobileMenu.setAttribute('aria-hidden', 'true');
+    setBackdrop(false);
   }
 
   burger.addEventListener('click', () => {
@@ -288,15 +299,67 @@
     navbar?.classList.toggle('nav-menu-open', isOpen);
     burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    setBackdrop(isOpen);
   });
 
-  mobileMenu.querySelectorAll('a').forEach((link) => {
+  mobileMenu.querySelectorAll('.mobile-menu-nav a').forEach((link) => {
     link.addEventListener('click', closeMenu);
   });
 
   document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target)) closeMenu();
+    if (!nav.contains(e.target) && !backdrop.contains(e.target)) closeMenu();
   });
 
   window.addEventListener('resize', closeMenu);
+
+  backdrop.addEventListener('click', closeMenu);
+})();
+
+(function initDockNav() {
+  const navLinks = document.querySelector('.nav-links');
+  if (!navLinks) return;
+
+  const SCALE_MAX = 1.38;
+  const LIFT_MAX  = 10;
+  const RANGE     = 110;
+
+  let rafId = null;
+  let lastX = null;
+
+  function smoothstep(t) {
+    const c = Math.max(0, Math.min(1, t));
+    return c * c * (3 - 2 * c);
+  }
+
+  function applyDock(mouseX) {
+    navLinks.querySelectorAll('a').forEach(link => {
+      const rect = link.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      const t = smoothstep(1 - Math.abs(mouseX - center) / RANGE);
+      const scale = 1 + (SCALE_MAX - 1) * t;
+      const lift  = LIFT_MAX * t;
+      link.style.transform = `translateY(${-lift}px) scale(${scale})`;
+    });
+  }
+
+  function resetDock() {
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.style.transform = '';
+    });
+  }
+
+  navLinks.addEventListener('mousemove', e => {
+    lastX = e.clientX;
+    if (rafId) return;
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      if (lastX !== null) applyDock(lastX);
+    });
+  });
+
+  navLinks.addEventListener('mouseleave', () => {
+    lastX = null;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    resetDock();
+  });
 })();
