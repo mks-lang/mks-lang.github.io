@@ -78,6 +78,7 @@
     });
     document.querySelectorAll('.copy-btn').forEach((button) => {
       button.textContent = messages?.['copy.default'] || 'Copy';
+      button.setAttribute('aria-live', 'polite');
     });
   }
 
@@ -132,7 +133,10 @@
 (function initActiveNav() {
   const path = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a, .mobile-menu a').forEach((a) => {
-    if (a.getAttribute('href') === path) a.classList.add('active');
+    if (a.getAttribute('href') === path) {
+      a.classList.add('active');
+      a.setAttribute('aria-current', 'page');
+    }
   });
 })();
 
