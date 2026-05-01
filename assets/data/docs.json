@@ -5,6 +5,11 @@
     "title": "MKS reference for release 0.2 beta",
     "description": "Practical syntax, control flow, pointers, namespace imports, package.pkg packages, .mkspkg artifacts, stdlib modules, terminal UI helpers, process capture, runtime behavior, and cookbook examples. NOTE: Some examples may be erroneous or non-functional; this will be fixed in future updates.",
     "icon": "hgi-book-open-01",
+    "notice": {
+      "type": "warning",
+      "title": "Preview docs",
+      "text": "These docs are not final. Some examples may be outdated, incomplete, or wrong. A full rewrite and verification pass is planned before the stable release."
+      },
     "meta": "Synced with README, REFERENCE, USER_GUIDE, PACKAGES, std/process, std/tty, std/io, std/path, and std/json",
     "tags": [
       "syntax",
