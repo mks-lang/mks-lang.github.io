@@ -78,6 +78,7 @@
     });
     document.querySelectorAll('.copy-btn').forEach((button) => {
       button.textContent = messages?.['copy.default'] || 'Copy';
+      button.setAttribute('aria-live', 'polite');
     });
   }
 
