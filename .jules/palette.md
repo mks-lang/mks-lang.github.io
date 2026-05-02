@@ -1,0 +1,3 @@
+## 2025-05-15 - Global Skip to Content Pattern
+**Learning:** For a multi-page static site with a sticky header, a "Skip to Content" link is essential for keyboard accessibility. Sticking to a unified `id="main-content"` across all pages allows for a single, dynamically injected link in the global header. Adding `tabindex="-1"` to the target `<main>` element ensures that focus is correctly moved and managed, which is critical for screen reader users to begin reading from the correct spot.
+**Action:** Always include `tabindex="-1"` on jump targets and maintain consistent IDs for primary content areas across different page templates.
