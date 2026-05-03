@@ -72,6 +72,13 @@
     </div>
   `;
 
+  const skipLink = document.createElement('a');
+  skipLink.href = '#main-content';
+  skipLink.className = 'skip-to-content';
+  skipLink.setAttribute('data-i18n', 'nav.skip');
+  skipLink.textContent = 'Skip to content';
+
   const main = document.querySelector('main');
-  document.body.insertBefore(nav, main || document.body.firstChild);
+  document.body.insertBefore(skipLink, document.body.firstChild);
+  document.body.insertBefore(nav, skipLink.nextSibling);
 })();
