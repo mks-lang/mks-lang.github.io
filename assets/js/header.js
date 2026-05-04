@@ -74,4 +74,11 @@
 
   const main = document.querySelector('main');
   document.body.insertBefore(nav, main || document.body.firstChild);
+
+  const skipLink = document.createElement('a');
+  skipLink.className = 'skip-link';
+  skipLink.href = '#main-content';
+  skipLink.setAttribute('data-i18n', 'nav.skip');
+  skipLink.textContent = window.MKSSiteI18n?.get('nav.skip', 'Skip to content') || 'Skip to content';
+  document.body.prepend(skipLink);
 })();

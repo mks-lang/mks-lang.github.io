@@ -5,7 +5,7 @@ body[data-theme="dark"] {
     linear-gradient(180deg, #090312 0%, #130720 52%, #0a0413 100%);
 }
 
-#changelog-root {
+#main-content {
   padding: 112px 0 60px;
 }
 
