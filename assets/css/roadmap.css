@@ -1316,7 +1316,7 @@ body[data-theme="dark"] {
     linear-gradient(180deg, #090312 0%, #130720 52%, #0a0413 100%);
 }
 
-#roadmap-root { padding-top: 112px; padding-bottom: 56px; }
+#main-content { padding-top: 112px; padding-bottom: 56px; }
 .road-hero-bg,
 .scan-grid,
 .signal-ribbon,
@@ -1396,7 +1396,7 @@ body[data-theme="dark"] {
 .stage-meter span { background: linear-gradient(90deg, #a855f7, #d8b4fe); }
 
 @media (max-width: 760px) {
-  #roadmap-root { padding-top: 24px; padding-bottom: 104px; }
+  #main-content { padding-top: 24px; padding-bottom: 104px; }
   .road-hero-inner,
   .section { width: min(100% - 32px, 1180px); }
 }

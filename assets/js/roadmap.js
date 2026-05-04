@@ -1,5 +1,5 @@
 (async function initRoadmapPage() {
-  const root = document.getElementById('roadmap-root');
+  const root = document.getElementById('main-content');
   if (!root) return;
 
   async function render() {

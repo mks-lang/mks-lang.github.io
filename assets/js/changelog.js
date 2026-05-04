@@ -1,5 +1,5 @@
 (async function initChangelogPage() {
-  const root = document.getElementById('changelog-root');
+  const root = document.getElementById('main-content');
   if (!root) return;
 
   async function render() {
