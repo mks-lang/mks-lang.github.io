@@ -74,4 +74,11 @@
 
   const main = document.querySelector('main');
   document.body.insertBefore(nav, main || document.body.firstChild);
+
+  const skip = document.createElement('a');
+  skip.className = 'skip-link';
+  skip.href = '#main-content';
+  skip.dataset.i18n = 'nav.skip';
+  skip.textContent = 'Skip to content';
+  document.body.prepend(skip);
 })();

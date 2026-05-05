@@ -2,6 +2,7 @@
   "ui": {
     "en": {
       "brand.language": "language",
+      "nav.skip": "Skip to content",
       "nav.home": "Home",
       "nav.examples": "Examples",
       "nav.docs": "Docs",
@@ -33,6 +34,7 @@
     },
     "ru": {
       "brand.language": "язык",
+      "nav.skip": "Перейти к содержанию",
       "nav.home": "Главная",
       "nav.examples": "Примеры",
       "nav.docs": "Документация",
