@@ -2301,3 +2301,7 @@ body::after,
 .mobile-menu-controls {
   display: none !important;
 }
+
+.hidden {
+  display: none !important;
+}

@@ -30,7 +30,8 @@
       "roadmap.path": "Path",
       "roadmap.reworking": "Reworking...",
       "docs.warning.title": "Note",
-      "docs.warning.text": "Some examples currently may be erroneous and non-working, this will be fixed soon."
+      "docs.warning.text": "Some examples currently may be erroneous and non-working, this will be fixed soon.",
+      "examples.empty": "No examples found"
     },
     "ru": {
       "brand.language": "язык",
@@ -62,7 +63,8 @@
       "roadmap.path": "Путь",
       "roadmap.reworking": "В процессе переработки...",
       "docs.warning.title": "Примечание",
-      "docs.warning.text": "Некоторые примеры в данный момент могут быть ошибочными и нерабочими, это будет исправлено в ближайшее время."
+      "docs.warning.text": "Некоторые примеры в данный момент могут быть ошибочными и нерабочими, это будет исправлено в ближайшее время.",
+      "examples.empty": "Примеры не найдены"
     }
   },
   "pages": {
