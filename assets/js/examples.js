@@ -22,12 +22,24 @@
   }
 
   function applyFilters() {
+    let visibleCount = 0;
     cards.forEach((card) => {
       const kind = card.dataset.kind;
       const matchesKind = activeFilter === 'all' || kind === activeFilter;
       const matchesQuery = !query || cardText(card).includes(query);
-      card.classList.toggle('hidden', !(matchesKind && matchesQuery));
+      const isVisible = matchesKind && matchesQuery;
+      card.classList.toggle('hidden', !isVisible);
+      if (isVisible) visibleCount++;
     });
+
+    const empty = document.querySelector('.examples-empty');
+    if (empty) {
+      empty.classList.toggle('hidden', visibleCount > 0);
+    }
+
+    if (count) {
+      count.textContent = String(visibleCount);
+    }
   }
 
   chips.forEach((chip) => {
