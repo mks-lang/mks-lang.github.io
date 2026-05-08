@@ -365,17 +365,20 @@
 })();
 
 (function initGlobalShortcuts() {
-  window.addEventListener('keydown', (e) => {
+  if (typeof window === 'undefined') return;
+
+  window.addEventListener('keydown', function(e) {
     const active = document.activeElement;
     if (!active) return;
 
-    const isInput = ['INPUT', 'TEXTAREA'].includes(active.tagName) || (active.isContentEditable === true);
+    const isInput = ['INPUT', 'TEXTAREA'].includes(active.tagName) ||
+                    (typeof active.isContentEditable !== 'undefined' && active.isContentEditable === true);
 
     if (e.key === '/' && !isInput) {
-      const search = document.querySelector('[data-example-search], [data-change-search]');
-      if (search) {
+      const searchEl = document.querySelector('[data-example-search], [data-change-search]');
+      if (searchEl) {
         e.preventDefault();
-        search.focus();
+        searchEl.focus();
       }
     }
   });
