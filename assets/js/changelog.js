@@ -92,11 +92,12 @@ function renderHero(hero, stats) {
 function renderFilters(releases) {
   const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
   const tags = [allLabel, ...new Set((releases || []).map(item => item.tag).filter(Boolean))];
+  const searchPlaceholder = (window.MKSSiteI18n?.get('changelog.search', 'Search changelog...') || 'Search changelog...') + ' (/)';
 
   return `
     <section class="section change-filter-shell">
       <div class="change-filters panel glass" data-change-filters>
-        <input class="change-search" type="search" placeholder="${escapeHtml(window.MKSSiteI18n?.get('changelog.search', 'Search changelog...'))}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('changelog.search', 'Search changelog...'))}" data-change-search>
+        <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
             <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}">
@@ -154,7 +155,8 @@ function initFilters() {
       const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
-      card.hidden = !(matchesFilter && matchesQuery);
+      const isVisible = matchesFilter && matchesQuery;
+      card.hidden = !isVisible;
     });
   }
 
