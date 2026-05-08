@@ -130,7 +130,7 @@
   applyLanguage(readLang());
 })();
 
-(function initActiveNav() {
+;(function initActiveNav() {
   const path = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a, .mobile-menu-nav a').forEach((a) => {
     if (a.getAttribute('href') === path) {
@@ -140,7 +140,7 @@
   });
 })();
 
-(function bindCopyButtons() {
+;(function bindCopyButtons() {
   document.addEventListener('click', async (event) => {
     const btn = event.target.closest('.copy-btn');
     if (!btn) return;
@@ -169,7 +169,7 @@
   });
 })();
 
-(function initParticles() {
+;(function initParticles() {
   const canvas = document.querySelector('.particles');
   if (!canvas) return;
 
@@ -243,7 +243,7 @@
   });
 })();
 
-(function revealOnScroll() {
+;(function revealOnScroll() {
   if (!('IntersectionObserver' in window)) return;
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -269,7 +269,7 @@
   document.head.appendChild(style);
 })();
 
-(function initMobileMenu() {
+;(function initMobileMenu() {
   const navbar = document.querySelector('.navbar');
   const nav = document.querySelector('.nav-inner');
   const burger = document.querySelector('.burger');
@@ -315,7 +315,7 @@
   backdrop.addEventListener('click', closeMenu);
 })();
 
-(function initDockNav() {
+;(function initDockNav() {
   const navLinks = document.querySelector('.nav-links');
   if (!navLinks) return;
 
@@ -364,22 +364,24 @@
   });
 })();
 
-(function initGlobalShortcuts() {
-  if (typeof window === 'undefined') return;
+;(function initGlobalShortcuts() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
   window.addEventListener('keydown', function(e) {
-    const active = document.activeElement;
-    if (!active) return;
+    try {
+      var active = document.activeElement;
+      if (!active) return;
 
-    const isInput = ['INPUT', 'TEXTAREA'].includes(active.tagName) ||
-                    (typeof active.isContentEditable !== 'undefined' && active.isContentEditable === true);
+      var tag = (active.tagName || '').toUpperCase();
+      var isInput = tag === 'INPUT' || tag === 'TEXTAREA' || (active.isContentEditable === true);
 
-    if (e.key === '/' && !isInput) {
-      const searchEl = document.querySelector('[data-example-search], [data-change-search]');
-      if (searchEl) {
-        e.preventDefault();
-        searchEl.focus();
+      if (e.key === '/' && !isInput) {
+        var searchEl = document.querySelector('[data-example-search], [data-change-search]');
+        if (searchEl) {
+          e.preventDefault();
+          searchEl.focus();
+        }
       }
-    }
+    } catch (err) {}
   });
 })();

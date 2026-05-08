@@ -1,4 +1,4 @@
-(async function initChangelogPage() {
+;(async function initChangelogPage() {
   const root = document.getElementById('changelog-root');
   if (!root) return;
 

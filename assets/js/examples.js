@@ -1,57 +1,60 @@
-(function staggerExampleCards() {
-  document.querySelectorAll('.example-card').forEach((card, idx) => {
-    card.style.animationDelay = `${(idx % 6) * 0.08}s`;
+;(function staggerExampleCards() {
+  var cards = document.querySelectorAll('.example-card');
+  cards.forEach(function(card, idx) {
+    card.style.animationDelay = (idx % 6) * 0.08 + 's';
   });
 
-  const count = document.querySelector('[data-example-count]');
-  if (count) count.textContent = String(document.querySelectorAll('.example-card').length);
+  var count = document.querySelector('[data-example-count]');
+  if (count) count.textContent = String(cards.length);
 })();
 
-(function initExampleFilters() {
-  const chips = document.querySelectorAll('.filter-chip');
-  const cards = document.querySelectorAll('.example-card, .featured-card');
-  const search = document.querySelector('[data-example-search]');
-  const count = document.querySelector('[data-example-count]');
+;(function initExampleFilters() {
+  var chips = document.querySelectorAll('.filter-chip');
+  var cards = document.querySelectorAll('.example-card, .featured-card');
+  var search = document.querySelector('[data-example-search]');
+  var count = document.querySelector('[data-example-count]');
 
   if (!chips.length || !cards.length) return;
 
-  let activeFilter = 'all';
-  let query = '';
+  var activeFilter = 'all';
+  var query = '';
 
   function cardText(card) {
     return card.textContent.toLowerCase();
   }
 
   function applyFilters() {
-    let visibleCount = 0;
-    cards.forEach((card) => {
-      const kind = card.dataset.kind;
-      const matchesKind = activeFilter === 'all' || kind === activeFilter;
-      const matchesQuery = !query || cardText(card).includes(query);
-      const isVisible = matchesKind && matchesQuery;
+    var visibleCount = 0;
+    cards.forEach(function(card) {
+      var kind = card.dataset.kind;
+      var matchesKind = activeFilter === 'all' || kind === activeFilter;
+      var matchesQuery = !query || cardText(card).indexOf(query) !== -1;
+      var isVisible = matchesKind && matchesQuery;
       card.classList.toggle('hidden', !isVisible);
       if (isVisible) visibleCount++;
     });
 
-    const empty = document.querySelector('.examples-empty');
+    var empty = document.querySelector('.examples-empty');
     if (empty) {
       empty.classList.toggle('hidden', visibleCount > 0);
     }
 
     if (count) {
-      const changed = count.textContent !== String(visibleCount);
-      count.textContent = String(visibleCount);
+      var nextText = String(visibleCount);
+      var changed = count.textContent !== nextText;
+      count.textContent = nextText;
       if (changed) {
-        count.classList.remove('count-pop');
-        // trigger reflow
-        count.offsetWidth;
-        count.classList.add('count-pop');
-        setTimeout(() => count.classList.remove('count-pop'), 200);
+        try {
+          count.classList.remove('count-pop');
+          count.offsetWidth; // trigger reflow
+          count.classList.add('count-pop');
+          setTimeout(function() { count.classList.remove('count-pop'); }, 200);
+        } catch (e) {}
       }
     }
   }
 
-  chips.forEach((chip) => {
+  chips.forEach(function(chip) {
     chip.addEventListener('click', () => {
       chips.forEach((c) => c.classList.remove('active'));
       chip.classList.add('active');
@@ -69,7 +72,7 @@
   }
 })();
 
-(function animateExamplesTerminal() {
+;(function animateExamplesTerminal() {
   const root = document.querySelector('[data-examples-terminal]');
   if (!root) return;
 
