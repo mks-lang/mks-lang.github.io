@@ -43,7 +43,8 @@
       count.textContent = String(visibleCount);
       if (changed) {
         count.classList.remove('count-pop');
-        void count.offsetWidth; // trigger reflow
+        // trigger reflow
+        count.offsetWidth;
         count.classList.add('count-pop');
         setTimeout(() => count.classList.remove('count-pop'), 200);
       }

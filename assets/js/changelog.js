@@ -156,7 +156,7 @@ function initFilters() {
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
-      card.classList.toggle('hidden', !isVisible);
+      card.hidden = !isVisible;
     });
   }
 
