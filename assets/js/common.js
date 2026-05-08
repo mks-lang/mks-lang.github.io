@@ -363,3 +363,18 @@
     resetDock();
   });
 })();
+
+(function initGlobalShortcuts() {
+  window.addEventListener('keydown', (e) => {
+    const active = document.activeElement;
+    const isInput = ['INPUT', 'TEXTAREA'].includes(active.tagName) || active.isContentEditable;
+
+    if (e.key === '/' && !isInput) {
+      const search = document.querySelector('[data-example-search], [data-change-search]');
+      if (search) {
+        e.preventDefault();
+        search.focus();
+      }
+    }
+  });
+})();

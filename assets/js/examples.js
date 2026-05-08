@@ -11,6 +11,7 @@
   const chips = document.querySelectorAll('.filter-chip');
   const cards = document.querySelectorAll('.example-card, .featured-card');
   const search = document.querySelector('[data-example-search]');
+  const count = document.querySelector('[data-example-count]');
 
   if (!chips.length || !cards.length) return;
 
@@ -38,7 +39,14 @@
     }
 
     if (count) {
+      const changed = count.textContent !== String(visibleCount);
       count.textContent = String(visibleCount);
+      if (changed) {
+        count.classList.remove('count-pop');
+        void count.offsetWidth; // trigger reflow
+        count.classList.add('count-pop');
+        setTimeout(() => count.classList.remove('count-pop'), 200);
+      }
     }
   }
 
