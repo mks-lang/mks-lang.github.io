@@ -292,7 +292,7 @@
     burger.setAttribute('aria-expanded', 'false');
     mobileMenu.setAttribute('aria-hidden', 'true');
     setBackdrop(false);
-    document.body.style.overflow = '';
+    if (document.body) document.body.style.overflow = '';
   }
 
   burger.addEventListener('click', () => {
@@ -301,7 +301,7 @@
     burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
     setBackdrop(isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    if (document.body) document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
   mobileMenu.querySelectorAll('.mobile-menu-nav a').forEach((link) => {
@@ -388,6 +388,19 @@
         if (searchEl) {
           e.preventDefault();
           searchEl.focus();
+        }
+      }
+
+      if (e.key === 'Escape') {
+        if (isInput) {
+          active.blur();
+        } else {
+          // Re-triggering existing burger logic if it's open
+          var burger = document.querySelector('.burger');
+          var nav = document.querySelector('.nav-inner');
+          if (burger && nav && nav.classList.contains('nav-open')) {
+            burger.click();
+          }
         }
       }
     } catch (err) {}
