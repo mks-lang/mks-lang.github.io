@@ -292,6 +292,7 @@
     burger.setAttribute('aria-expanded', 'false');
     mobileMenu.setAttribute('aria-hidden', 'true');
     setBackdrop(false);
+    document.body.style.overflow = '';
   }
 
   burger.addEventListener('click', () => {
@@ -300,6 +301,7 @@
     burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
     setBackdrop(isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
   mobileMenu.querySelectorAll('.mobile-menu-nav a').forEach((link) => {
@@ -313,6 +315,12 @@
   window.addEventListener('resize', closeMenu);
 
   backdrop.addEventListener('click', closeMenu);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && nav.classList.contains('nav-open')) {
+      closeMenu();
+    }
+  });
 })();
 
 ;(function initDockNav() {
