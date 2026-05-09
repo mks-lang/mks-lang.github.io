@@ -1,4 +1,4 @@
-(async function initSiteLanguage() {
+;(async function initSiteLanguage() {
   const LANG_KEY = 'mks.site.lang';
   const defaultLang = document.documentElement.getAttribute('lang') || 'en';
   const page = document.documentElement.getAttribute('data-page') || '';
@@ -316,7 +316,7 @@
 
   backdrop.addEventListener('click', closeMenu);
 
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav.classList.contains('nav-open')) {
       closeMenu();
     }

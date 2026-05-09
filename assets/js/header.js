@@ -1,4 +1,4 @@
-(function renderSiteHeader() {
+;(function renderSiteHeader() {
   const navItems = [
     { href: 'index.html',    label: 'Home',       key: 'nav.home',       icon: 'home-01' },
     { href: 'examples.html', label: 'Examples',   key: 'nav.examples',   icon: 'code' },
