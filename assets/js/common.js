@@ -315,12 +315,6 @@
   window.addEventListener('resize', closeMenu);
 
   backdrop.addEventListener('click', closeMenu);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.classList.contains('nav-open')) {
-      closeMenu();
-    }
-  });
 })();
 
 ;(function initDockNav() {
@@ -395,9 +389,8 @@
         if (isInput) {
           active.blur();
         } else {
-          // Re-triggering existing burger logic if it's open
-          var burger = document.querySelector('.burger');
-          var nav = document.querySelector('.nav-inner');
+          const burger = document.querySelector('.burger');
+          const nav = document.querySelector('.nav-inner');
           if (burger && nav && nav.classList.contains('nav-open')) {
             burger.click();
           }
