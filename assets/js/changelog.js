@@ -100,7 +100,7 @@ function renderFilters(releases) {
         <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
-            <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}">
+            <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}" aria-pressed="${index === 0 ? 'true' : 'false'}">
               ${escapeHtml(tag)}
             </button>
           `).join('')}
@@ -111,6 +111,8 @@ function renderFilters(releases) {
 }
 
 function renderReleases(releases) {
+  const emptyLabel = window.MKSSiteI18n?.get('changelog.empty', 'No releases found');
+
   return `
     <section class="section change-feed" data-change-feed>
       ${(releases || []).map((release, index) => `
@@ -138,6 +140,11 @@ function renderReleases(releases) {
         </article>
       `).join('')}
     </section>
+
+    <div class="change-empty hidden reworking-container">
+      <div class="reworking-icon"></div>
+      <div class="reworking-text" data-i18n="changelog.empty">${escapeHtml(emptyLabel)}</div>
+    </div>
   `;
 }
 
@@ -151,13 +158,20 @@ function initFilters() {
   let query = '';
 
   function applyFilters() {
+    var visibleCount = 0;
     cards.forEach((card) => {
       const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
       card.hidden = !isVisible;
+      if (isVisible) visibleCount++;
     });
+
+    const empty = document.querySelector('.change-empty');
+    if (empty) {
+      empty.classList.toggle('hidden', visibleCount > 0);
+    }
   }
 
   filters.addEventListener('click', (event) => {
@@ -166,7 +180,9 @@ function initFilters() {
 
     activeFilter = button.dataset.filter;
     filters.querySelectorAll('.change-filter').forEach((item) => {
-      item.classList.toggle('active', item === button);
+      const isActive = item === button;
+      item.classList.toggle('active', isActive);
+      item.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
     applyFilters();
