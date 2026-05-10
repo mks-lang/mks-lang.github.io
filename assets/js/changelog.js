@@ -100,7 +100,7 @@ function renderFilters(releases) {
         <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
-            <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}" aria-pressed="${index === 0 ? 'true' : 'false'}">
+            <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}" aria-pressed="${index === 0}">
               ${escapeHtml(tag)}
             </button>
           `).join('')}
@@ -168,7 +168,7 @@ function initFilters() {
     filters.querySelectorAll('.change-filter').forEach((item) => {
       const isActive = item === button;
       item.classList.toggle('active', isActive);
-      item.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      item.setAttribute('aria-pressed', isActive);
     });
 
     applyFilters();
