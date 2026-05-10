@@ -111,8 +111,6 @@ function renderFilters(releases) {
 }
 
 function renderReleases(releases) {
-  const emptyLabel = window.MKSSiteI18n?.get('changelog.empty', 'No releases found');
-
   return `
     <section class="section change-feed" data-change-feed>
       ${(releases || []).map((release, index) => `
@@ -140,11 +138,6 @@ function renderReleases(releases) {
         </article>
       `).join('')}
     </section>
-
-    <div class="change-empty hidden reworking-container">
-      <div class="reworking-icon"></div>
-      <div class="reworking-text" data-i18n="changelog.empty">${escapeHtml(emptyLabel)}</div>
-    </div>
   `;
 }
 
@@ -158,20 +151,13 @@ function initFilters() {
   let query = '';
 
   function applyFilters() {
-    var visibleCount = 0;
     cards.forEach((card) => {
       const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
       card.hidden = !isVisible;
-      if (isVisible) visibleCount++;
     });
-
-    const empty = document.querySelector('.change-empty');
-    if (empty) {
-      empty.classList.toggle('hidden', visibleCount > 0);
-    }
   }
 
   filters.addEventListener('click', (event) => {
