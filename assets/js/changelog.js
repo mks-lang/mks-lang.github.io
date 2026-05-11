@@ -1,4 +1,5 @@
 ;(async function initChangelogPage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const root = document.getElementById('changelog-root');
   if (!root) return;
 
@@ -100,7 +101,7 @@ function renderFilters(releases) {
         <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
-            <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}">
+            <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}" aria-pressed="${index === 0 ? 'true' : 'false'}">
               ${escapeHtml(tag)}
             </button>
           `).join('')}
@@ -160,13 +161,15 @@ function initFilters() {
     });
   }
 
-  filters.addEventListener('click', (event) => {
+  filters.addEventListener('click', function(event) {
     const button = event.target.closest('.change-filter');
     if (!button) return;
 
     activeFilter = button.dataset.filter;
-    filters.querySelectorAll('.change-filter').forEach((item) => {
-      item.classList.toggle('active', item === button);
+    filters.querySelectorAll('.change-filter').forEach(function(item) {
+      const isActive = item === button;
+      item.classList.toggle('active', isActive);
+      item.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
     applyFilters();
