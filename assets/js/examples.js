@@ -55,8 +55,8 @@
   }
 
   chips.forEach(function(chip) {
-    chip.addEventListener('click', () => {
-      chips.forEach((c) => {
+    chip.addEventListener('click', function() {
+      chips.forEach(function(c) {
         c.classList.remove('active');
         c.setAttribute('aria-pressed', 'false');
       });

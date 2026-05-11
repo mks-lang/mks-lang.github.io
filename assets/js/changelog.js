@@ -160,12 +160,12 @@ function initFilters() {
     });
   }
 
-  filters.addEventListener('click', (event) => {
+  filters.addEventListener('click', function(event) {
     const button = event.target.closest('.change-filter');
     if (!button) return;
 
     activeFilter = button.dataset.filter;
-    filters.querySelectorAll('.change-filter').forEach((item) => {
+    filters.querySelectorAll('.change-filter').forEach(function(item) {
       const isActive = item === button;
       item.classList.toggle('active', isActive);
       item.setAttribute('aria-pressed', isActive ? 'true' : 'false');
