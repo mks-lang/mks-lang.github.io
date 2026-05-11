@@ -1,5 +1,5 @@
 ;(function staggerExampleCards() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   var cards = document.querySelectorAll('.example-card');
   cards.forEach(function(card, idx) {
     card.style.animationDelay = (idx % 6) * 0.08 + 's';
@@ -10,7 +10,7 @@
 })();
 
 ;(function initExampleFilters() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   var chips = document.querySelectorAll('.filter-chip');
   var cards = document.querySelectorAll('.example-card, .featured-card');
   var search = document.querySelector('[data-example-search]');
@@ -57,8 +57,8 @@
   }
 
   chips.forEach(function(chip) {
-    chip.addEventListener('click', () => {
-      chips.forEach((c) => {
+    chip.addEventListener('click', function() {
+      chips.forEach(function(c) {
         c.classList.remove('active');
         c.setAttribute('aria-pressed', 'false');
       });
@@ -71,7 +71,7 @@
   });
 
   if (search) {
-    search.addEventListener('input', () => {
+    search.addEventListener('input', function() {
       query = search.value.trim().toLowerCase();
       applyFilters();
     });
@@ -79,7 +79,7 @@
 })();
 
 ;(function animateExamplesTerminal() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const root = document.querySelector('[data-examples-terminal]');
   if (!root) return;
 
