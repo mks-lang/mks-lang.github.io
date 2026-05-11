@@ -1,4 +1,4 @@
-(async function initSiteLanguage() {
+;(async function initSiteLanguage() {
   const LANG_KEY = 'mks.site.lang';
   const defaultLang = document.documentElement.getAttribute('lang') || 'en';
   const page = document.documentElement.getAttribute('data-page') || '';
@@ -292,6 +292,7 @@
     burger.setAttribute('aria-expanded', 'false');
     mobileMenu.setAttribute('aria-hidden', 'true');
     setBackdrop(false);
+    if (document.body) document.body.style.overflow = '';
   }
 
   burger.addEventListener('click', () => {
@@ -300,6 +301,7 @@
     burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
     setBackdrop(isOpen);
+    if (document.body) document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
   mobileMenu.querySelectorAll('.mobile-menu-nav a').forEach((link) => {
@@ -380,6 +382,18 @@
         if (searchEl) {
           e.preventDefault();
           searchEl.focus();
+        }
+      }
+
+      if (e.key === 'Escape') {
+        if (isInput) {
+          active.blur();
+        } else {
+          const burger = document.querySelector('.burger');
+          const nav = document.querySelector('.nav-inner');
+          if (burger && nav && nav.classList.contains('nav-open')) {
+            burger.click();
+          }
         }
       }
     } catch (err) {}
