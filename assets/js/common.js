@@ -1,4 +1,5 @@
-(async function initSiteLanguage() {
+;(async function initSiteLanguage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const LANG_KEY = 'mks.site.lang';
   const defaultLang = document.documentElement.getAttribute('lang') || 'en';
   const page = document.documentElement.getAttribute('data-page') || '';
@@ -131,6 +132,7 @@
 })();
 
 ;(function initActiveNav() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const path = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a, .mobile-menu-nav a').forEach((a) => {
     if (a.getAttribute('href') === path) {
@@ -141,6 +143,7 @@
 })();
 
 ;(function bindCopyButtons() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   document.addEventListener('click', async (event) => {
     const btn = event.target.closest('.copy-btn');
     if (!btn) return;
@@ -170,6 +173,7 @@
 })();
 
 ;(function initParticles() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const canvas = document.querySelector('.particles');
   if (!canvas) return;
 
@@ -244,6 +248,7 @@
 })();
 
 ;(function revealOnScroll() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   if (!('IntersectionObserver' in window)) return;
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -270,52 +275,56 @@
 })();
 
 ;(function initMobileMenu() {
-  const navbar = document.querySelector('.navbar');
-  const nav = document.querySelector('.nav-inner');
-  const burger = document.querySelector('.burger');
-  const mobileMenu = document.querySelector('.mobile-menu');
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  var navbar = document.querySelector('.navbar');
+  var nav = document.querySelector('.nav-inner');
+  var burger = document.querySelector('.burger');
+  var mobileMenu = document.querySelector('.mobile-menu');
   if (!nav || !burger || !mobileMenu) return;
 
-  const backdrop = document.createElement('div');
+  var backdrop = document.createElement('div');
   backdrop.className = 'nav-backdrop';
   document.body.appendChild(backdrop);
 
-  function setBackdrop(open) {
+  function toggleMenu(open) {
+    nav.classList.toggle('nav-open', open);
+    if (navbar) navbar.classList.toggle('nav-menu-open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+
     backdrop.style.opacity = open ? '1' : '';
     backdrop.style.visibility = open ? 'visible' : '';
     backdrop.style.pointerEvents = open ? 'auto' : '';
+    document.body.style.overflow = open ? 'hidden' : '';
   }
 
   function closeMenu() {
-    nav.classList.remove('nav-open');
-    navbar?.classList.remove('nav-menu-open');
-    burger.setAttribute('aria-expanded', 'false');
-    mobileMenu.setAttribute('aria-hidden', 'true');
-    setBackdrop(false);
+    toggleMenu(false);
   }
 
-  burger.addEventListener('click', () => {
-    const isOpen = nav.classList.toggle('nav-open');
-    navbar?.classList.toggle('nav-menu-open', isOpen);
-    burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-    setBackdrop(isOpen);
+  burger.addEventListener('click', function() {
+    var isOpen = !nav.classList.contains('nav-open');
+    toggleMenu(isOpen);
   });
 
-  mobileMenu.querySelectorAll('.mobile-menu-nav a').forEach((link) => {
+  mobileMenu.querySelectorAll('.mobile-menu-nav a').forEach(function(link) {
     link.addEventListener('click', closeMenu);
   });
 
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', function(e) {
     if (!nav.contains(e.target) && !backdrop.contains(e.target)) closeMenu();
   });
 
   window.addEventListener('resize', closeMenu);
-
   backdrop.addEventListener('click', closeMenu);
+
+  window.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeMenu();
+  });
 })();
 
 ;(function initDockNav() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const navLinks = document.querySelector('.nav-links');
   if (!navLinks) return;
 
@@ -380,7 +389,12 @@
         if (searchEl) {
           e.preventDefault();
           searchEl.focus();
+          if (searchEl.select) searchEl.select();
         }
+      }
+
+      if (e.key === 'Escape' && isInput) {
+        active.blur();
       }
     } catch (err) {}
   });
