@@ -1,6 +1,5 @@
-(function renderSiteHeader() {
+;(function renderSiteHeader() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
-
   const navItems = [
     { href: 'index.html',    label: 'Home',       key: 'nav.home',       icon: 'home-01' },
     { href: 'examples.html', label: 'Examples',   key: 'nav.examples',   icon: 'code' },

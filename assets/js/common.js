@@ -1,6 +1,5 @@
 ;(async function initSiteLanguage() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
-
   const LANG_KEY = 'mks.site.lang';
   const defaultLang = document.documentElement.getAttribute('lang') || 'en';
   const page = document.documentElement.getAttribute('data-page') || '';
@@ -133,8 +132,6 @@
 })();
 
 ;(function initActiveNav() {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
-
   const path = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a, .mobile-menu-nav a').forEach((a) => {
     if (a.getAttribute('href') === path) {
@@ -145,8 +142,6 @@
 })();
 
 ;(function bindCopyButtons() {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
-
   document.addEventListener('click', async (event) => {
     const btn = event.target.closest('.copy-btn');
     if (!btn) return;
@@ -176,8 +171,6 @@
 })();
 
 ;(function initParticles() {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
-
   const canvas = document.querySelector('.particles');
   if (!canvas) return;
 
@@ -252,7 +245,6 @@
 })();
 
 ;(function revealOnScroll() {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   if (!('IntersectionObserver' in window)) return;
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -279,8 +271,6 @@
 })();
 
 ;(function initMobileMenu() {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
-
   const navbar = document.querySelector('.navbar');
   const nav = document.querySelector('.nav-inner');
   const burger = document.querySelector('.burger');
@@ -324,14 +314,12 @@
 
   backdrop.addEventListener('click', closeMenu);
 
-  window.addEventListener('keydown', function(e) {
+  window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeMenu();
   });
 })();
 
 ;(function initDockNav() {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
-
   const navLinks = document.querySelector('.nav-links');
   if (!navLinks) return;
 
@@ -396,7 +384,7 @@
         if (searchEl) {
           e.preventDefault();
           searchEl.focus();
-          if (typeof searchEl.select === 'function') searchEl.select();
+          if (searchEl.select) searchEl.select();
         }
       }
 
