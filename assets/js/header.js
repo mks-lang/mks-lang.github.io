@@ -53,7 +53,7 @@
           <span class="mobile-menu-title">Navigation</span>
         </div>
         <div class="mobile-menu-nav">
-          ${navItems.map((item) => `<a href="${item.href}" data-i18n="${item.key}"><i class="hgi-stroke hgi-${item.icon}" aria-hidden="true"></i><span>${item.label}</span></a>`).join('')}
+          ${navItems.map((item) => `<a href="${item.href}"><i class="hgi-stroke hgi-${item.icon}" aria-hidden="true"></i><span data-i18n="${item.key}">${item.label}</span></a>`).join('')}
         </div>
         <div class="mobile-menu-footer">
           <label class="nav-language mobile-language" aria-label="Language">
@@ -63,9 +63,9 @@
               <option value="ru">RU</option>
             </select>
           </label>
-          <a class="mobile-github-btn" href="${github.href}" target="_blank" rel="noreferrer" data-i18n="${github.key}">
+          <a class="mobile-github-btn" href="${github.href}" target="_blank" rel="noreferrer">
             <i class="hgi-stroke hgi-github" aria-hidden="true"></i>
-            <span>${github.label}</span>
+            <span data-i18n="${github.key}">${github.label}</span>
           </a>
         </div>
       </div>
