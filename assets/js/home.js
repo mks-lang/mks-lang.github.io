@@ -1,66 +1,70 @@
-document.addEventListener('DOMContentLoaded', () => {
-  initHeroTerminal();
-});
+;(function initHomePage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
-function initHeroTerminal() {
-  const term = document.querySelector('[data-terminal]');
-  if (!term) return;
+  document.addEventListener('DOMContentLoaded', function() {
+    initHeroTerminal();
+  });
 
-  const lines = [
-    'mks run observe.mks',
-    'load module ... ok',
-    'attach watch x ... attached',
-    'gc pass #12 ... 6 freed',
-    'event -> "x changed"',
-    'defer queue -> "closing"',
-    'exit in 38ms'
-  ];
+  function initHeroTerminal() {
+    var term = document.querySelector('[data-terminal]');
+    if (!term) return;
 
-  let index = 0;
+    var lines = [
+      'mks run observe.mks',
+      'load module ... ok',
+      'attach watch x ... attached',
+      'gc pass #12 ... 6 freed',
+      'event -> "x changed"',
+      'defer queue -> "closing"',
+      'exit in 38ms'
+    ];
 
-  function render() {
-    const previous = lines
-      .slice(0, index)
-      .map((line) => formatLine(line))
-      .join('');
+    var index = 0;
 
-    const current = index < lines.length
-      ? `<div class="term-line">${formatLine(lines[index], true)}</div>`
-      : '';
+    function render() {
+      var previous = lines
+        .slice(0, index)
+        .map(function(line) { return formatLine(line); })
+        .join('');
 
-    term.innerHTML = previous + current;
+      var current = index < lines.length
+        ? '<div class="term-line">' + formatLine(lines[index], true) + '</div>'
+        : '';
 
-    index += 1;
+      term.innerHTML = previous + current;
 
-    if (index > lines.length) {
-      setTimeout(() => {
-        index = 0;
-        render();
-      }, 1200);
-      return;
+      index += 1;
+
+      if (index > lines.length) {
+        setTimeout(function() {
+          index = 0;
+          render();
+        }, 1200);
+        return;
+      }
+
+      setTimeout(render, 850);
     }
 
-    setTimeout(render, 850);
+    render();
   }
 
-  render();
-}
+  function formatLine(text, withCursor) {
+    var escaped = escapeHtml(text)
+      .replace(/^mks run/, '<span class="prompt">$</span> mks run')
+      .replace(/\bok\b/g, '<span class="green">ok</span>')
+      .replace(/attached/g, '<span class="accent">attached</span>')
+      .replace(/6 freed/g, '<span class="accent">6 freed</span>')
+      .replace(/"x changed"/g, '<span class="accent">"x changed"</span>')
+      .replace(/"closing"/g, '<span class="accent">"closing"</span>');
 
-function formatLine(text, withCursor = false) {
-  const escaped = escapeHtml(text)
-    .replace(/^mks run/, '<span class="prompt">$</span> mks run')
-    .replace(/\bok\b/g, '<span class="green">ok</span>')
-    .replace(/attached/g, '<span class="accent">attached</span>')
-    .replace(/6 freed/g, '<span class="accent">6 freed</span>')
-    .replace(/"x changed"/g, '<span class="accent">"x changed"</span>')
-    .replace(/"closing"/g, '<span class="accent">"closing"</span>');
+    return escaped + (withCursor ? '<span class="cursor"></span>' : '');
+  }
 
-  return `${escaped}${withCursor ? '<span class="cursor"></span>' : ''}`;
-}
-
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+})();

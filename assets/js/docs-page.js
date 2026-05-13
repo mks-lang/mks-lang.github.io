@@ -1,4 +1,5 @@
-(async function initDocsPage() {
+;(async function initDocsPage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const sidebar = document.querySelector('[data-docs-sidebar]');
   const body = document.querySelector('[data-docs-body]');
   if (!sidebar || !body) return;

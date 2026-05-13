@@ -172,7 +172,7 @@ function initFilters() {
 
     const empty = document.querySelector('.changelog-empty');
     if (empty) {
-      empty.classList.toggle('hidden', visibleCount > 0);
+      empty.hidden = visibleCount > 0;
     }
   }
 

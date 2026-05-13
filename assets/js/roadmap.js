@@ -1,4 +1,5 @@
-(async function initRoadmapPage() {
+;(async function initRoadmapPage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const root = document.getElementById('roadmap-root');
   if (!root) return;
 
