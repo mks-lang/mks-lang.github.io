@@ -1,47 +1,46 @@
-;(async function initChangelogPage() {
+;(function initChangelogPage() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   var root = document.getElementById('changelog-root');
   if (!root) return;
 
-  async function render() {
+  function render() {
     var lang = (window.MKSSiteI18n && window.MKSSiteI18n.getLanguage && window.MKSSiteI18n.getLanguage()) || 'en';
     var path = lang === 'ru' ? 'assets/data/changelog.ru.json?v=20260425-i18n-1' : 'assets/data/changelog.json?v=20260423-1';
-    var response = await fetch(path, { cache: 'no-store' });
-    if (!response.ok) {
-      throw new Error('Failed to fetch changelog.json: ' + response.status + ' ' + response.statusText);
-    }
 
-    var data = await response.json();
-    root.innerHTML = [
-      renderHero(data.hero, data.stats),
-      renderFilters(data.releases),
-      renderReleases(data.releases)
-    ].join('');
+    fetch(path, { cache: 'no-store' })
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error('Failed to fetch changelog.json: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(function(data) {
+        root.innerHTML = [
+          renderHero(data.hero, data.stats),
+          renderFilters(data.releases),
+          renderReleases(data.releases)
+        ].join('');
 
-    initFilters();
-    initChangelogFx();
+        initFilters();
+        initChangelogFx();
+      })
+      .catch(function(err) {
+        console.error('Changelog load error:', err);
+        var failedLabel = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('changelog.failed', 'Failed to load changelog') : 'Failed to load changelog';
+        root.innerHTML = [
+          '<section class="section panel glass">',
+            '<p class="eyebrow">Changelog</p>',
+            '<h1>' + escapeHtml(failedLabel) + '</h1>',
+            '<p class="sub">' + escapeHtml(err.message) + '</p>',
+          '</section>'
+        ].join('');
+      });
   }
 
-  try {
-    await render();
-  } catch (err) {
-    console.error('Changelog load error:', err);
-    var failedLabel = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('changelog.failed', 'Failed to load changelog') : 'Failed to load changelog';
-    root.innerHTML = [
-      '<section class="section panel glass">',
-        '<p class="eyebrow">Changelog</p>',
-        '<h1>' + escapeHtml(failedLabel) + '</h1>',
-        '<p class="sub">' + escapeHtml(err.message) + '</p>',
-      '</section>'
-    ].join('');
-  }
+  render();
 
-  document.addEventListener('mks:language-change', async function() {
-    try {
-      await render();
-    } catch (err) {
-      console.error('Changelog rerender error:', err);
-    }
+  document.addEventListener('mks:language-change', function() {
+    render();
   });
 })();
 
@@ -53,8 +52,8 @@ function renderHero(hero, stats) {
   var statsList = stats || [];
 
   return [
-    '<section class="change-hero">',
-      '<div class="change-hero-bg">',
+    '<section class="road-hero">',
+      '<div class="road-hero-bg">',
         '<div class="change-grid"></div>',
         '<div class="change-beam beam-a"></div>',
         '<div class="change-beam beam-b"></div>',
@@ -127,11 +126,13 @@ function renderReleases(releases) {
   return [
     '<section class="section change-feed" data-change-feed>',
       (releases || []).map(function(release, index) {
+        var num = index + 1;
+        var padded = num < 10 ? '0' + num : '' + num;
         return [
           '<article class="change-card panel glimmer" data-tag="' + escapeHtml(release.tag || '') + '" style="--delay:' + (index * 90) + 'ms">',
             '<div class="change-date">',
               '<span>' + escapeHtml(release.date) + '</span>',
-              '<strong>' + String(index + 1).padStart(2, '0') + '</strong>',
+              '<strong>' + padded + '</strong>',
             '</div>',
             '<div class="change-content">',
               '<div class="change-card-head">',
@@ -146,7 +147,7 @@ function renderReleases(releases) {
                 (release.items || []).map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join(''),
               '</ul>',
             '</div>',
-          '</article>'
+          '</article>' + (releases[index + 1] ? '<div class="change-divider"></div>' : '')
         ].join('');
       }).join(''),
     '</section>',

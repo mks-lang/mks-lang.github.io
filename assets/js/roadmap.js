@@ -162,10 +162,12 @@ function renderVersionPath(versionPath) {
         '<div class="version-line"></div>',
         '<div class="version-grid">',
           (versionPath.items || []).map(function(item, index) {
+            var num = index + 1;
+            var padded = num < 10 ? '0' + num : '' + num;
             return [
               '<article class="version-node ' + escapeHtml(item.state || '') + '">',
                 '<div class="version-dot-wrap">',
-                  '<span class="version-dot">' + String(index + 1).padStart(2, '0') + '</span>',
+                  '<span class="version-dot">' + padded + '</span>',
                 '</div>',
                 '<div class="version-card">',
                   '<p class="version-number">' + escapeHtml(item.version || '') + '</p>',
@@ -188,9 +190,11 @@ function renderRail(rail) {
       '<div class="road-rail panel glass">',
         '<div class="rail-line"></div>',
         rail.map(function(node, index) {
+          var num = index + 1;
+          var padded = num < 10 ? '0' + num : '' + num;
           return [
             '<div class="rail-node ' + (node.state || '') + '">',
-              '<span class="rail-dot">' + String(index + 1).padStart(2, '0') + '</span>',
+              '<span class="rail-dot">' + padded + '</span>',
               '<div>',
                 '<p class="eyebrow">' + escapeHtml(node.phase) + '</p>',
                 '<strong>' + escapeHtml(node.title) + '</strong>',
