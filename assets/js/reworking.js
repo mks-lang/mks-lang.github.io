@@ -1,17 +1,19 @@
-(function initReworking() {
-  const root = document.querySelector('main');
+;(function initReworkingUI() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  var root = document.querySelector('main');
   if (!root) return;
 
-  function render() {
-    const text = window.MKSSiteI18n?.get('roadmap.reworking', 'Reworking...') || 'Reworking...';
-    root.innerHTML = `
-      <div class="reworking-container">
-        <div class="reworking-icon"></div>
-        <div class="reworking-text">${text}</div>
-      </div>
-    `;
+  function applyReworking() {
+    var nodes = document.querySelectorAll('.reworking-text');
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      if (node.dataset.i18n === 'roadmap.reworking') {
+        var text = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('roadmap.reworking', 'Reworking...') : 'Reworking...';
+        node.textContent = text;
+      }
+    }
   }
 
-  render();
-  document.addEventListener('mks:language-change', render);
+  applyReworking();
+  document.addEventListener('mks:language-change', applyReworking);
 })();

@@ -1,271 +1,234 @@
-const docsEnhancementState = {
-  cleanup: null,
-};
+;(function initDocsEnhancements() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
-function initDocsEnhancements() {
-  if (typeof docsEnhancementState.cleanup === 'function') {
-    docsEnhancementState.cleanup();
-    docsEnhancementState.cleanup = null;
-  }
-
-  document.querySelectorAll('.panel').forEach((panel, idx) => {
-    panel.style.animationDelay = `${(idx % 5) * 0.08}s`;
-  });
-
-  const cardCleanups = [];
-
-  document.querySelectorAll('[data-docs-card]').forEach((panel) => {
-    const onPointerMove = (event) => {
-      const rect = panel.getBoundingClientRect();
-      const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
-      const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
-
-      panel.style.setProperty('--mx', `${x}px`);
-      panel.style.setProperty('--my', `${y}px`);
-    };
-
-    const onPointerLeave = () => {
-      panel.style.setProperty('--mx', '50%');
-      panel.style.setProperty('--my', '18%');
-    };
-
-    panel.addEventListener('pointermove', onPointerMove);
-    panel.addEventListener('pointerleave', onPointerLeave);
-
-    cardCleanups.push(() => {
-      panel.removeEventListener('pointermove', onPointerMove);
-      panel.removeEventListener('pointerleave', onPointerLeave);
-    });
-  });
-
-  const cards = Array.from(document.querySelectorAll('[data-docs-card]'));
-  let observer = null;
-
-  if (cards.length && 'IntersectionObserver' in window) {
-    observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        entry.target.classList.toggle('docs-card-live', entry.isIntersecting);
-      });
-    }, {
-      rootMargin: '-32% 0px -50% 0px',
-      threshold: 0,
-    });
-
-    cards.forEach((card) => observer.observe(card));
-  }
-
-  docsEnhancementState.cleanup = () => {
-    cardCleanups.forEach((cleanup) => cleanup());
-    if (observer) observer.disconnect();
+  var docsEnhancementState = {
+    cleanup: null
   };
-}
 
-(function bootDocsEnhancements() {
-  window.addEventListener('docs:ready', initDocsEnhancements);
-})();
-
-const docsSidebarState = {
-  cleanup: null,
-};
-
-function initSidebarLinks() {
-  if (typeof docsSidebarState.cleanup === 'function') {
-    docsSidebarState.cleanup();
-    docsSidebarState.cleanup = null;
-  }
-
-  const sidebar = document.querySelector('.sidebar');
-  const links = Array.from(document.querySelectorAll('.sidebar a'));
-  if (!sidebar || !links.length) return;
-
-  const sections = links
-    .map((link) => document.querySelector(link.getAttribute('href')))
-    .filter(Boolean);
-
-  let sidebarScrollTarget = sidebar.scrollTop;
-  let sidebarScrollFrame = null;
-  let userSidebarLockUntil = 0;
-
-  function lockSidebarAutoScroll(ms = 1400) {
-    userSidebarLockUntil = Date.now() + ms;
-
-    if (sidebarScrollFrame) {
-      cancelAnimationFrame(sidebarScrollFrame);
-      sidebarScrollFrame = null;
+  function initCards() {
+    var panels = document.querySelectorAll('.panel');
+    for (var i = 0; i < panels.length; i++) {
+      panels[i].style.animationDelay = (i * 0.05) + 's';
     }
+
+    var cardCleanups = [];
+    var cards = document.querySelectorAll('[data-docs-card]');
+    for (var j = 0; j < cards.length; j++) {
+      (function(panel) {
+        var onPointerMove = function(event) {
+          var rect = panel.getBoundingClientRect();
+          var x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
+          var y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
+          panel.style.setProperty('--x', x + 'px');
+          panel.style.setProperty('--y', y + 'px');
+        };
+        var onPointerLeave = function() {
+          panel.style.setProperty('--x', '-1000px');
+          panel.style.setProperty('--y', '-1000px');
+        };
+        panel.addEventListener('pointermove', onPointerMove);
+        panel.addEventListener('pointerleave', onPointerLeave);
+        cardCleanups.push(function() {
+          panel.removeEventListener('pointermove', onPointerMove);
+          panel.removeEventListener('pointerleave', onPointerLeave);
+        });
+      })(cards[j]);
+    }
+
+    var observer = null;
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver(function(entries) {
+        for (var k = 0; k < entries.length; k++) {
+          var entry = entries[k];
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        }
+      }, { threshold: 0.1 });
+      for (var l = 0; l < cards.length; l++) {
+        observer.observe(cards[l]);
+      }
+    }
+
+    docsEnhancementState.cleanup = function() {
+      for (var m = 0; m < cardCleanups.length; m++) {
+        cardCleanups[m]();
+      }
+      if (observer) observer.disconnect();
+    };
   }
 
-  function smoothSidebarScrollTo(target) {
-    sidebarScrollTarget = target;
+  var docsSidebarState = {
+    cleanup: null
+  };
 
-    if (sidebarScrollFrame) return;
+  function initSidebar() {
+    var sidebar = document.querySelector('.sidebar');
+    var links = Array.prototype.slice.call(document.querySelectorAll('.sidebar a'));
+    if (!sidebar || !links.length) return;
 
-    const step = () => {
-      const current = sidebar.scrollTop;
-      const delta = sidebarScrollTarget - current;
+    var sections = [];
+    for (var i = 0; i < links.length; i++) {
+      var sec = document.querySelector(links[i].getAttribute('href'));
+      if (sec) sections.push(sec);
+    }
 
-      if (Math.abs(delta) < 0.8) {
-        sidebar.scrollTop = sidebarScrollTarget;
-        sidebarScrollFrame = null;
-        return;
+    var sidebarScrollTarget = sidebar.scrollTop;
+    var sidebarScrollFrame = null;
+    var userSidebarLockUntil = 0;
+
+    function lockSidebarAutoScroll(ms) {
+      userSidebarLockUntil = Date.now() + ms;
+    }
+
+    function smoothScrollSidebar() {
+      if (sidebarScrollFrame) return;
+      var step = function() {
+        var current = sidebar.scrollTop;
+        var delta = sidebarScrollTarget - current;
+        if (Math.abs(delta) < 0.5) {
+          sidebar.scrollTop = sidebarScrollTarget;
+          sidebarScrollFrame = null;
+          return;
+        }
+        sidebar.scrollTop = current + delta * 0.12;
+        sidebarScrollFrame = requestAnimationFrame(step);
+      };
+      sidebarScrollFrame = requestAnimationFrame(step);
+    }
+
+    function syncSidebar() {
+      if (Date.now() < userSidebarLockUntil) return;
+      var activeLink = sidebar.querySelector('a.active');
+      if (!activeLink) return;
+
+      var sidebarBox = sidebar.getBoundingClientRect();
+      var linkBox = activeLink.getBoundingClientRect();
+      var offset = linkBox.top - sidebarBox.top + sidebar.scrollTop;
+
+      if (window.innerWidth <= 960) {
+        var targetLeft = activeLink.offsetLeft - (sidebar.clientWidth - activeLink.offsetWidth) / 2;
+        sidebar.scrollLeft = targetLeft;
+      } else {
+        var linkTop = activeLink.offsetTop;
+        var linkBottom = linkTop + activeLink.offsetHeight;
+        var visibleTop = sidebar.scrollTop;
+        var visibleBottom = visibleTop + sidebar.clientHeight;
+        var padding = 12;
+
+        if (linkTop < visibleTop + padding) {
+          sidebarScrollTarget = Math.max(0, linkTop - padding);
+          smoothScrollSidebar();
+        } else if (linkBottom > visibleBottom - padding) {
+          sidebarScrollTarget = linkBottom - sidebar.clientHeight + padding;
+          smoothScrollSidebar();
+        }
+      }
+    }
+
+    function updateActiveSection() {
+      var viewportLine = window.innerHeight * 0.44;
+      var pageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+      var current = pageBottom ? sections[sections.length - 1] : sections[0];
+      var closestDistance = Number.POSITIVE_INFINITY;
+
+      if (!pageBottom) {
+        for (var i = 0; i < sections.length; i++) {
+          var section = sections[i];
+          var rect = section.getBoundingClientRect();
+          var distance = Math.abs(rect.top - viewportLine);
+          if (rect.top < viewportLine && distance < closestDistance) {
+            closestDistance = distance;
+            current = section;
+          }
+        }
       }
 
-      sidebar.scrollTop = current + delta * 0.16;
-      sidebarScrollFrame = requestAnimationFrame(step);
-    };
-
-    sidebarScrollFrame = requestAnimationFrame(step);
-  }
-
-  function moveSidebar() {
-    if (window.matchMedia('(max-width: 960px)').matches) {
-      sidebar.style.setProperty('--sidebar-shift', '0px');
-      return;
-    }
-
-    const shift = Math.min(10, window.scrollY * 0.02);
-    sidebar.style.setProperty('--sidebar-shift', `${shift}px`);
-  }
-
-  function moveIndicator(activeLink) {
-    const sidebarBox = sidebar.getBoundingClientRect();
-    const linkBox = activeLink.getBoundingClientRect();
-    const offset = linkBox.top - sidebarBox.top + sidebar.scrollTop;
-
-    sidebar.style.setProperty('--indicator-y', `${offset}px`);
-    sidebar.style.setProperty('--indicator-height', `${linkBox.height}px`);
-    sidebar.style.setProperty('--indicator-opacity', '1');
-  }
-
-  function keepLinkVisible(activeLink, smooth = false) {
-    if (window.matchMedia('(max-width: 960px)').matches) {
-      const targetLeft = activeLink.offsetLeft - (sidebar.clientWidth - activeLink.offsetWidth) / 2;
-      sidebar.scrollTo({
-        left: Math.max(0, targetLeft),
-        behavior: smooth ? 'smooth' : 'auto',
-      });
-      return;
-    }
-
-    const linkTop = activeLink.offsetTop;
-    const linkBottom = linkTop + activeLink.offsetHeight;
-    const visibleTop = sidebar.scrollTop;
-    const visibleBottom = visibleTop + sidebar.clientHeight;
-    const padding = 12;
-
-    if (linkTop < visibleTop + padding) {
-      const nextTop = Math.max(0, linkTop - padding);
-      if (smooth) smoothSidebarScrollTo(nextTop);
-      else sidebar.scrollTop = nextTop;
-    } else if (linkBottom > visibleBottom - padding) {
-      const nextTop = linkBottom - sidebar.clientHeight + padding;
-      if (smooth) smoothSidebarScrollTo(nextTop);
-      else sidebar.scrollTop = nextTop;
-    }
-  }
-
-  function setActive(id) {
-    const hash = `#${id}`;
-    let activeLink = null;
-
-    links.forEach((link) => {
-      const isActive = link.getAttribute('href') === hash;
-      link.classList.toggle('active', isActive);
-      if (isActive) activeLink = link;
-    });
-
-    if (activeLink) {
-      moveIndicator(activeLink);
-      if (Date.now() > userSidebarLockUntil) keepLinkVisible(activeLink, true);
-    }
-  }
-
-  function sync() {
-    const viewportLine = window.innerHeight * 0.44;
-    const pageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-    let current = pageBottom ? sections[sections.length - 1] : sections[0];
-    let closestDistance = Number.POSITIVE_INFINITY;
-
-    if (!pageBottom) {
-      sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        if (rect.bottom < viewportLine) return;
-
-        const distance = Math.abs(rect.top - viewportLine);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          current = section;
+      if (current) {
+        var hash = '#' + current.id;
+        for (var j = 0; j < links.length; j++) {
+          var link = links[j];
+          var isActive = link.getAttribute('href') === hash;
+          link.classList.toggle('active', isActive);
+          if (isActive) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
         }
-      });
+        syncSidebar();
+      }
     }
 
-    moveSidebar();
-    if (current) setActive(current.id);
-  }
+    var ticking = false;
+    function requestSync() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          updateActiveSection();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
 
-  let ticking = false;
-  function requestSync() {
-    if (ticking) return;
-
-    ticking = true;
-    requestAnimationFrame(() => {
-      sync();
-      ticking = false;
-    });
-  }
-
-  const onPointerDown = () => lockSidebarAutoScroll(1800);
-  const onMouseDown = () => lockSidebarAutoScroll(1800);
-  const onWheel = () => lockSidebarAutoScroll(900);
-  const onScroll = () => requestSync();
-  const onResize = () => requestSync();
-  const onHashChange = () => {
-    sync();
-    const activeLink = links.find((link) => link.classList.contains('active'));
-    if (activeLink) keepLinkVisible(activeLink, true);
-  };
-
-  sidebar.addEventListener('pointerdown', onPointerDown);
-  sidebar.addEventListener('mousedown', onMouseDown);
-  sidebar.addEventListener('wheel', onWheel, { passive: true });
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onResize);
-  window.addEventListener('hashchange', onHashChange);
-
-  const linkCleanups = links.map((link) => {
-    const onClick = (event) => {
-      const section = document.querySelector(link.getAttribute('href'));
-      if (!section) return;
-
-      event.preventDefault();
-      section.scrollIntoView({ block: 'center', behavior: 'smooth' });
-      history.pushState(null, '', link.getAttribute('href'));
-      setActive(section.id);
+    var onPointerDown = function() { lockSidebarAutoScroll(1800); };
+    var onMouseDown = function() { lockSidebarAutoScroll(1800); };
+    var onWheel = function() { lockSidebarAutoScroll(900); };
+    var onScroll = function() { requestSync(); };
+    var onResize = function() { requestSync(); };
+    var onHashChange = function() {
+      requestSync();
+      var activeLink = null;
+      for (var k = 0; k < links.length; k++) {
+        if (links[k].classList.contains('active')) {
+          activeLink = links[k];
+          break;
+        }
+      }
+      if (activeLink) lockSidebarAutoScroll(2000);
     };
 
-    link.addEventListener('click', onClick);
-    return () => link.removeEventListener('click', onClick);
+    sidebar.addEventListener('pointerdown', onPointerDown);
+    sidebar.addEventListener('mousedown', onMouseDown);
+    sidebar.addEventListener('wheel', onWheel);
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onResize);
+    window.addEventListener('hashchange', onHashChange);
+
+    var linkCleanups = links.map(function(link) {
+      var onClick = function(event) {
+        var section = document.querySelector(link.getAttribute('href'));
+        if (section) {
+          event.preventDefault();
+          lockSidebarAutoScroll(3000);
+          window.scrollTo({
+            top: section.offsetTop - 100,
+            behavior: 'smooth'
+          });
+          history.pushState(null, null, link.getAttribute('href'));
+          updateActiveSection();
+        }
+      };
+      link.addEventListener('click', onClick);
+      return function() { link.removeEventListener('click', onClick); };
+    });
+
+    docsSidebarState.cleanup = function() {
+      sidebar.removeEventListener('pointerdown', onPointerDown);
+      sidebar.removeEventListener('mousedown', onMouseDown);
+      sidebar.removeEventListener('wheel', onWheel);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('hashchange', onHashChange);
+      for (var l = 0; l < linkCleanups.length; l++) {
+        linkCleanups[l]();
+      }
+    };
+
+    updateActiveSection();
+  }
+
+  window.addEventListener('docs:ready', function() {
+    if (docsEnhancementState.cleanup) docsEnhancementState.cleanup();
+    if (docsSidebarState.cleanup) docsSidebarState.cleanup();
+    initCards();
+    initSidebar();
   });
-
-  sync();
-
-  docsSidebarState.cleanup = () => {
-    if (sidebarScrollFrame) {
-      cancelAnimationFrame(sidebarScrollFrame);
-      sidebarScrollFrame = null;
-    }
-
-    sidebar.removeEventListener('pointerdown', onPointerDown);
-    sidebar.removeEventListener('mousedown', onMouseDown);
-    sidebar.removeEventListener('wheel', onWheel);
-    window.removeEventListener('scroll', onScroll);
-    window.removeEventListener('resize', onResize);
-    window.removeEventListener('hashchange', onHashChange);
-    linkCleanups.forEach((cleanup) => cleanup());
-  };
-}
-
-(function bootSidebarLinks() {
-  window.addEventListener('docs:ready', initSidebarLinks);
 })();

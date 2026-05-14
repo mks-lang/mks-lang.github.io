@@ -1,9 +1,11 @@
 ;(function staggerExampleCards() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   var cards = document.querySelectorAll('.example-card');
-  cards.forEach(function(card, idx) {
-    card.style.animationDelay = (idx % 6) * 0.08 + 's';
-  });
+  for (var i = 0; i < cards.length; i++) {
+    (function(card, idx) {
+      card.style.animationDelay = (idx % 6) * 0.08 + 's';
+    })(cards[i], i);
+  }
 
   var count = document.querySelector('[data-example-count]');
   if (count) count.textContent = String(cards.length);
@@ -27,14 +29,15 @@
 
   function applyFilters() {
     var visibleCount = 0;
-    cards.forEach(function(card) {
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
       var kind = card.dataset.kind;
       var matchesKind = activeFilter === 'all' || kind === activeFilter;
       var matchesQuery = !query || cardText(card).indexOf(query) !== -1;
       var isVisible = matchesKind && matchesQuery;
       card.classList.toggle('hidden', !isVisible);
       if (isVisible) visibleCount++;
-    });
+    }
 
     var empty = document.querySelector('.examples-empty');
     if (empty) {
@@ -56,19 +59,22 @@
     }
   }
 
-  chips.forEach(function(chip) {
-    chip.addEventListener('click', function() {
-      chips.forEach(function(c) {
-        c.classList.remove('active');
-        c.setAttribute('aria-pressed', 'false');
-      });
-      chip.classList.add('active');
-      chip.setAttribute('aria-pressed', 'true');
+  for (var j = 0; j < chips.length; j++) {
+    (function(chip) {
+      chip.addEventListener('click', function() {
+        for (var k = 0; k < chips.length; k++) {
+          var c = chips[k];
+          c.classList.remove('active');
+          c.setAttribute('aria-pressed', 'false');
+        }
+        chip.classList.add('active');
+        chip.setAttribute('aria-pressed', 'true');
 
-      activeFilter = chip.dataset.filter;
-      applyFilters();
-    });
-  });
+        activeFilter = chip.dataset.filter;
+        applyFilters();
+      });
+    })(chips[j]);
+  }
 
   if (search) {
     search.addEventListener('input', function() {
@@ -80,10 +86,10 @@
 
 ;(function animateExamplesTerminal() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
-  const root = document.querySelector('[data-examples-terminal]');
+  var root = document.querySelector('[data-examples-terminal]');
   if (!root) return;
 
-  const lines = [
+  var lines = [
     '$ mks examples/showcase.mks',
     'loading std/math... ok',
     'binding watcher... ok',
@@ -93,7 +99,7 @@
     'done in 34ms'
   ];
 
-  let index = 0;
+  var index = 0;
 
   function colorize(line) {
     return line
@@ -103,15 +109,17 @@
   }
 
   function draw() {
-    const shown = lines.slice(0, index + 1)
-      .map((line) => `<div class="term-line">${colorize(line)}</div>`)
+    var shown = lines.slice(0, index + 1)
+      .map(function(line) {
+        return '<div class="term-line">' + colorize(line) + '</div>';
+      })
       .join('');
 
     root.innerHTML = shown;
     index++;
 
     if (index >= lines.length) {
-      setTimeout(() => {
+      setTimeout(function() {
         index = 0;
         draw();
       }, 1300);

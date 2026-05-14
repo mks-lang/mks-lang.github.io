@@ -1,21 +1,24 @@
-;(async function initDocsPage() {
-  const sidebar = document.querySelector('[data-docs-sidebar]');
-  const body = document.querySelector('[data-docs-body]');
+;(function initDocsPage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  var sidebar = document.querySelector('[data-docs-sidebar]');
+  var body = document.querySelector('[data-docs-body]');
   if (!sidebar || !body) return;
 
-  const defaultIcon = 'hgi-book-open-01';
+  var defaultIcon = 'hgi-book-open-01';
 
   function iconMarkup(name) {
-    const icon = name || defaultIcon;
-    return `<i class="hgi-stroke ${icon}" aria-hidden="true"></i>`;
+    var icon = name || defaultIcon;
+    return '<i class="hgi-stroke ' + icon + '" aria-hidden="true"></i>';
   }
 
   function unstableBadge() {
-    return `<span class="docs-status docs-status-unstable">${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</span>`;
+    var label = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('docs.unstable', 'Not-Stable') : 'Not-Stable';
+    return '<span class="docs-status docs-status-unstable">' + escapeHtml(label) + '</span>';
   }
 
   function newBadge() {
-    return `<span class="docs-status docs-status-new">${escapeHtml(window.MKSSiteI18n?.get('docs.new', 'New'))}</span>`;
+    var label = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('docs.new', 'New') : 'New';
+    return '<span class="docs-status docs-status-new">' + escapeHtml(label) + '</span>';
   }
 
   function statusBadges(section) {
@@ -25,63 +28,67 @@
     ].join('');
   }
 
-  const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
+  function codeText(value) {
+    return Array.isArray(value) ? value.join('\n') : String(value || '');
+  }
 
-  function makeCodeBlock(code, withCopy = true) {
-    const block = document.createElement('div');
+  function makeCodeBlock(code, withCopy) {
+    var isWithCopy = withCopy === undefined ? true : withCopy;
+    var block = document.createElement('div');
     block.className = 'code-block';
     block.dataset.lang = 'MKS';
 
-    if (withCopy) {
-      const copy = document.createElement('button');
+    if (isWithCopy) {
+      var copy = document.createElement('button');
       copy.className = 'copy-btn';
       copy.type = 'button';
-      copy.textContent = window.MKSSiteI18n?.get('copy.default', 'Copy');
-      block.append(copy);
+      var copyLabel = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('copy.default', 'Copy') : 'Copy';
+      copy.textContent = copyLabel;
+      block.appendChild(copy);
     }
 
-    const pre = document.createElement('pre');
-    const codeEl = document.createElement('code');
+    var pre = document.createElement('pre');
+    var codeEl = document.createElement('code');
     codeEl.textContent = codeText(code);
-    pre.append(codeEl);
-    block.append(pre);
+    pre.appendChild(codeEl);
+    block.appendChild(pre);
 
     return block;
   }
 
   function appendRichContent(parent, section) {
     if (Array.isArray(section.points) && section.points.length) {
-      const list = document.createElement('ul');
+      var list = document.createElement('ul');
       list.className = 'docs-points';
-      section.points.forEach((item) => {
-        const point = document.createElement('li');
+      section.points.forEach(function(item) {
+        var point = document.createElement('li');
         point.innerHTML = item;
-        list.append(point);
+        list.appendChild(point);
       });
-      parent.append(list);
+      parent.appendChild(list);
     }
 
     if (section.warning) {
-      const warning = document.createElement('p');
+      var warning = document.createElement('p');
       warning.className = 'docs-callout warning';
       warning.innerHTML = section.warning;
-      parent.append(warning);
+      parent.appendChild(warning);
     }
 
     if (section.source) {
-      const source = document.createElement('p');
+      var source = document.createElement('p');
       source.className = 'docs-source';
       source.innerHTML = section.source;
-      parent.append(source);
+      parent.appendChild(source);
     }
   }
 
   function renderHero(hero) {
-    const header = document.createElement('header');
+    var header = document.createElement('header');
     header.className = 'panel glass glimmer docs-hero';
     header.id = hero.id || 'overview';
 
-    const scene = document.createElement('div');
+    var scene = document.createElement('div');
     scene.className = 'docs-hero-scene';
     scene.setAttribute('aria-hidden', 'true');
     scene.innerHTML = [
@@ -90,32 +97,32 @@
       '<b></b><b></b>'
     ].join('');
 
-    const eyebrow = document.createElement('p');
+    var eyebrow = document.createElement('p');
     eyebrow.className = 'eyebrow';
     eyebrow.textContent = hero.eyebrow || 'Docs';
 
-    const meta = document.createElement('div');
+    var meta = document.createElement('div');
     meta.className = 'docs-hero-meta';
-    meta.innerHTML = `${iconMarkup(hero.icon)}<span>${hero.meta || 'Reference based on current interpreter branch'}</span>`;
+    meta.innerHTML = iconMarkup(hero.icon) + '<span>' + (hero.meta || 'Reference based on current interpreter branch') + '</span>';
 
-    const title = document.createElement('h1');
+    var title = document.createElement('h1');
     title.textContent = hero.title || 'Docs';
 
-    const description = document.createElement('p');
+    var description = document.createElement('p');
     description.className = 'sub';
     description.textContent = hero.description || '';
 
-    const pills = document.createElement('div');
+    var pills = document.createElement('div');
     pills.className = 'docs-hero-pills';
-    (hero.tags || []).forEach((item) => {
-      const tag = document.createElement('span');
-      const data = typeof item === 'string' ? { label: item } : item;
+    (hero.tags || []).forEach(function(item) {
+      var tag = document.createElement('span');
+      var data = typeof item === 'string' ? { label: item } : item;
       tag.className = data.live ? 'tag live' : 'tag';
       tag.textContent = data.label;
-      pills.append(tag);
+      pills.appendChild(tag);
     });
 
-    const terminal = document.createElement('div');
+    var terminal = document.createElement('div');
     terminal.className = 'docs-mini-terminal';
     terminal.innerHTML = [
       '<div><span>$</span> mks docs --open</div>',
@@ -123,242 +130,272 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    header.appendChild(scene);
+    header.appendChild(eyebrow);
+    header.appendChild(meta);
+    header.appendChild(title);
+    header.appendChild(description);
+    header.appendChild(pills);
+    header.appendChild(terminal);
     return header;
   }
 
   function renderTabbedSection(section) {
-    const el = document.createElement('section');
+    var el = document.createElement('section');
     el.className = 'panel glimmer';
     el.id = section.id;
     el.dataset.docsCard = '';
 
-    const title = document.createElement('div');
+    var title = document.createElement('div');
     title.className = 'docs-section-head';
-    title.innerHTML = `
-      <div class="docs-section-title">
-        ${iconMarkup(section.icon)}
-        <h2>${section.title}</h2>
-      </div>
-      ${statusBadges(section)}
-    `;
+    title.innerHTML = [
+      '<div class="docs-section-title">',
+        iconMarkup(section.icon),
+        '<h2>' + section.title + '</h2>',
+      '</div>',
+      statusBadges(section)
+    ].join('');
 
-    const description = document.createElement('p');
+    var description = document.createElement('p');
     description.className = 'sub';
     description.innerHTML = section.description || '';
 
-    const tabs = document.createElement('div');
+    var tabs = document.createElement('div');
     tabs.className = 'tabs';
 
-    const panes = document.createDocumentFragment();
-    section.tabs.forEach((tab, index) => {
-      const button = document.createElement('button');
+    var panes = document.createDocumentFragment();
+    section.tabs.forEach(function(tab, index) {
+      var button = document.createElement('button');
       button.className = index === 0 ? 'tab active' : 'tab';
       button.type = 'button';
       button.dataset.tab = tab.id;
       button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
       button.textContent = tab.label;
-      tabs.append(button);
+      tabs.appendChild(button);
 
-      const pane = document.createElement('div');
+      var pane = document.createElement('div');
       pane.className = index === 0 ? 'tab-pane active' : 'tab-pane';
       pane.dataset.tabPane = tab.id;
       pane.hidden = index !== 0;
-      const codeBlock = makeCodeBlock(tab.code);
+      var codeBlock = makeCodeBlock(tab.code);
       codeBlock.dataset.lang = tab.label || tab.id || 'code';
-      pane.append(codeBlock);
+      pane.appendChild(codeBlock);
 
       if (Array.isArray(tab.steps) && tab.steps.length) {
-        const steps = document.createElement('ol');
+        var steps = document.createElement('ol');
         steps.className = 'docs-steps';
-        tab.steps.forEach((item) => {
-          const step = document.createElement('li');
+        tab.steps.forEach(function(item) {
+          var step = document.createElement('li');
           step.innerHTML = item;
-          steps.append(step);
+          steps.appendChild(step);
         });
-        pane.append(steps);
+        pane.appendChild(steps);
       }
 
       if (tab.note) {
-        const note = document.createElement('p');
+        var note = document.createElement('p');
         note.className = 'docs-callout';
         note.innerHTML = tab.note;
-        pane.append(note);
+        pane.appendChild(note);
       }
 
-      panes.append(pane);
+      panes.appendChild(pane);
     });
 
-    el.append(title, description);
+    el.appendChild(title);
+    el.appendChild(description);
     appendRichContent(el, section);
-    el.append(tabs, panes);
+    el.appendChild(tabs);
+    el.appendChild(panes);
     return el;
   }
 
   function renderPlainSection(section) {
     if (section.python) {
-      return renderTabbedSection({
-        ...section,
-        tabs: [
-          {
-            id: 'mks',
-            label: section.mksLabel || 'MKS',
-            code: section.code,
-            note: section.note,
-            steps: section.steps,
-          },
-          {
-            id: 'py',
-            label: section.pythonLabel || 'Python',
-            code: section.python,
-          },
-        ],
-      });
+      var tabs = [
+        {
+          id: 'mks',
+          label: section.mksLabel || 'MKS',
+          code: section.code,
+          note: section.note,
+          steps: section.steps,
+        },
+        {
+          id: 'py',
+          label: section.pythonLabel || 'Python',
+          code: section.python,
+        }
+      ];
+      var tabbedData = {};
+      for (var key in section) {
+        if (section.hasOwnProperty(key)) tabbedData[key] = section[key];
+      }
+      tabbedData.tabs = tabs;
+      return renderTabbedSection(tabbedData);
     }
 
-    const el = document.createElement('section');
+    var el = document.createElement('section');
     el.className = 'panel glimmer';
     el.id = section.id;
     el.dataset.docsCard = '';
 
-    const title = document.createElement('div');
+    var title = document.createElement('div');
     title.className = 'docs-section-head';
-    title.innerHTML = `
-      <div class="docs-section-title">
-        ${iconMarkup(section.icon)}
-        <h2>${section.title}</h2>
-      </div>
-      ${statusBadges(section)}
-    `;
+    title.innerHTML = [
+      '<div class="docs-section-title">',
+        iconMarkup(section.icon),
+        '<h2>' + section.title + '</h2>',
+      '</div>',
+      statusBadges(section)
+    ].join('');
 
-    const description = document.createElement('p');
+    var description = document.createElement('p');
     description.className = 'sub';
     description.innerHTML = section.description || '';
 
-    el.append(title, description);
+    el.appendChild(title);
+    el.appendChild(description);
     appendRichContent(el, section);
-    if (section.code) el.append(makeCodeBlock(section.code));
+    if (section.code) el.appendChild(makeCodeBlock(section.code));
 
     return el;
   }
 
   function renderTabs() {
-    document.querySelectorAll('.tabs').forEach((tabset) => {
-      const tabs = Array.from(tabset.querySelectorAll('.tab'));
-      const panel = tabset.closest('.panel');
-      if (!panel || !tabs.length) return;
+    var tabsets = document.querySelectorAll('.tabs');
+    for (var i = 0; i < tabsets.length; i++) {
+      (function() {
+        var tabset = tabsets[i];
+        var tabs = Array.prototype.slice.call(tabset.querySelectorAll('.tab'));
+        var panel = tabset.closest('.panel');
+        if (!panel || !tabs.length) return;
 
-      const panes = Array.from(panel.querySelectorAll('.tab-pane'));
-      if (!panes.length) return;
+        var panes = Array.prototype.slice.call(panel.querySelectorAll('.tab-pane'));
+        if (!panes.length) return;
 
-      function activate(name) {
-        tabs.forEach((tab) => {
-          const isActive = tab.dataset.tab === name;
-          tab.classList.toggle('active', isActive);
-          tab.setAttribute('aria-selected', String(isActive));
+        function activate(name) {
+          tabs.forEach(function(tab) {
+            var isActive = tab.dataset.tab === name;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-selected', String(isActive));
+          });
+
+          panes.forEach(function(pane) {
+            var isActive = pane.dataset.tabPane === name;
+            pane.classList.toggle('active', isActive);
+            pane.hidden = !isActive;
+          });
+        }
+
+        var activeTab = tabset.querySelector('.tab.active');
+        var initial = (activeTab && activeTab.dataset.tab) || (tabs[0] && tabs[0].dataset.tab);
+        if (initial) activate(initial);
+
+        tabs.forEach(function(tab) {
+          tab.addEventListener('click', function() { activate(tab.dataset.tab); });
         });
-
-        panes.forEach((pane) => {
-          const isActive = pane.dataset.tabPane === name;
-          pane.classList.toggle('active', isActive);
-          pane.hidden = !isActive;
-        });
-      }
-
-      const initial = tabset.querySelector('.tab.active')?.dataset.tab || tabs[0]?.dataset.tab;
-      if (initial) activate(initial);
-
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => activate(tab.dataset.tab));
-      });
-    });
-  }
-
-  async function render() {
-    const lang = window.MKSSiteI18n?.getLanguage?.() || 'en';
-    const path = lang === 'ru' ? 'assets/data/docs.ru.json?v=20260426-docs-ru-1' : 'assets/data/docs.json?v=20260423-docs-data-1';
-    const response = await fetch(path, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Docs data request failed: ${response.status}`);
-
-    const docs = await response.json();
-    const sections = docs.sections || [];
-
-    sidebar.replaceChildren();
-    body.replaceChildren();
-
-    const overview = document.createElement('a');
-    overview.href = `#${docs.hero?.id || 'overview'}`;
-    overview.innerHTML = `${iconMarkup(docs.hero?.icon)}<span>${escapeHtml(window.MKSSiteI18n?.get('docs.overview', 'Overview'))}</span>`;
-    sidebar.append(overview);
-
-    const sectionById = new Map(sections.map((section) => [section.id, section]));
-    const navigation = Array.isArray(docs.navigation) && docs.navigation.length
-      ? docs.navigation
-      : [{ title: '', sections: sections.map((section) => section.id) }];
-
-    navigation.forEach((group) => {
-      const groupSections = (group.sections || [])
-        .map((id) => sectionById.get(id))
-        .filter(Boolean);
-      if (!groupSections.length) return;
-
-      if (group.title) {
-        const heading = document.createElement('p');
-        heading.className = 'sidebar-heading';
-        heading.textContent = group.title;
-        sidebar.append(heading);
-      }
-
-      groupSections.forEach((section) => {
-        const link = document.createElement('a');
-        link.href = `#${section.id}`;
-        const sidebarBadge = section.isNew
-          ? `<em class="sidebar-badge sidebar-badge-new">${escapeHtml(window.MKSSiteI18n?.get('docs.new', 'New'))}</em>`
-          : section.unstable
-            ? `<em>${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</em>`
-            : '';
-        link.innerHTML = `${iconMarkup(section.icon)}<span>${section.nav || section.title}</span>${sidebarBadge}`;
-        sidebar.append(link);
-      });
-    });
-
-    const alertBanner = document.createElement('div');
-    alertBanner.className = 'docs-warning-banner';
-    alertBanner.innerHTML = `
-      <i class="hgi-stroke hgi-alert-01" aria-hidden="true"></i>
-      <div>
-        <strong>${escapeHtml(window.MKSSiteI18n?.get('docs.warning.title', 'Note'))}</strong>
-        ${escapeHtml(window.MKSSiteI18n?.get('docs.warning.text', 'Some examples currently may be erroneous and non-working, this will be fixed soon.'))}
-      </div>
-    `;
-    body.append(alertBanner);
-
-    body.append(renderHero(docs.hero || {}));
-    sections.forEach((section) => {
-      body.append(section.tabs ? renderTabbedSection(section) : renderPlainSection(section));
-    });
-
-    renderTabs();
-    window.dispatchEvent(new CustomEvent('docs:ready'));
-  }
-
-  try {
-    await render();
-  } catch (error) {
-    body.innerHTML = `<section class="panel glimmer docs-loading">${escapeHtml(window.MKSSiteI18n?.get('docs.failed', 'Docs failed to load.'))}</section>`;
-    console.error(error);
-  }
-
-  document.addEventListener('mks:language-change', async () => {
-    try {
-      await render();
-    } catch (error) {
-      console.error('Docs rerender error:', error);
+      })();
     }
+  }
+
+  function render() {
+    var lang = (window.MKSSiteI18n && window.MKSSiteI18n.getLanguage && window.MKSSiteI18n.getLanguage()) || 'en';
+    var path = lang === 'ru' ? 'assets/data/docs.ru.json?v=20260426-docs-ru-1' : 'assets/data/docs.json?v=20260423-docs-data-1';
+
+    fetch(path, { cache: 'no-store' })
+      .then(function(response) {
+        if (!response.ok) throw new Error('Docs data request failed: ' + response.status);
+        return response.json();
+      })
+      .then(function(docs) {
+        var sections = docs.sections || [];
+
+        while (sidebar.firstChild) sidebar.removeChild(sidebar.firstChild);
+        while (body.firstChild) body.removeChild(body.firstChild);
+
+        var overview = document.createElement('a');
+        var heroData = docs.hero || {};
+        overview.href = '#' + (heroData.id || 'overview');
+        var overviewLabel = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('docs.overview', 'Overview') : 'Overview';
+        overview.innerHTML = iconMarkup(heroData.icon) + '<span>' + escapeHtml(overviewLabel) + '</span>';
+        sidebar.appendChild(overview);
+
+        var sectionById = {};
+        sections.forEach(function(section) {
+          sectionById[section.id] = section;
+        });
+
+        var navigation = Array.isArray(docs.navigation) && docs.navigation.length
+          ? docs.navigation
+          : [{ title: '', sections: sections.map(function(section) { return section.id; }) }];
+
+        navigation.forEach(function(group) {
+          var groupSections = (group.sections || [])
+            .map(function(id) { return sectionById[id]; })
+            .filter(Boolean);
+          if (!groupSections.length) return;
+
+          if (group.title) {
+            var heading = document.createElement('p');
+            heading.className = 'sidebar-heading';
+            heading.textContent = group.title;
+            sidebar.appendChild(heading);
+          }
+
+          groupSections.forEach(function(section) {
+            var link = document.createElement('a');
+            link.href = '#' + section.id;
+            var newLabel = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('docs.new', 'New') : 'New';
+            var unstableLabel = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('docs.unstable', 'Not-Stable') : 'Not-Stable';
+            var sidebarBadge = section.isNew
+              ? '<em class="sidebar-badge sidebar-badge-new">' + escapeHtml(newLabel) + '</em>'
+              : section.unstable
+                ? '<em>' + escapeHtml(unstableLabel) + '</em>'
+                : '';
+            link.innerHTML = iconMarkup(section.icon) + '<span>' + (section.nav || section.title) + '</span>' + sidebarBadge;
+            sidebar.appendChild(link);
+          });
+        });
+
+        var alertBanner = document.createElement('div');
+        alertBanner.className = 'docs-warning-banner';
+        var warningTitle = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('docs.warning.title', 'Note') : 'Note';
+        var warningText = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('docs.warning.text', 'Some examples currently may be erroneous and non-working, this will be fixed soon.') : 'Some examples currently may be erroneous and non-working, this will be fixed soon.';
+        alertBanner.innerHTML = [
+          '<i class="hgi-stroke hgi-alert-01" aria-hidden="true"></i>',
+          '<div>',
+            '<strong>' + escapeHtml(warningTitle) + '</strong>',
+            ' ' + escapeHtml(warningText),
+          '</div>'
+        ].join('');
+        body.appendChild(alertBanner);
+
+        body.appendChild(renderHero(docs.hero || {}));
+        sections.forEach(function(section) {
+          body.appendChild(section.tabs ? renderTabbedSection(section) : renderPlainSection(section));
+        });
+
+        renderTabs();
+        if (typeof CustomEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('docs:ready'));
+        }
+      })
+      .catch(function(error) {
+        var failedLabel = (window.MKSSiteI18n && window.MKSSiteI18n.get) ? window.MKSSiteI18n.get('docs.failed', 'Docs failed to load.') : 'Docs failed to load.';
+        body.innerHTML = '<section class="panel glimmer docs-loading">' + escapeHtml(failedLabel) + '</section>';
+        console.error(error);
+      });
+  }
+
+  render();
+
+  document.addEventListener('mks:language-change', function() {
+    render();
   });
 
   function escapeHtml(str) {
-    return String(str ?? '')
+    var s = (str === null || str === undefined) ? '' : String(str);
+    return s
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
