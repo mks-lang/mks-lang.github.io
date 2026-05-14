@@ -1,4 +1,4 @@
-(async function initRoadmapPage() {
+;(async function initRoadmapPage() {
   const root = document.getElementById('roadmap-root');
   if (!root) return;
 
@@ -283,8 +283,8 @@ function initRoadmapTerminal(lines) {
 
   function colorize(line) {
     return escapeHtml(line)
-      .replaceAll('$', '<span class="prompt">$</span>')
-      .replaceAll('active', '<span class="green">active</span>')
+      .replace(/\$/g, '<span class="prompt">$</span>')
+      .replace(/active/g, '<span class="green">active</span>')
       .replace('in development', '<span class="accent">in development</span>');
   }
 
@@ -386,9 +386,9 @@ function chipClass(variant) {
 
 function escapeHtml(str) {
   return String(str ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
