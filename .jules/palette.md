@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-14 - Consistent Visibility Toggling & Environment Constraints
+**Learning:** Mixing CSS-based visibility (using a `.hidden` class) and native attribute-based visibility (`hidden` attribute) can lead to conflicts if not handled carefully. Additionally, environment-specific methods like `String.prototype.replaceAll` can break CI/build pipelines in certain environments like Cloudflare Workers. Using `aria-live="polite"` on empty state containers is essential for ensuring dynamic result changes are communicated to screen reader users.
+**Action:** Favor the native `hidden` attribute for simple JS-driven visibility toggles and always include `aria-live` on dynamic state containers. Use global regex for string replacement to maintain broad compatibility.

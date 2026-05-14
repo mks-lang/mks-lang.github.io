@@ -1,12 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   initHeroTerminal();
 });
 
 function initHeroTerminal() {
-  const term = document.querySelector('[data-terminal]');
+  var term = document.querySelector('[data-terminal]');
   if (!term) return;
 
-  const lines = [
+  var lines = [
     'mks run observe.mks',
     'load module ... ok',
     'attach watch x ... attached',
@@ -16,16 +16,16 @@ function initHeroTerminal() {
     'exit in 38ms'
   ];
 
-  let index = 0;
+  var index = 0;
 
   function render() {
-    const previous = lines
+    var previous = lines
       .slice(0, index)
-      .map((line) => formatLine(line))
+      .map(function(line) { return formatLine(line); })
       .join('');
 
-    const current = index < lines.length
-      ? `<div class="term-line">${formatLine(lines[index], true)}</div>`
+    var current = index < lines.length
+      ? '<div class="term-line">' + formatLine(lines[index], true) + '</div>'
       : '';
 
     term.innerHTML = previous + current;
@@ -33,7 +33,7 @@ function initHeroTerminal() {
     index += 1;
 
     if (index > lines.length) {
-      setTimeout(() => {
+      setTimeout(function() {
         index = 0;
         render();
       }, 1200);
@@ -46,8 +46,8 @@ function initHeroTerminal() {
   render();
 }
 
-function formatLine(text, withCursor = false) {
-  const escaped = escapeHtml(text)
+function formatLine(text, withCursor) {
+  var escaped = escapeHtml(text)
     .replace(/^mks run/, '<span class="prompt">$</span> mks run')
     .replace(/\bok\b/g, '<span class="green">ok</span>')
     .replace(/attached/g, '<span class="accent">attached</span>')
@@ -55,12 +55,13 @@ function formatLine(text, withCursor = false) {
     .replace(/"x changed"/g, '<span class="accent">"x changed"</span>')
     .replace(/"closing"/g, '<span class="accent">"closing"</span>');
 
-  return `${escaped}${withCursor ? '<span class="cursor"></span>' : ''}`;
+  return escaped + (withCursor ? '<span class="cursor"></span>' : '');
 }
 
 function escapeHtml(str) {
-  return str
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+  var s = str === null || str === undefined ? '' : String(str);
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
