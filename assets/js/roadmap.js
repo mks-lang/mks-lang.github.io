@@ -1,56 +1,53 @@
-;(async function initRoadmapPage() {
+;(function initRoadmapPage() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const root = document.getElementById('roadmap-root');
   if (!root) return;
 
-  async function render() {
+  function render() {
     const lang = window.MKSSiteI18n?.getLanguage?.() || 'en';
     const path = lang === 'ru' ? 'assets/data/roadmap.ru.json?v=20260425-i18n-1' : 'assets/data/roadmap.json?v=20260416-1';
-    const response = await fetch(path, { cache: 'no-store' });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch roadmap.json: ${response.status} ${response.statusText}`);
-    }
+    fetch(path, { cache: 'no-store' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch roadmap.json: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        root.innerHTML = `
+          ${renderHero(data.hero, data.terminal, data.metrics)}
+          ${renderVersionPath(data.versionPath)}
+          ${renderRail(data.rail)}
+          ${renderSections(data.sections)}
+          ${renderTimeline(data.timeline)}
+          ${renderPrinciple(data.principle)}
+          <div class="roadmap-footer-status">
+            <div class="reworking-text">${escapeHtml(window.MKSSiteI18n?.get('roadmap.reworking', 'Reworking...'))}</div>
+            <div class="soft-spinner"></div>
+          </div>
+        `;
 
-    const data = await response.json();
-
-    root.innerHTML = `
-      ${renderHero(data.hero, data.terminal, data.metrics)}
-      ${renderVersionPath(data.versionPath)}
-      ${renderRail(data.rail)}
-      ${renderSections(data.sections)}
-      ${renderTimeline(data.timeline)}
-      ${renderPrinciple(data.principle)}
-      <div class="roadmap-footer-status">
-        <div class="reworking-text">${escapeHtml(window.MKSSiteI18n?.get('roadmap.reworking', 'Reworking...'))}</div>
-        <div class="soft-spinner"></div>
-      </div>
-    `;
-
-    initRoadmapTerminal(data.terminal?.lines || []);
-    animateRoadmapBars();
-    initTiltCards();
-    initRoadmapScrollFx();
+        initRoadmapTerminal(data.terminal?.lines || []);
+        animateRoadmapBars();
+        initTiltCards();
+        initRoadmapScrollFx();
+      })
+      .catch((err) => {
+        console.error('Roadmap load error:', err);
+        root.innerHTML = `
+          <section class="section panel glass">
+            <p class="eyebrow">Roadmap</p>
+            <h1>${escapeHtml(window.MKSSiteI18n?.get('roadmap.failed', 'Failed to load roadmap'))}</h1>
+            <p class="sub">${escapeHtml(err.message)}</p>
+          </section>
+        `;
+      });
   }
 
-  try {
-    await render();
-  } catch (err) {
-    console.error('Roadmap load error:', err);
-    root.innerHTML = `
-      <section class="section panel glass">
-        <p class="eyebrow">Roadmap</p>
-        <h1>${escapeHtml(window.MKSSiteI18n?.get('roadmap.failed', 'Failed to load roadmap'))}</h1>
-        <p class="sub">${escapeHtml(err.message)}</p>
-      </section>
-    `;
-  }
+  render();
 
-  document.addEventListener('mks:language-change', async () => {
-    try {
-      await render();
-    } catch (err) {
-      console.error('Roadmap rerender error:', err);
-    }
+  document.addEventListener('mks:language-change', () => {
+    render();
   });
 })();
 

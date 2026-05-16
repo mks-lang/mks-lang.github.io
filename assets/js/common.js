@@ -1,4 +1,4 @@
-;(async function initSiteLanguage() {
+;(function initSiteLanguage() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const LANG_KEY = 'mks.site.lang';
   const defaultLang = document.documentElement.getAttribute('lang') || 'en';
@@ -85,15 +85,20 @@
 
   let dictionary = { ui: {}, pages: {} };
 
-  try {
-    const response = await fetch('assets/data/site.json?v=20260426-i18n-fix-1', { cache: 'no-store' });
-    if (response.ok) dictionary = await response.json();
-  } catch (error) {
-    console.error('Failed to load site copy:', error);
+  function load() {
+    fetch('assets/data/site.json?v=20260426-i18n-fix-1', { cache: 'no-store' })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (data) dictionary = data;
+        captureBaseline(dictionary.pages?.[page]?.en?.entries || []);
+        captureBaseline(dictionary.pages?.[page]?.ru?.entries || []);
+        applyLanguage(readLang());
+      })
+      .catch((error) => {
+        console.error('Failed to load site copy:', error);
+        applyLanguage(readLang());
+      });
   }
-
-  captureBaseline(dictionary.pages?.[page]?.en?.entries || []);
-  captureBaseline(dictionary.pages?.[page]?.ru?.entries || []);
 
   function applyLanguage(lang) {
     const nextLang = dictionary.ui?.[lang] ? lang : 'en';
@@ -128,7 +133,7 @@
     },
   };
 
-  applyLanguage(readLang());
+  load();
 })();
 
 ;(function initActiveNav() {
@@ -144,7 +149,7 @@
 
 ;(function bindCopyButtons() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
-  document.addEventListener('click', async (event) => {
+  document.addEventListener('click', (event) => {
     const btn = event.target.closest('.copy-btn');
     if (!btn) return;
 
@@ -152,23 +157,30 @@
     if (!code) return;
     const text = code.innerText.trim();
 
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
+    const done = () => {
+      const copiedLabel = window.MKSSiteI18n?.get('copy.copied', 'Copied');
+      const copyLabel = window.MKSSiteI18n?.get('copy.default', 'Copy');
+      btn.textContent = copiedLabel;
+      setTimeout(() => {
+        btn.textContent = copyLabel;
+      }, 1200);
+    };
+
+    const fallback = () => {
       const ta = document.createElement('textarea');
       ta.value = text;
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
       ta.remove();
-    }
+      done();
+    };
 
-    const copiedLabel = window.MKSSiteI18n?.get('copy.copied', 'Copied');
-    const copyLabel = window.MKSSiteI18n?.get('copy.default', 'Copy');
-    btn.textContent = copiedLabel;
-    setTimeout(() => {
-      btn.textContent = copyLabel;
-    }, 1200);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(fallback);
+    } else {
+      fallback();
+    }
   });
 })();
 
