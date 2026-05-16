@@ -269,3 +269,21 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initCopyLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.docs-copy-link');
+    if (!btn || !btn.dataset.id) return;
+
+    const url = new URL(window.location.href);
+    url.hash = btn.dataset.id;
+    await navigator.clipboard.writeText(url.toString());
+
+    const icon = btn.querySelector('i');
+    if (!icon) return;
+    const old = icon.className;
+    icon.className = 'hgi-stroke hgi-checkmark-circle-02';
+    setTimeout(() => icon.className = old, 1500);
+  });
+})();
