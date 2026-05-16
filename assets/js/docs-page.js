@@ -1,4 +1,5 @@
-(async function initDocsPage() {
+;(function initDocsPage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const sidebar = document.querySelector('[data-docs-sidebar]');
   const body = document.querySelector('[data-docs-body]');
   if (!sidebar || !body) return;
@@ -139,6 +140,9 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="Copy link to this section">
+          <i class="hgi-stroke hgi-link-03" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -227,6 +231,9 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="Copy link to this section">
+          <i class="hgi-stroke hgi-link-03" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -274,95 +281,93 @@
     });
   }
 
-  async function render() {
+  function render() {
     const lang = window.MKSSiteI18n?.getLanguage?.() || 'en';
     const path = lang === 'ru' ? 'assets/data/docs.ru.json?v=20260426-docs-ru-1' : 'assets/data/docs.json?v=20260423-docs-data-1';
-    const response = await fetch(path, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Docs data request failed: ${response.status}`);
+    fetch(path, { cache: 'no-store' })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Docs data request failed: ${response.status}`);
+        return response.json();
+      })
+      .then((docs) => {
+        const sections = docs.sections || [];
 
-    const docs = await response.json();
-    const sections = docs.sections || [];
+        sidebar.replaceChildren();
+        body.replaceChildren();
 
-    sidebar.replaceChildren();
-    body.replaceChildren();
+        const overview = document.createElement('a');
+        overview.href = `#${docs.hero?.id || 'overview'}`;
+        overview.innerHTML = `${iconMarkup(docs.hero?.icon)}<span>${escapeHtml(window.MKSSiteI18n?.get('docs.overview', 'Overview'))}</span>`;
+        sidebar.append(overview);
 
-    const overview = document.createElement('a');
-    overview.href = `#${docs.hero?.id || 'overview'}`;
-    overview.innerHTML = `${iconMarkup(docs.hero?.icon)}<span>${escapeHtml(window.MKSSiteI18n?.get('docs.overview', 'Overview'))}</span>`;
-    sidebar.append(overview);
+        const sectionById = new Map(sections.map((section) => [section.id, section]));
+        const navigation = Array.isArray(docs.navigation) && docs.navigation.length
+          ? docs.navigation
+          : [{ title: '', sections: sections.map((section) => section.id) }];
 
-    const sectionById = new Map(sections.map((section) => [section.id, section]));
-    const navigation = Array.isArray(docs.navigation) && docs.navigation.length
-      ? docs.navigation
-      : [{ title: '', sections: sections.map((section) => section.id) }];
+        navigation.forEach((group) => {
+          const groupSections = (group.sections || [])
+            .map((id) => sectionById.get(id))
+            .filter(Boolean);
+          if (!groupSections.length) return;
 
-    navigation.forEach((group) => {
-      const groupSections = (group.sections || [])
-        .map((id) => sectionById.get(id))
-        .filter(Boolean);
-      if (!groupSections.length) return;
+          if (group.title) {
+            const heading = document.createElement('p');
+            heading.className = 'sidebar-heading';
+            heading.textContent = group.title;
+            sidebar.append(heading);
+          }
 
-      if (group.title) {
-        const heading = document.createElement('p');
-        heading.className = 'sidebar-heading';
-        heading.textContent = group.title;
-        sidebar.append(heading);
-      }
+          groupSections.forEach((section) => {
+            const link = document.createElement('a');
+            link.href = `#${section.id}`;
+            const sidebarBadge = section.isNew
+              ? `<em class="sidebar-badge sidebar-badge-new">${escapeHtml(window.MKSSiteI18n?.get('docs.new', 'New'))}</em>`
+              : section.unstable
+                ? `<em>${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</em>`
+                : '';
+            link.innerHTML = `${iconMarkup(section.icon)}<span>${section.nav || section.title}</span>${sidebarBadge}`;
+            sidebar.append(link);
+          });
+        });
 
-      groupSections.forEach((section) => {
-        const link = document.createElement('a');
-        link.href = `#${section.id}`;
-        const sidebarBadge = section.isNew
-          ? `<em class="sidebar-badge sidebar-badge-new">${escapeHtml(window.MKSSiteI18n?.get('docs.new', 'New'))}</em>`
-          : section.unstable
-            ? `<em>${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</em>`
-            : '';
-        link.innerHTML = `${iconMarkup(section.icon)}<span>${section.nav || section.title}</span>${sidebarBadge}`;
-        sidebar.append(link);
+        const alertBanner = document.createElement('div');
+        alertBanner.className = 'docs-warning-banner';
+        alertBanner.innerHTML = `
+          <i class="hgi-stroke hgi-alert-01" aria-hidden="true"></i>
+          <div>
+            <strong>${escapeHtml(window.MKSSiteI18n?.get('docs.warning.title', 'Note'))}</strong>
+            ${escapeHtml(window.MKSSiteI18n?.get('docs.warning.text', 'Some examples currently may be erroneous and non-working, this will be fixed soon.'))}
+          </div>
+        `;
+        body.append(alertBanner);
+
+        body.append(renderHero(docs.hero || {}));
+        sections.forEach((section) => {
+          body.append(section.tabs ? renderTabbedSection(section) : renderPlainSection(section));
+        });
+
+        renderTabs();
+        window.dispatchEvent(new CustomEvent('docs:ready'));
+      })
+      .catch((error) => {
+        body.innerHTML = `<section class="panel glimmer docs-loading">${escapeHtml(window.MKSSiteI18n?.get('docs.failed', 'Docs failed to load.'))}</section>`;
+        console.error(error);
       });
-    });
-
-    const alertBanner = document.createElement('div');
-    alertBanner.className = 'docs-warning-banner';
-    alertBanner.innerHTML = `
-      <i class="hgi-stroke hgi-alert-01" aria-hidden="true"></i>
-      <div>
-        <strong>${escapeHtml(window.MKSSiteI18n?.get('docs.warning.title', 'Note'))}</strong>
-        ${escapeHtml(window.MKSSiteI18n?.get('docs.warning.text', 'Some examples currently may be erroneous and non-working, this will be fixed soon.'))}
-      </div>
-    `;
-    body.append(alertBanner);
-
-    body.append(renderHero(docs.hero || {}));
-    sections.forEach((section) => {
-      body.append(section.tabs ? renderTabbedSection(section) : renderPlainSection(section));
-    });
-
-    renderTabs();
-    window.dispatchEvent(new CustomEvent('docs:ready'));
   }
 
-  try {
-    await render();
-  } catch (error) {
-    body.innerHTML = `<section class="panel glimmer docs-loading">${escapeHtml(window.MKSSiteI18n?.get('docs.failed', 'Docs failed to load.'))}</section>`;
-    console.error(error);
-  }
+  render();
 
-  document.addEventListener('mks:language-change', async () => {
-    try {
-      await render();
-    } catch (error) {
-      console.error('Docs rerender error:', error);
-    }
+  document.addEventListener('mks:language-change', () => {
+    render();
   });
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();

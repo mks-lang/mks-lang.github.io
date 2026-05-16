@@ -1,48 +1,61 @@
-;(async function initChangelogPage() {
+;(function initChangelogPage() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const root = document.getElementById('changelog-root');
   if (!root) return;
 
-  async function render() {
+  function render() {
     const lang = window.MKSSiteI18n?.getLanguage?.() || 'en';
     const path = lang === 'ru' ? 'assets/data/changelog.ru.json?v=20260425-i18n-1' : 'assets/data/changelog.json?v=20260423-1';
-    const response = await fetch(path, { cache: 'no-store' });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch changelog.json: ${response.status} ${response.statusText}`);
-    }
+    fetch(path, { cache: 'no-store' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch changelog.json: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        root.innerHTML = [
+          renderHero(data.hero, data.stats),
+          renderFilters(data.releases),
+          renderReleases(data.releases)
+        ].join('');
 
-    const data = await response.json();
-    root.innerHTML = [
-      renderHero(data.hero, data.stats),
-      renderFilters(data.releases),
-      renderReleases(data.releases)
-    ].join('');
-
-    initFilters();
-    initChangelogFx();
+        initFilters();
+        initChangelogFx();
+      })
+      .catch((err) => {
+        console.error('Changelog load error:', err);
+        root.innerHTML = `
+          <section class="section panel glass">
+            <p class="eyebrow">Changelog</p>
+            <h1>${escapeHtml(window.MKSSiteI18n?.get('changelog.failed', 'Failed to load changelog'))}</h1>
+            <p class="sub">${escapeHtml(err.message)}</p>
+          </section>
+        `;
+      });
   }
 
-  try {
-    await render();
-  } catch (err) {
-    console.error('Changelog load error:', err);
-    root.innerHTML = `
-      <section class="section panel glass">
-        <p class="eyebrow">Changelog</p>
-        <h1>${escapeHtml(window.MKSSiteI18n?.get('changelog.failed', 'Failed to load changelog'))}</h1>
-        <p class="sub">${escapeHtml(err.message)}</p>
-      </section>
-    `;
-  }
+  render();
 
-  document.addEventListener('mks:language-change', async () => {
-    try {
-      await render();
-    } catch (err) {
-      console.error('Changelog rerender error:', err);
-    }
+  document.addEventListener('mks:language-change', () => {
+    render();
   });
 })();
+
+function chipClass(variant) {
+  if (variant === 'live') return 'chip-live';
+  if (variant === 'ghost') return 'chip-ghost';
+  return '';
+}
+
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 function renderHero(hero, stats) {
   return `
@@ -198,17 +211,3 @@ function initChangelogFx() {
   cards.forEach((card) => observer.observe(card));
 }
 
-function chipClass(variant) {
-  if (variant === 'live') return 'chip-live';
-  if (variant === 'ghost') return 'chip-ghost';
-  return '';
-}
-
-function escapeHtml(str) {
-  return String(str ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}

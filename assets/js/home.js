@@ -1,6 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
-  initHeroTerminal();
-});
+;(function bootHome() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  document.addEventListener('DOMContentLoaded', () => {
+    initHeroTerminal();
+  });
+})();
 
 function initHeroTerminal() {
   const term = document.querySelector('[data-terminal]');
@@ -60,7 +63,7 @@ function formatLine(text, withCursor = false) {
 
 function escapeHtml(str) {
   return str
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }

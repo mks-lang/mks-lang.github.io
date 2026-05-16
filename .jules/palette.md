@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-15 - Immediate Visual Feedback for Copy Actions
+**Learning:** Providing immediate, temporary visual feedback (like changing an icon to a checkmark) for non-destructive clipboard actions significantly reduces user uncertainty without requiring intrusive toast notifications in a documentation context.
+**Action:** Implement 1.5s icon-swap feedback for copy-to-clipboard interactions using `setTimeout` to handle the transition back to the original state.
