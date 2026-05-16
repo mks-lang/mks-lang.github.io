@@ -60,7 +60,8 @@ function initDocsEnhancements() {
   };
 }
 
-(function bootDocsEnhancements() {
+;(function bootDocsEnhancements() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   window.addEventListener('docs:ready', initDocsEnhancements);
 })();
 
@@ -266,24 +267,25 @@ function initSidebarLinks() {
   };
 }
 
-(function bootSidebarLinks() {
+;(function bootSidebarLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
 
 ;(function initCopyLinks() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
-  document.addEventListener('click', async (e) => {
+  document.addEventListener('click', (e) => {
     const btn = e.target.closest('.docs-copy-link');
     if (!btn || !btn.dataset.id) return;
 
     const url = new URL(window.location.href);
     url.hash = btn.dataset.id;
-    await navigator.clipboard.writeText(url.toString());
-
-    const icon = btn.querySelector('i');
-    if (!icon) return;
-    const old = icon.className;
-    icon.className = 'hgi-stroke hgi-checkmark-circle-02';
-    setTimeout(() => icon.className = old, 1500);
+    navigator.clipboard.writeText(url.toString()).then(() => {
+      const icon = btn.querySelector('i');
+      if (!icon) return;
+      const old = icon.className;
+      icon.className = 'hgi-stroke hgi-checkmark-circle-02';
+      setTimeout(() => { icon.className = old; }, 1500);
+    });
   });
 })();
