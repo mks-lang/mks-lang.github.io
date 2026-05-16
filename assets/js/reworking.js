@@ -1,4 +1,5 @@
-(function initReworking() {
+;(function initReworking() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const root = document.querySelector('main');
   if (!root) return;
 

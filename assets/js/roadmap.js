@@ -1,4 +1,5 @@
-(async function initRoadmapPage() {
+;(async function initRoadmapPage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const root = document.getElementById('roadmap-root');
   if (!root) return;
 
@@ -52,6 +53,21 @@
     }
   });
 })();
+
+function chipClass(variant) {
+  if (variant === 'live') return 'chip-live';
+  if (variant === 'ghost') return 'chip-ghost';
+  return '';
+}
+
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 function renderHero(hero, terminal, metrics) {
   return `
@@ -283,8 +299,8 @@ function initRoadmapTerminal(lines) {
 
   function colorize(line) {
     return escapeHtml(line)
-      .replaceAll('$', '<span class="prompt">$</span>')
-      .replaceAll('active', '<span class="green">active</span>')
+      .replace(/\$/g, '<span class="prompt">$</span>')
+      .replace(/active/g, '<span class="green">active</span>')
       .replace('in development', '<span class="accent">in development</span>');
   }
 
@@ -378,17 +394,3 @@ function initRoadmapScrollFx() {
   });
 }
 
-function chipClass(variant) {
-  if (variant === 'live') return 'chip-live';
-  if (variant === 'ghost') return 'chip-ghost';
-  return '';
-}
-
-function escapeHtml(str) {
-  return String(str ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}

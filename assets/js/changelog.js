@@ -44,6 +44,21 @@
   });
 })();
 
+function chipClass(variant) {
+  if (variant === 'live') return 'chip-live';
+  if (variant === 'ghost') return 'chip-ghost';
+  return '';
+}
+
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function renderHero(hero, stats) {
   return `
     <section class="change-hero">
@@ -198,17 +213,3 @@ function initChangelogFx() {
   cards.forEach((card) => observer.observe(card));
 }
 
-function chipClass(variant) {
-  if (variant === 'live') return 'chip-live';
-  if (variant === 'ghost') return 'chip-ghost';
-  return '';
-}
-
-function escapeHtml(str) {
-  return String(str ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}

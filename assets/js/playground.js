@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+;(function bootPlayground() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.querySelector('[data-heap-canvas]');
   const astRoot = document.querySelector('[data-ast-tree]');
   const logRoot = document.querySelector('[data-log]');
@@ -182,3 +184,4 @@ document.addEventListener('DOMContentLoaded', () => {
   draw();
   window.addEventListener('resize', resize);
 });
+})();
