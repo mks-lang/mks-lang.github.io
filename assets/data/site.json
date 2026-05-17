@@ -31,6 +31,7 @@
       "roadmap.reworking": "Reworking...",
       "docs.warning.title": "Note",
       "docs.warning.text": "Some examples currently may be erroneous and non-working, this will be fixed soon.",
+      "docs.copy_link": "Copy link to section",
       "examples.empty": "No examples found"
     },
     "ru": {
@@ -64,6 +65,7 @@
       "roadmap.reworking": "В процессе переработки...",
       "docs.warning.title": "Примечание",
       "docs.warning.text": "Некоторые примеры в данный момент могут быть ошибочными и нерабочими, это будет исправлено в ближайшее время.",
+      "docs.copy_link": "Скопировать ссылку на раздел",
       "examples.empty": "Примеры не найдены"
     }
   },
