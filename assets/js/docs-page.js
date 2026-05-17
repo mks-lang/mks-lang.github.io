@@ -101,6 +101,17 @@
     const title = document.createElement('h1');
     title.textContent = hero.title || 'Docs';
 
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'docs-copy-link';
+    copyBtn.type = 'button';
+    copyBtn.dataset.id = hero.id || 'overview';
+    copyBtn.setAttribute('aria-label', escapeHtml(window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section')));
+    copyBtn.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+
+    const titleRow = document.createElement('div');
+    titleRow.className = 'docs-section-title';
+    titleRow.append(title, copyBtn);
+
     const description = document.createElement('p');
     description.className = 'sub';
     description.textContent = hero.description || '';
@@ -123,7 +134,7 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    header.append(scene, eyebrow, meta, titleRow, description, pills, terminal);
     return header;
   }
 
@@ -139,6 +150,9 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section'))}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -227,6 +241,9 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section'))}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -359,10 +376,10 @@
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();

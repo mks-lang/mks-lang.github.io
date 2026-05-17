@@ -6,6 +6,10 @@
 **Learning:** Using the `aria-pressed` attribute on filter chips/buttons provides critical state feedback for screen readers in dynamic filtering interfaces, ensuring that users with assistive technologies can understand which filters are active.
 **Action:** Always implement `aria-pressed` on toggleable filter elements and manage its state dynamically in JavaScript alongside visual classes like `.active`.
 
+## 2026-05-15 - Preventing Feedback Race Conditions
+**Learning:** Rapid, repeated interactions with buttons that trigger timed visual feedback (e.g., "Copied" states) can lead to broken UI states if the icon/text revert logic captures the "temporary" state.
+**Action:** Always add a guard to ignore interactions if the element is already in the feedback state, and use explicit fallback constants for original states instead of dynamic capturing when possible.
+
 ## 2026-05-12 - Preserving Icons in Localized Elements
 **Learning:** In this repository's i18n system, applying `data-i18n` to a parent element (like an `<a>` or `<button>`) that contains both an icon (`<i>`) and a text label will cause the icon to be deleted when the translation is applied (as `textContent` overwrites all inner HTML).
 **Action:** Always wrap the text label in a `<span>` with the `data-i18n` attribute if the element contains other children like icons.
