@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-12 - Copy Link Feedback & Throttling
+**Learning:** Interactive 'Copy Link' buttons require immediate visual confirmation (like an icon swap) and a guard to ignore rapid repeat clicks while in the "copied" state to prevent feedback animation flickering.
+**Action:** Implement a state check (e.g., `if (el.classList.contains('copied')) return`) and use `setTimeout` to restore the original state after a short delay (~1500ms).

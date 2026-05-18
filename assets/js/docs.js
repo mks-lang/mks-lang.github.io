@@ -2,6 +2,43 @@ const docsEnhancementState = {
   cleanup: null,
 };
 
+function initDocsCopyLinks() {
+  const sections = document.querySelectorAll('[data-docs-card]');
+  const copyLabel = (window.MKSSiteI18n && typeof window.MKSSiteI18n.get === 'function')
+    ? (window.MKSSiteI18n.get('docs.copy_link') || 'Copy link to section')
+    : 'Copy link to section';
+
+  sections.forEach((section) => {
+    if (section.querySelector('.docs-copy-link')) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'docs-copy-link';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', copyLabel);
+    btn.setAttribute('title', copyLabel);
+    btn.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('copied')) return;
+
+      const url = new URL(window.location.href);
+      url.hash = section.id;
+
+      navigator.clipboard.writeText(url.toString()).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = '<i class="hgi-stroke hgi-checkmark-circle-01" aria-hidden="true"></i>';
+
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+        }, 1500);
+      });
+    });
+
+    section.appendChild(btn);
+  });
+}
+
 function initDocsEnhancements() {
   if (typeof docsEnhancementState.cleanup === 'function') {
     docsEnhancementState.cleanup();
@@ -61,7 +98,10 @@ function initDocsEnhancements() {
 }
 
 (function bootDocsEnhancements() {
-  window.addEventListener('docs:ready', initDocsEnhancements);
+  window.addEventListener('docs:ready', () => {
+    initDocsEnhancements();
+    initDocsCopyLinks();
+  });
 })();
 
 const docsSidebarState = {
