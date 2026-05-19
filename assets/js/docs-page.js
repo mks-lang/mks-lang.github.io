@@ -133,12 +133,17 @@
     el.id = section.id;
     el.dataset.docsCard = '';
 
+    const copyLinkLabel = window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section');
+
     const title = document.createElement('div');
     title.className = 'docs-section-head';
     title.innerHTML = `
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" aria-label="${escapeHtml(copyLinkLabel)}" title="${escapeHtml(copyLinkLabel)}">
+          <i class="hgi-stroke hgi-link-03" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -221,12 +226,17 @@
     el.id = section.id;
     el.dataset.docsCard = '';
 
+    const copyLinkLabel = window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section');
+
     const title = document.createElement('div');
     title.className = 'docs-section-head';
     title.innerHTML = `
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" aria-label="${escapeHtml(copyLinkLabel)}" title="${escapeHtml(copyLinkLabel)}">
+          <i class="hgi-stroke hgi-link-03" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;

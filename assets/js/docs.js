@@ -269,3 +269,66 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initCopySectionLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', (event) => {
+    const btn = event.target.closest('.docs-copy-link');
+    if (!btn || btn.classList.contains('copied')) return;
+
+    const section = btn.closest('section[id]');
+    if (!section) return;
+
+    const url = new URL(window.location.href);
+    url.hash = section.id;
+    const text = url.toString();
+
+    const icon = btn.querySelector('i');
+    const originalIconClass = 'hgi-link-03';
+    const successIconClass = 'hgi-checkmark-circle-02';
+
+    const onCopySuccess = () => {
+      btn.classList.add('copied');
+      if (icon) {
+        icon.classList.remove(originalIconClass);
+        icon.classList.add(successIconClass);
+      }
+
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        if (icon) {
+          icon.classList.remove(successIconClass);
+          icon.classList.add(originalIconClass);
+        }
+      }, 1500);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(onCopySuccess)
+        .catch((err) => {
+          console.error('Clipboard copy failed:', err);
+          fallbackCopy(text);
+        });
+    } else {
+      fallbackCopy(text);
+    }
+
+    function fallbackCopy(val) {
+      const ta = document.createElement('textarea');
+      ta.value = val;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        onCopySuccess();
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+      }
+      document.body.removeChild(ta);
+    }
+  });
+})();
