@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-15 - Section-Specific Shareability
+**Learning:** Adding "Copy link to section" buttons to documentation headers significantly improves shareability. By combining `:focus-within` on the container with `:focus-visible` on the button, we ensure the button is accessible to keyboard users while remaining visually clean for mouse users (only appearing on hover).
+**Action:** Use a combination of hover-reveal and focus-reveal triggers for utility buttons in informational cards to maintain a minimalist UI without sacrificing accessibility. Implement a clear success state (icon swap and color change) with a ~1.5s timeout for immediate user feedback.
