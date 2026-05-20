@@ -269,3 +269,57 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initDocsCopyLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', function(event) {
+    var btn = event.target.closest('.docs-copy-link');
+    if (!btn || btn.classList.contains('copied')) return;
+
+    var id = btn.dataset.id;
+    if (!id) return;
+
+    var url = window.location.origin + window.location.pathname + '#' + id;
+
+    function reset(el, icon) {
+      setTimeout(function() {
+        el.classList.remove('copied');
+        if (icon) {
+          icon.classList.remove('hgi-checkmark-badge-01');
+          icon.classList.add('hgi-link-03');
+        }
+      }, 1500);
+    }
+
+    try {
+      navigator.clipboard.writeText(url).then(function() {
+        btn.classList.add('copied');
+        var icon = btn.querySelector('i');
+        if (icon) {
+          icon.classList.remove('hgi-link-03');
+          icon.classList.add('hgi-checkmark-badge-01');
+        }
+        reset(btn, icon);
+      });
+    } catch (err) {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        btn.classList.add('copied');
+        var icon = btn.querySelector('i');
+        if (icon) {
+          icon.classList.remove('hgi-link-03');
+          icon.classList.add('hgi-checkmark-badge-01');
+        }
+        reset(btn, icon);
+      } catch (e) {}
+      document.body.removeChild(ta);
+    }
+  });
+})();
