@@ -139,6 +139,9 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section'))}">
+          <i class="hgi-stroke hgi-link-03" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -227,6 +230,9 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section'))}">
+          <i class="hgi-stroke hgi-link-03" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
