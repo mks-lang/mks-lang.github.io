@@ -1,3 +1,63 @@
+;(function initDocsCopyLink() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', function(event) {
+    const btn = event.target.closest('.docs-copy-link');
+    if (!btn || btn.classList.contains('is-copied')) return;
+
+    const section = btn.closest('section, header');
+    if (!section || !section.id) return;
+
+    const url = new URL(window.location.href);
+    url.hash = section.id;
+    const text = url.toString();
+
+    const fallbackCopy = (val) => {
+      const ta = document.createElement('textarea');
+      ta.value = val;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(ta);
+    };
+
+    const performCopy = () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+      }
+      fallbackCopy(text);
+      return Promise.resolve();
+    };
+
+    performCopy().then(() => {
+      btn.classList.add('is-copied');
+      const icon = btn.querySelector('i');
+      const originalIconClass = 'hgi-link-03';
+      const successIconClass = 'hgi-tick-01';
+
+      if (icon) {
+        icon.classList.replace(originalIconClass, successIconClass);
+      }
+
+      const originalTitle = btn.title;
+      const successTitle = window.MKSSiteI18n?.get('docs.link_copied', 'Link copied') || 'Link copied';
+      btn.title = successTitle;
+      btn.setAttribute('aria-label', successTitle);
+
+      setTimeout(() => {
+        btn.classList.remove('is-copied');
+        if (icon) {
+          icon.classList.replace(successIconClass, originalIconClass);
+        }
+        btn.title = originalTitle;
+        btn.setAttribute('aria-label', originalTitle);
+      }, 1500);
+    });
+  });
+})();
+
 const docsEnhancementState = {
   cleanup: null,
 };
@@ -60,7 +120,8 @@ function initDocsEnhancements() {
   };
 }
 
-(function bootDocsEnhancements() {
+;(function bootDocsEnhancements() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   window.addEventListener('docs:ready', initDocsEnhancements);
 })();
 
@@ -266,6 +327,7 @@ function initSidebarLinks() {
   };
 }
 
-(function bootSidebarLinks() {
+;(function bootSidebarLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   window.addEventListener('docs:ready', initSidebarLinks);
 })();

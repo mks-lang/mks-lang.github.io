@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-21 - Section-Specific Shareable Links
+**Learning:** Interactive "Copy Link" buttons for documentation sections significantly improve shareability and navigation UX. Providing multi-channel feedback (icon swap, color transition, and temporary title/aria-label update) for ~1.5s provides definitive confirmation of success. Event delegation is critical when these buttons are injected by a separate rendering script.
+**Action:** For "copy to clipboard" features, implement a temporary success state (is-copied) that provides visual and accessible feedback, and use event delegation on the document for dynamically rendered elements.
