@@ -1,4 +1,5 @@
-(async function initDocsPage() {
+;(async function initDocsPage() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const sidebar = document.querySelector('[data-docs-sidebar]');
   const body = document.querySelector('[data-docs-body]');
   if (!sidebar || !body) return;
@@ -101,6 +102,13 @@
     const title = document.createElement('h1');
     title.textContent = hero.title || 'Docs';
 
+    const copyLink = document.createElement('button');
+    copyLink.className = 'docs-copy-link';
+    copyLink.type = 'button';
+    copyLink.title = window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section') || 'Copy link to section';
+    copyLink.setAttribute('aria-label', copyLink.title);
+    copyLink.innerHTML = iconMarkup('hgi-link-03');
+
     const description = document.createElement('p');
     description.className = 'sub';
     description.textContent = hero.description || '';
@@ -123,7 +131,7 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    header.append(scene, eyebrow, meta, title, copyLink, description, pills, terminal);
     return header;
   }
 
@@ -135,10 +143,14 @@
 
     const title = document.createElement('div');
     title.className = 'docs-section-head';
+    const copyLabel = window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section') || 'Copy link to section';
     title.innerHTML = `
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" title="${escapeHtml(copyLabel)}" aria-label="${escapeHtml(copyLabel)}">
+          ${iconMarkup('hgi-link-03')}
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -223,10 +235,14 @@
 
     const title = document.createElement('div');
     title.className = 'docs-section-head';
+    const copyLabel = window.MKSSiteI18n?.get('docs.copy_link', 'Copy link to section') || 'Copy link to section';
     title.innerHTML = `
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" title="${escapeHtml(copyLabel)}" aria-label="${escapeHtml(copyLabel)}">
+          ${iconMarkup('hgi-link-03')}
+        </button>
       </div>
       ${statusBadges(section)}
     `;
