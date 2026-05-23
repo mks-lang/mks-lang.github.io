@@ -12,6 +12,17 @@ function initDocsEnhancements() {
     panel.style.animationDelay = `${(idx % 5) * 0.08}s`;
   });
 
+  const copyLabel = window.MKSSiteI18n?.get('copy.link', 'Copy link');
+  document.querySelectorAll('.docs-section-title').forEach((title) => {
+    if (title.querySelector('.docs-copy-link')) return;
+    const btn = document.createElement('button');
+    btn.className = 'docs-copy-link';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', copyLabel);
+    btn.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+    title.appendChild(btn);
+  });
+
   const cardCleanups = [];
 
   document.querySelectorAll('[data-docs-card]').forEach((panel) => {
@@ -62,6 +73,28 @@ function initDocsEnhancements() {
 
 (function bootDocsEnhancements() {
   window.addEventListener('docs:ready', initDocsEnhancements);
+
+  document.addEventListener('click', (event) => {
+    const btn = event.target.closest('.docs-copy-link');
+    const sec = btn && btn.closest('section, header');
+    if (!sec || !sec.id || btn.classList.contains('copied')) return;
+
+    const url = new URL(window.location.href);
+    url.hash = sec.id;
+
+    navigator.clipboard.writeText(url.toString()).then(() => {
+      const original = btn.innerHTML;
+      const originalLabel = btn.getAttribute('aria-label');
+      btn.classList.add('copied');
+      btn.innerHTML = '<i class="hgi-stroke hgi-tick-01" aria-hidden="true"></i>';
+      btn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link_copied', 'Link copied'));
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = original;
+        btn.setAttribute('aria-label', originalLabel);
+      }, 1500);
+    });
+  });
 })();
 
 const docsSidebarState = {
