@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-13 - Robust Clipboard Feedback Loops
+**Learning:** Interactive clipboard actions require both visual and semantic feedback. Simply copying the text is insufficient; users need a clear confirmation (e.g., icon swap to checkmark) and screen readers must be notified via dynamic ARIA label updates (switching from "Copy link" to "Copied!").
+**Action:** Implement a 1500ms feedback loop that toggles visual classes and 'aria-label' simultaneously. Use Promise-based '.then()/.catch()' chains instead of 'async/await' in this repository to maintain Cloudflare Workers build compatibility.
