@@ -269,3 +269,35 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initCopyLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', function(event) {
+    var btn = event.target.closest('.docs-copy-link');
+    if (!btn || btn.dataset.copied === 'true') return;
+
+    var section = btn.closest('section, header');
+    var id = section ? section.id : null;
+    if (!id) return;
+
+    var url = new URL(window.location.href);
+    url.hash = id;
+
+    navigator.clipboard.writeText(url.toString()).then(function() {
+      btn.dataset.copied = 'true';
+      var icon = btn.querySelector('i');
+      var originalClass = icon.className;
+      var originalAria = btn.getAttribute('aria-label');
+
+      icon.className = 'hgi-stroke hgi-tick-01';
+      btn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link_copied', 'Link copied'));
+
+      setTimeout(function() {
+        icon.className = originalClass;
+        btn.setAttribute('aria-label', originalAria);
+        btn.dataset.copied = 'false';
+      }, 1500);
+    });
+  });
+})();

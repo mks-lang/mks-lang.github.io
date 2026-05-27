@@ -13,3 +13,11 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-20 - Multi-modal Feedback for Copy Interactions
+**Learning:** For interactive copy elements (like deep links), providing both visual (icon change) and non-visual (aria-label update) feedback ensures that all users, regardless of ability, receive immediate confirmation of their action.
+**Action:** When implementing copy-to-clipboard buttons, switch the icon to a checkmark and update the `aria-label` to a localized "Copied" string for ~1500ms.
+
+## 2026-05-20 - Cleaner Search Accessibility
+**Learning:** Keyboard shortcut hints (like `(/)`) are valuable in placeholders for sighted users but create cognitive noise in `aria-label` for screen reader users who may not use those specific shortcuts.
+**Action:** Strip keyboard shortcut hints from `aria-label` attributes while keeping them in `placeholder` text to balance visual discovery with screen reader clarity.
