@@ -81,6 +81,13 @@
     header.className = 'panel glass glimmer docs-hero';
     header.id = hero.id || 'overview';
 
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'docs-copy-link';
+    copyBtn.type = 'button';
+    copyBtn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link', 'Copy link to section'));
+    copyBtn.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+    header.append(copyBtn);
+
     const scene = document.createElement('div');
     scene.className = 'docs-hero-scene';
     scene.setAttribute('aria-hidden', 'true');
@@ -139,6 +146,9 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" aria-label="${escapeHtml(window.MKSSiteI18n?.get('copy.link', 'Copy link to section'))}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -227,6 +237,9 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        <button class="docs-copy-link" type="button" aria-label="${escapeHtml(window.MKSSiteI18n?.get('copy.link', 'Copy link to section'))}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
       </div>
       ${statusBadges(section)}
     `;
@@ -359,10 +372,10 @@
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();

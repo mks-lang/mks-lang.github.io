@@ -94,11 +94,12 @@ function renderFilters(releases) {
   const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
   const tags = [allLabel, ...new Set((releases || []).map(item => item.tag).filter(Boolean))];
   const searchPlaceholder = (window.MKSSiteI18n?.get('changelog.search', 'Search changelog...') || 'Search changelog...') + ' (/)';
+  const searchAria = window.MKSSiteI18n?.get('changelog.search', 'Search changelog...') || 'Search changelog...';
 
   return `
     <section class="section change-filter-shell">
       <div class="change-filters panel glass" data-change-filters>
-        <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
+        <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchAria)}" data-change-search>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
             <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}" aria-pressed="${index === 0 ? 'true' : 'false'}">
@@ -206,9 +207,9 @@ function chipClass(variant) {
 
 function escapeHtml(str) {
   return String(str ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
