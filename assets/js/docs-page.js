@@ -25,6 +25,15 @@
     ].join('');
   }
 
+  function copyLinkMarkup() {
+    const label = window.MKSSiteI18n?.get('copy.link', 'Copy link to section');
+    return `
+      <button class="docs-copy-link" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">
+        <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+      </button>
+    `;
+  }
+
   const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
 
   function makeCodeBlock(code, withCopy = true) {
@@ -96,7 +105,11 @@
 
     const meta = document.createElement('div');
     meta.className = 'docs-hero-meta';
-    meta.innerHTML = `${iconMarkup(hero.icon)}<span>${hero.meta || 'Reference based on current interpreter branch'}</span>`;
+    meta.innerHTML = `
+      ${iconMarkup(hero.icon)}
+      <span>${hero.meta || 'Reference based on current interpreter branch'}</span>
+      ${copyLinkMarkup()}
+    `;
 
     const title = document.createElement('h1');
     title.textContent = hero.title || 'Docs';
@@ -139,6 +152,7 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        ${copyLinkMarkup()}
       </div>
       ${statusBadges(section)}
     `;
@@ -227,6 +241,7 @@
       <div class="docs-section-title">
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
+        ${copyLinkMarkup()}
       </div>
       ${statusBadges(section)}
     `;
@@ -359,10 +374,10 @@
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();
