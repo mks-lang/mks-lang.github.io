@@ -269,3 +269,29 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initCopyLink() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  document.addEventListener('click', function(event) {
+    const btn = event.target.closest('.docs-copy-link');
+    if (!btn || btn.classList.contains('copied')) return;
+    const section = btn.closest('section, header');
+    if (!section?.id) return;
+
+    const url = window.location.origin + window.location.pathname + '#' + section.id;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() {
+        btn.classList.add('copied');
+        const icon = btn.querySelector('i');
+        if (icon) { icon.classList.remove('hgi-link-01'); icon.classList.add('hgi-tick-01'); }
+        const label = btn.getAttribute('aria-label');
+        btn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link_copied') || 'Link copied!');
+        setTimeout(function() {
+          btn.classList.remove('copied');
+          if (icon) { icon.classList.remove('hgi-tick-01'); icon.classList.add('hgi-link-01'); }
+          btn.setAttribute('aria-label', label);
+        }, 1500);
+      });
+    }
+  });
+})();

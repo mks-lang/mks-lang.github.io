@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-28 - Cross-Environment Compatibility for Shared Assets
+**Learning:** Build-time parsing in environments like Cloudflare Workers (Workers Assets) can fail on modern ES2021+ features (like `replaceAll`) or illegal DOM access at the top level of scripts.
+**Action:** Use global regex `replace` instead of `replaceAll` and implement defensive early return guards (`if (typeof window === 'undefined') return;`) at the beginning of all browser-targeted IIFEs.
