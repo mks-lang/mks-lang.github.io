@@ -60,13 +60,58 @@ function initDocsEnhancements() {
   };
 }
 
-(function bootDocsEnhancements() {
+;(function bootDocsEnhancements() {
   window.addEventListener('docs:ready', initDocsEnhancements);
+
+  document.addEventListener('click', function(event) {
+    var btn = event.target.closest('.docs-copy-link');
+    if (!btn) return;
+
+    var section = btn.closest('section, header');
+    if (!section || !section.id) return;
+
+    if (btn.classList.contains('copied')) return;
+
+    var url = window.location.origin + window.location.pathname + '#' + section.id;
+
+    navigator.clipboard.writeText(url).then(function() {
+      btn.classList.add('copied');
+      var icon = btn.querySelector('i');
+      var originalClass = icon.className;
+      icon.className = 'hgi-stroke hgi-tick-01';
+
+      var originalAria = btn.getAttribute('aria-label');
+      var copiedAria = window.MKSSiteI18n ? window.MKSSiteI18n.get('copy.link_copied') : 'Link copied!';
+      btn.setAttribute('aria-label', copiedAria);
+
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        icon.className = originalClass;
+        btn.setAttribute('aria-label', originalAria);
+      }, 1500);
+    });
+  });
 })();
 
 const docsSidebarState = {
   cleanup: null,
 };
+
+;(function initDocsCompatibility() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  function escapeHtml(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // Ensure compatibility in case docs-page.js version in cache is old
+  window.escapeHtml = escapeHtml;
+})();
 
 function initSidebarLinks() {
   if (typeof docsSidebarState.cleanup === 'function') {
