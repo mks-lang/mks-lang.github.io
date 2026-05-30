@@ -728,6 +728,48 @@ body[data-theme="dark"] {
   color: #d8b4fe;
 }
 
+.docs-section-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+[data-docs-card]:hover .docs-section-actions,
+[data-docs-card]:focus-within .docs-section-actions {
+  opacity: 1;
+  transform: none;
+}
+
+.docs-copy-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(216, 180, 254, 0.16);
+  background: rgba(23, 11, 38, 0.9);
+  color: #d8b4fe;
+  cursor: pointer;
+  transition: all 160ms ease;
+}
+
+.docs-copy-link:hover,
+.docs-copy-link:focus-visible {
+  background: rgba(168, 85, 247, 0.16);
+  border-color: rgba(216, 180, 254, 0.3);
+  color: #fbf7ff;
+}
+
+.docs-copy-link.copied {
+  background: rgba(34, 197, 94, 0.14);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #dcfce7;
+}
+
 /* Callout: left-border accent style */
 .docs-callout {
   border-left: 3px solid rgba(168, 85, 247, 0.5) !important;

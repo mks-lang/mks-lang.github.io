@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-30 - Micro-UX and Scope Management
+**Learning:** UX improvements often touch multiple layers (i18n, JS injection, CSS). When working in strict build environments (like Cloudflare Workers), technical debt fixes (like `replaceAll` to regex) should be isolated to the specific files being modified for the feature to keep the PR focused and under line-count constraints.
+**Action:** Limit refactoring to the immediate scope of the feature to ensure clean, reviewable PRs while maintaining technical standards.

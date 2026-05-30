@@ -19,9 +19,19 @@
   }
 
   function statusBadges(section) {
+    const copyLabel = window.MKSSiteI18n?.get('copy.link', 'Copy Link');
+    const actions = `
+      <div class="docs-section-actions">
+        <button class="docs-copy-link" type="button" aria-label="${escapeHtml(copyLabel)}" data-id="${section.id}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
+      </div>
+    `;
+
     return [
       section.unstable ? unstableBadge() : '',
       section.isNew ? newBadge() : '',
+      actions,
     ].join('');
   }
 
@@ -359,10 +369,10 @@
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();

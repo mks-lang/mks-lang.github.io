@@ -269,3 +269,43 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initDocsCopyLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', (event) => {
+    const btn = event.target.closest('.docs-copy-link');
+    if (!btn || btn.classList.contains('copied')) return;
+
+    const id = btn.dataset.id;
+    if (!id) return;
+
+    const url = new URL(window.location.href);
+    url.hash = id;
+
+    navigator.clipboard.writeText(url.toString()).then(() => {
+      btn.classList.add('copied');
+      const icon = btn.querySelector('i');
+      const originalIcon = 'hgi-link-01';
+      const successIcon = 'hgi-tick-01';
+
+      if (icon) {
+        icon.classList.remove(originalIcon);
+        icon.classList.add(successIcon);
+      }
+
+      const successLabel = window.MKSSiteI18n?.get('copy.link_copied', 'Link Copied');
+      const originalLabel = window.MKSSiteI18n?.get('copy.link', 'Copy Link');
+      btn.setAttribute('aria-label', successLabel);
+
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        if (icon) {
+          icon.classList.remove(successIcon);
+          icon.classList.add(originalIcon);
+        }
+        btn.setAttribute('aria-label', originalLabel);
+      }, 1500);
+    }).catch((err) => console.error('Failed to copy link:', err));
+  });
+})();
