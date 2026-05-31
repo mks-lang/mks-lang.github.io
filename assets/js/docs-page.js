@@ -25,6 +25,18 @@
     ].join('');
   }
 
+  function sectionActions(section) {
+    const copyLabel = window.MKSSiteI18n?.get('copy.link', 'Copy link');
+    return `
+      <div class="docs-section-actions">
+        <button class="docs-copy-link" type="button" data-docs-copy-link aria-label="${escapeHtml(copyLabel)}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
+        ${statusBadges(section)}
+      </div>
+    `;
+  }
+
   const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
 
   function makeCodeBlock(code, withCopy = true) {
@@ -140,7 +152,7 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      ${sectionActions(section)}
     `;
 
     const description = document.createElement('p');
@@ -228,7 +240,7 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      ${sectionActions(section)}
     `;
 
     const description = document.createElement('p');
