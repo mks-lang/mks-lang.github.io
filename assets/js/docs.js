@@ -62,6 +62,32 @@ function initDocsEnhancements() {
 
 (function bootDocsEnhancements() {
   window.addEventListener('docs:ready', initDocsEnhancements);
+
+  document.addEventListener('click', function(event) {
+    const btn = event.target.closest('[data-docs-copy-link]');
+    if (!btn || btn.dataset.copying === 'true') return;
+
+    const id = btn.dataset.docsCopyLink;
+    const url = new URL(window.location.href);
+    url.hash = id;
+
+    navigator.clipboard.writeText(url.toString()).then(function() {
+      btn.dataset.copying = 'true';
+      const icon = btn.querySelector('i');
+      const originalClass = icon.className;
+      const originalLabel = btn.getAttribute('aria-label');
+      const successLabel = window.MKSSiteI18n?.get('copy.link_copied', 'Link copied');
+
+      icon.className = 'hgi-stroke hgi-tick-01';
+      btn.setAttribute('aria-label', successLabel);
+
+      setTimeout(function() {
+        icon.className = originalClass;
+        btn.setAttribute('aria-label', originalLabel);
+        btn.dataset.copying = 'false';
+      }, 1500);
+    });
+  });
 })();
 
 const docsSidebarState = {

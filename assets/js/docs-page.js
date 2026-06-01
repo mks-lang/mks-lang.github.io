@@ -25,6 +25,17 @@
     ].join('');
   }
 
+  function makeCopyLink(id) {
+    const btn = document.createElement('button');
+    btn.className = 'docs-copy-link';
+    btn.type = 'button';
+    btn.dataset.docsCopyLink = id;
+    btn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link', 'Copy link'));
+    btn.setAttribute('aria-live', 'polite');
+    btn.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+    return btn;
+  }
+
   const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
 
   function makeCodeBlock(code, withCopy = true) {
@@ -123,7 +134,11 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    const heroActions = document.createElement('div');
+    heroActions.className = 'docs-hero-actions';
+    heroActions.append(makeCopyLink(header.id));
+
+    header.append(scene, heroActions, eyebrow, meta, title, description, pills, terminal);
     return header;
   }
 
@@ -140,8 +155,9 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">${statusBadges(section)}</div>
     `;
+    title.querySelector('.docs-section-actions').append(makeCopyLink(section.id));
 
     const description = document.createElement('p');
     description.className = 'sub';
@@ -228,8 +244,9 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">${statusBadges(section)}</div>
     `;
+    title.querySelector('.docs-section-actions').append(makeCopyLink(section.id));
 
     const description = document.createElement('p');
     description.className = 'sub';
