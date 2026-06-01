@@ -368,6 +368,21 @@ body[data-theme="dark"] {
   margin-bottom: 12px;
 }
 
+.docs-section-actions { display: flex; align-items: center; gap: 8px; }
+.docs-copy-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px; border: 1px solid rgba(216, 180, 254, 0.16);
+  background: rgba(216, 180, 254, 0.05); color: #d8b4fe; cursor: pointer; transition: all 160ms ease;
+}
+.docs-copy-link:hover, .docs-copy-link:focus-visible {
+  border-color: rgba(216, 180, 254, 0.4); background: rgba(168, 85, 247, 0.15); color: #fbf7ff; outline: none;
+}
+.docs-copy-link:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+.docs-hero-actions { position: absolute; top: 24px; right: 24px; z-index: 10; }
+.docs-hero-actions .docs-copy-link {
+  width: 36px; height: 36px; font-size: 18px; background: rgba(23, 11, 38, 0.6); backdrop-filter: blur(8px);
+}
+
 .docs-section-head .docs-status + .docs-status {
   margin-left: 8px;
 }
