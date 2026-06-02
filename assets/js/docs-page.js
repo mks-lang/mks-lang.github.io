@@ -81,6 +81,14 @@
     header.className = 'panel glass glimmer docs-hero';
     header.id = hero.id || 'overview';
 
+    const actions = document.createElement('div');
+    actions.className = 'docs-hero-actions';
+    actions.innerHTML = `
+      <button class="docs-copy-link" type="button" data-id="${header.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('copy.link', 'Copy Link'))}">
+        <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+      </button>
+    `;
+
     const scene = document.createElement('div');
     scene.className = 'docs-hero-scene';
     scene.setAttribute('aria-hidden', 'true');
@@ -123,7 +131,7 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    header.append(actions, scene, eyebrow, meta, title, description, pills, terminal);
     return header;
   }
 
@@ -140,7 +148,12 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">
+        ${statusBadges(section)}
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('copy.link', 'Copy Link'))}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
+      </div>
     `;
 
     const description = document.createElement('p');
@@ -228,7 +241,12 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">
+        ${statusBadges(section)}
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('copy.link', 'Copy Link'))}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
+      </div>
     `;
 
     const description = document.createElement('p');
@@ -359,10 +377,10 @@
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();
