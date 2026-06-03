@@ -250,6 +250,8 @@ body[data-theme="dark"] {
   font-size: 16px;
 }
 
+.docs-hero-actions { position: absolute; top: 24px; right: 24px; z-index: 10; display: flex; gap: 8px; }
+
 .docs-hero h1 {
   position: relative;
   z-index: 1;
@@ -368,6 +370,8 @@ body[data-theme="dark"] {
   margin-bottom: 12px;
 }
 
+.docs-section-actions { display: flex; align-items: center; gap: 8px; }
+
 .docs-section-head .docs-status + .docs-status {
   margin-left: 8px;
 }
@@ -408,6 +412,12 @@ body[data-theme="dark"] {
   color: #dcfce7;
   background: rgba(34, 197, 94, 0.16);
 }
+
+.docs-copy-link { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; border: 1px solid rgba(216, 180, 254, 0.16); background: rgba(23, 11, 38, 0.6); color: #d8b4fe; cursor: pointer; opacity: 0; transition: all 160ms ease; }
+.docs-copy-link i { font-size: 16px; }
+[data-docs-card]:hover .docs-copy-link, [data-docs-card]:focus-within .docs-copy-link, .docs-hero:hover .docs-copy-link, .docs-hero:focus-within .docs-copy-link { opacity: 1; }
+.docs-copy-link:hover, .docs-copy-link:focus-visible { background: rgba(168, 85, 247, 0.2); border-color: rgba(216, 180, 254, 0.3); color: #fbf7ff; transform: translateY(-1px); }
+.docs-copy-link.copied { background: rgba(34, 197, 94, 0.16); border-color: rgba(34, 197, 94, 0.32); color: #dcfce7; }
 
 [data-docs-card] .sub {
   max-width: 78ch;

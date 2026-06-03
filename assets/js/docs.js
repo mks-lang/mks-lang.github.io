@@ -269,3 +269,23 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initCopyLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.docs-copy-link');
+    var panel = btn && btn.closest('.panel');
+    if (!panel || !panel.id || btn.classList.contains('copied')) return;
+    navigator.clipboard.writeText(location.origin + location.pathname + '#' + panel.id).then(function() {
+      btn.classList.add('copied');
+      var icon = btn.querySelector('i'), oldLabel = btn.getAttribute('aria-label');
+      if (icon) { icon.classList.remove('hgi-link-01'); icon.classList.add('hgi-tick-01'); }
+      btn.setAttribute('aria-label', window.MKSSiteI18n ? window.MKSSiteI18n.get('copy.link_copied', 'Link copied') : 'Link copied');
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        if (icon) { icon.classList.remove('hgi-tick-01'); icon.classList.add('hgi-link-01'); }
+        btn.setAttribute('aria-label', oldLabel);
+      }, 1500);
+    });
+  });
+})();
