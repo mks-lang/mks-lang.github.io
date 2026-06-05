@@ -269,3 +269,24 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initCopyLinks() {
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.docs-copy-link');
+    if (!btn || btn.classList.contains('copied')) return;
+    var url = window.location.origin + window.location.pathname + '#' + btn.getAttribute('data-id');
+    navigator.clipboard.writeText(url).then(function() {
+      btn.classList.add('copied');
+      var icon = btn.querySelector('i');
+      var label = btn.getAttribute('aria-label');
+      var successLabel = window.MKSSiteI18n ? window.MKSSiteI18n.get('copy.link_copied') : 'Copied!';
+      if (icon) icon.className = 'hgi-stroke hgi-tick-01';
+      btn.setAttribute('aria-label', successLabel);
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        if (icon) icon.className = 'hgi-stroke hgi-link-01';
+        btn.setAttribute('aria-label', label);
+      }, 1500);
+    });
+  });
+})();

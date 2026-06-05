@@ -1,0 +1,3 @@
+## 2025-05-14 - [Documentation Deep-Linking & Feedback]
+**Learning:** In a documentation system where content is dynamically rendered (e.g., via `docs-page.js`), micro-interactions like "Copy Link" must be implemented using event delegation in a persistent script (`docs.js`). This ensures that even if sections are re-rendered or added late, the interactivity remains consistent. Additionally, providing visual (icon change) and accessible (aria-label update) feedback simultaneously creates a much more robust "delight" factor than a simple toast.
+**Action:** Always check if UI elements are rendered dynamically and use event delegation for global interaction patterns like copying, sharing, or bookmarking.

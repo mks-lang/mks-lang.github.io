@@ -766,6 +766,18 @@ body[data-theme="dark"] {
 }
 
 /* Mobile sidebar: pill tabs */
+.docs-hero-actions { position: absolute; top: 24px; right: 24px; z-index: 5; }
+.docs-section-actions { display: flex; align-items: center; gap: 8px; }
+.docs-copy-link {
+  width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--border);
+  background: rgba(168, 85, 247, 0.1); color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; opacity: 0; transition: all 0.2s;
+}
+.docs-copy-link:focus-visible, .docs-copy-link.copied { opacity: 1; outline: 2px solid var(--accent); }
+.docs-hero:hover .docs-copy-link, [data-docs-card]:hover .docs-copy-link { opacity: 1; }
+.docs-copy-link:hover { color: var(--text); border-color: var(--accent); background: rgba(168, 85, 247, 0.2); }
+.docs-copy-link.copied { color: var(--accent); border-color: var(--accent); }
+
 @media (max-width: 1020px) {
   .sidebar {
     padding: 8px;
