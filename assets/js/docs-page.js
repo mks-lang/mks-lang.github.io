@@ -25,6 +25,8 @@
     ].join('');
   }
 
+  const copyBtn = (id) => `<button class="docs-copy-link" type="button" data-id="${escapeHtml(id)}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('copy.link', 'Copy link'))}"><i class="hgi-stroke hgi-link-01" aria-hidden="true"></i></button>`;
+
   const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
 
   function makeCodeBlock(code, withCopy = true) {
@@ -123,7 +125,11 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    const actions = document.createElement('div');
+    actions.className = 'docs-hero-actions';
+    actions.innerHTML = copyBtn(hero.id || 'overview');
+
+    header.append(scene, eyebrow, meta, title, description, pills, terminal, actions);
     return header;
   }
 
@@ -140,7 +146,10 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">
+        ${statusBadges(section)}
+        ${copyBtn(section.id)}
+      </div>
     `;
 
     const description = document.createElement('p');
@@ -228,7 +237,10 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">
+        ${statusBadges(section)}
+        ${copyBtn(section.id)}
+      </div>
     `;
 
     const description = document.createElement('p');
@@ -358,11 +370,6 @@
   });
 
   function escapeHtml(str) {
-    return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+    return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 })();
