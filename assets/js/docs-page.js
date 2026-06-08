@@ -1,4 +1,4 @@
-(async function initDocsPage() {
+;(async function initDocsPage() {
   const sidebar = document.querySelector('[data-docs-sidebar]');
   const body = document.querySelector('[data-docs-body]');
   if (!sidebar || !body) return;
@@ -123,7 +123,17 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    const actions = document.createElement('div');
+    actions.className = 'docs-hero-actions';
+    const copyLink = document.createElement('button');
+    copyLink.className = 'docs-copy-link';
+    copyLink.type = 'button';
+    copyLink.dataset.id = hero.id || 'overview';
+    copyLink.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link', 'Copy link'));
+    copyLink.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+    actions.append(copyLink);
+
+    header.append(scene, actions, eyebrow, meta, title, description, pills, terminal);
     return header;
   }
 
@@ -140,7 +150,12 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">
+        ${statusBadges(section)}
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('copy.link', 'Copy link'))}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
+      </div>
     `;
 
     const description = document.createElement('p');
@@ -228,7 +243,12 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">
+        ${statusBadges(section)}
+        <button class="docs-copy-link" type="button" data-id="${section.id}" aria-label="${escapeHtml(window.MKSSiteI18n?.get('copy.link', 'Copy link'))}">
+          <i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>
+        </button>
+      </div>
     `;
 
     const description = document.createElement('p');
@@ -359,10 +379,10 @@
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();
