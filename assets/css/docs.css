@@ -765,6 +765,55 @@ body[data-theme="dark"] {
   text-transform: uppercase;
 }
 
+.docs-hero-actions {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+}
+
+.docs-section-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.docs-copy-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(216, 180, 254, 0.16);
+  background: rgba(23, 11, 38, 0.96);
+  color: #d8b4fe;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 180ms ease, transform 180ms ease, border-color 160ms, background 160ms;
+}
+
+[data-docs-card]:hover .docs-copy-link,
+[data-docs-card]:focus-within .docs-copy-link,
+.docs-hero:hover .docs-copy-link,
+.docs-hero:focus-within .docs-copy-link {
+  opacity: 1;
+  transform: none;
+}
+
+.docs-copy-link:hover,
+.docs-copy-link:focus-visible {
+  border-color: rgba(216, 180, 254, 0.34);
+  background: rgba(168, 85, 247, 0.14);
+  color: #fbf7ff;
+}
+
+.docs-copy-link.copied {
+  color: #6df2c5;
+  border-color: rgba(109, 242, 197, 0.4);
+}
+
 /* Mobile sidebar: pill tabs */
 @media (max-width: 1020px) {
   .sidebar {

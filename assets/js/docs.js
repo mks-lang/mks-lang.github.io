@@ -269,3 +269,42 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initCopyLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.docs-copy-link');
+    if (!btn || btn.classList.contains('copied')) return;
+
+    var id = btn.dataset.id;
+    if (!id) return;
+
+    var url = location.origin + location.pathname + '#' + id;
+
+    function reset() {
+      btn.classList.remove('copied');
+      btn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link', 'Copy link'));
+      var icon = btn.querySelector('i');
+      if (icon) {
+        icon.classList.remove('hgi-tick-01');
+        icon.classList.add('hgi-link-01');
+      }
+    }
+
+    try {
+      navigator.clipboard.writeText(url).then(function() {
+        btn.classList.add('copied');
+        btn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link_copied', 'Link copied'));
+        var icon = btn.querySelector('i');
+        if (icon) {
+          icon.classList.remove('hgi-link-01');
+          icon.classList.add('hgi-tick-01');
+        }
+        setTimeout(reset, 1500);
+      });
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+    }
+  });
+})();
