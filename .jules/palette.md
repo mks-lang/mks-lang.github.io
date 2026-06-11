@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-15 - Accessible Tabbed Interfaces
+**Learning:** Documentation tabs were using buttons without ARIA roles or keyboard navigation beyond basic clicking. Implementing the WAI-ARIA Tabs pattern (tablist, tab, tabpanel roles with Arrow/Home/End key support) significantly improves accessibility for keyboard and screen reader users while maintaining the existing design.
+**Action:** Use the `tablist` ARIA pattern for all tabbed components, ensuring roving tabindex and linking attributes (`aria-controls`, `aria-labelledby`) are present for assistive technology.
