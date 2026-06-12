@@ -269,3 +269,38 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initDocsCopyLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', async function(event) {
+    var btn = event.target.closest('.docs-copy-link');
+    if (!btn || btn.dataset.copied === 'true') return;
+
+    var section = btn.closest('section, header');
+    if (!section || !section.id) return;
+
+    var url = window.location.origin + window.location.pathname + '#' + section.id;
+
+    try {
+      await navigator.clipboard.writeText(url);
+
+      btn.dataset.copied = 'true';
+      var icon = btn.querySelector('i');
+      var originalIconClass = icon.className;
+      var originalAriaLabel = btn.getAttribute('aria-label');
+
+      icon.className = 'hgi-stroke hgi-tick-01';
+      var copiedLabel = window.MKSSiteI18n ? window.MKSSiteI18n.get('copy.link_copied') : 'Link copied';
+      btn.setAttribute('aria-label', copiedLabel);
+
+      setTimeout(function() {
+        icon.className = originalIconClass;
+        btn.setAttribute('aria-label', originalAriaLabel);
+        delete btn.dataset.copied;
+      }, 1500);
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+    }
+  });
+})();

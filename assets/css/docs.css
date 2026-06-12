@@ -752,6 +752,52 @@ body[data-theme="dark"] {
     #0b0518;
 }
 
+.docs-hero-actions,
+.docs-section-actions {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+
+.docs-copy-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid rgba(216, 180, 254, 0.22);
+  border-radius: 10px;
+  background: rgba(23, 11, 38, 0.88);
+  color: #d8b4fe;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.docs-hero:hover .docs-copy-link,
+[data-docs-card]:hover .docs-copy-link,
+.docs-hero:focus-within .docs-copy-link,
+[data-docs-card]:focus-within .docs-copy-link {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.docs-copy-link:hover {
+  background: #a855f7;
+  color: #fbf7ff;
+  border-color: #d8b4fe;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.34);
+}
+
+.docs-copy-link i {
+  font-size: 18px;
+}
+
 /* Better loading placeholder */
 .docs-loading {
   min-height: 420px;
