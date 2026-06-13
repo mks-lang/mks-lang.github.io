@@ -269,3 +269,43 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initDocsCopyLink() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', async (event) => {
+    const btn = event.target.closest('.docs-copy-link');
+    if (!btn || btn.dataset.copied === 'true') return;
+
+    const section = btn.closest('[data-docs-card], .docs-hero');
+    const id = section?.id;
+    if (!id) return;
+
+    const url = new URL(window.location.href);
+    url.hash = id;
+
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      btn.dataset.copied = 'true';
+
+      const icon = btn.querySelector('i');
+      if (icon) {
+        icon.classList.replace('hgi-link-01', 'hgi-tick-01');
+      }
+
+      const originalLabel = btn.getAttribute('aria-label');
+      const copiedLabel = window.MKSSiteI18n?.get('copy.link_copied', 'Link Copied');
+      btn.setAttribute('aria-label', copiedLabel);
+
+      setTimeout(() => {
+        btn.dataset.copied = 'false';
+        if (icon) {
+          icon.classList.replace('hgi-tick-01', 'hgi-link-01');
+        }
+        btn.setAttribute('aria-label', originalLabel);
+      }, 1500);
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+    }
+  });
+})();

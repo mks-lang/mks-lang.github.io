@@ -27,6 +27,18 @@
 
   const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
 
+  function makeCopyLink() {
+    const actions = document.createElement('div');
+    actions.className = 'docs-section-actions';
+    const copyLink = document.createElement('button');
+    copyLink.className = 'docs-copy-link';
+    copyLink.type = 'button';
+    copyLink.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link', 'Copy Link'));
+    copyLink.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+    actions.append(copyLink);
+    return actions;
+  }
+
   function makeCodeBlock(code, withCopy = true) {
     const block = document.createElement('div');
     block.className = 'code-block';
@@ -123,7 +135,9 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    const actions = makeCopyLink();
+    actions.className = 'docs-hero-actions';
+    header.append(scene, eyebrow, meta, title, description, pills, terminal, actions);
     return header;
   }
 
@@ -149,6 +163,8 @@
 
     const tabs = document.createElement('div');
     tabs.className = 'tabs';
+
+    const actions = makeCopyLink();
 
     const panes = document.createDocumentFragment();
     section.tabs.forEach((tab, index) => {
@@ -191,7 +207,7 @@
 
     el.append(title, description);
     appendRichContent(el, section);
-    el.append(tabs, panes);
+    el.append(tabs, panes, actions);
     return el;
   }
 
@@ -235,9 +251,12 @@
     description.className = 'sub';
     description.innerHTML = section.description || '';
 
+    const actions = makeCopyLink();
+
     el.append(title, description);
     appendRichContent(el, section);
     if (section.code) el.append(makeCodeBlock(section.code));
+    el.append(actions);
 
     return el;
   }

@@ -753,6 +753,55 @@ body[data-theme="dark"] {
 }
 
 /* Better loading placeholder */
+.docs-hero-actions {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+}
+
+.docs-section-actions {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+}
+
+.docs-copy-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel-2) 70%, transparent);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 180ms ease;
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.docs-hero:hover .docs-copy-link,
+[data-docs-card]:hover .docs-copy-link,
+.docs-copy-link:focus-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.docs-copy-link:hover {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+  background: color-mix(in srgb, var(--accent) 22%, var(--panel-2));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.docs-copy-link i {
+  font-size: 16px;
+}
+
 .docs-loading {
   min-height: 420px;
   display: flex;
