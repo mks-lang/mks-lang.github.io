@@ -148,6 +148,9 @@
     const btn = event.target.closest('.copy-btn');
     if (!btn) return;
 
+    const copiedLabel = window.MKSSiteI18n?.get('copy.copied', 'Copied');
+    if (btn.textContent === copiedLabel) return;
+
     const code = btn.parentElement?.querySelector('code, pre');
     if (!code) return;
     const text = code.innerText.trim();
@@ -163,7 +166,6 @@
       ta.remove();
     }
 
-    const copiedLabel = window.MKSSiteI18n?.get('copy.copied', 'Copied');
     const copyLabel = window.MKSSiteI18n?.get('copy.default', 'Copy');
     btn.textContent = copiedLabel;
     setTimeout(() => {
