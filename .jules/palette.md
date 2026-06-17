@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-20 - Standardized Empty States
+**Learning:** Utilizing a shared "reworking" component (reworking-container, reworking-icon) across different pages (Examples, Changelog, Roadmap) provides a cohesive brand identity and simplifies the implementation of empty or loading states.
+**Action:** Always pair the pulsing 'reworking.svg' icon with `aria-live="polite"` text for accessible and visually consistent feedback in filtered lists.
