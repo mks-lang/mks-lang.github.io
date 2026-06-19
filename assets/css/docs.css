@@ -215,6 +215,63 @@ body[data-theme="dark"] {
 .docs-hero-scene i,
 .docs-hero-scene b { display: none; }
 
+.docs-hero-actions {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+
+.docs-section-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.docs-copy-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(216, 180, 254, 0.16);
+  background: rgba(23, 11, 38, 0.8);
+  color: #b7a3cf;
+  cursor: pointer;
+  transition: all 180ms ease;
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.docs-hero .docs-copy-link {
+  opacity: 1;
+  transform: none;
+  background: rgba(216, 180, 254, 0.07);
+}
+
+.docs-hero .docs-copy-link:hover {
+  background: rgba(216, 180, 254, 0.14);
+}
+
+[data-docs-card]:hover .docs-copy-link,
+[data-docs-card]:focus-within .docs-copy-link {
+  opacity: 1;
+  transform: none;
+}
+
+.docs-copy-link:hover {
+  color: #fbf7ff;
+  border-color: rgba(216, 180, 254, 0.34);
+  background: rgba(168, 85, 247, 0.2);
+}
+
+.docs-copy-link i {
+  font-size: 16px;
+}
+
 .eyebrow {
   position: relative;
   z-index: 1;
