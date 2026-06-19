@@ -10,6 +10,15 @@
     return `<i class="hgi-stroke ${icon}" aria-hidden="true"></i>`;
   }
 
+  function makeCopyLink() {
+    const btn = document.createElement('button');
+    btn.className = 'docs-copy-link';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link', 'Copy Link'));
+    btn.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+    return btn;
+  }
+
   function unstableBadge() {
     return `<span class="docs-status docs-status-unstable">${escapeHtml(window.MKSSiteI18n?.get('docs.unstable', 'Not-Stable'))}</span>`;
   }
@@ -123,7 +132,11 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    const actions = document.createElement('div');
+    actions.className = 'docs-hero-actions';
+    actions.append(makeCopyLink());
+
+    header.append(scene, eyebrow, meta, title, description, pills, terminal, actions);
     return header;
   }
 
@@ -135,13 +148,17 @@
 
     const title = document.createElement('div');
     title.className = 'docs-section-head';
-    title.innerHTML = `
-      <div class="docs-section-title">
-        ${iconMarkup(section.icon)}
-        <h2>${section.title}</h2>
-      </div>
-      ${statusBadges(section)}
-    `;
+
+    const titleInner = document.createElement('div');
+    titleInner.className = 'docs-section-title';
+    titleInner.innerHTML = `${iconMarkup(section.icon)}<h2>${section.title}</h2>`;
+
+    const actions = document.createElement('div');
+    actions.className = 'docs-section-actions';
+    actions.innerHTML = statusBadges(section);
+    actions.append(makeCopyLink());
+
+    title.append(titleInner, actions);
 
     const description = document.createElement('p');
     description.className = 'sub';
@@ -223,13 +240,17 @@
 
     const title = document.createElement('div');
     title.className = 'docs-section-head';
-    title.innerHTML = `
-      <div class="docs-section-title">
-        ${iconMarkup(section.icon)}
-        <h2>${section.title}</h2>
-      </div>
-      ${statusBadges(section)}
-    `;
+
+    const titleInner = document.createElement('div');
+    titleInner.className = 'docs-section-title';
+    titleInner.innerHTML = `${iconMarkup(section.icon)}<h2>${section.title}</h2>`;
+
+    const actions = document.createElement('div');
+    actions.className = 'docs-section-actions';
+    actions.innerHTML = statusBadges(section);
+    actions.append(makeCopyLink());
+
+    title.append(titleInner, actions);
 
     const description = document.createElement('p');
     description.className = 'sub';

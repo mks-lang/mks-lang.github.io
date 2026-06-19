@@ -269,3 +269,42 @@ function initSidebarLinks() {
 (function bootSidebarLinks() {
   window.addEventListener('docs:ready', initSidebarLinks);
 })();
+
+;(function initDocsCopyLinks() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.docs-copy-link');
+    if (!btn) return;
+
+    var section = e.target.closest('section, header');
+    if (!section || !section.id) return;
+
+    // Guard to prevent multiple rapid clicks while in "copied" state
+    if (btn.classList.contains('is-copied')) return;
+
+    var url = location.origin + location.pathname + '#' + section.id;
+
+    navigator.clipboard.writeText(url).then(function() {
+      var icon = btn.querySelector('i');
+      var originalLabel = btn.getAttribute('aria-label');
+      var copiedLabel = window.MKSSiteI18n?.get('copy.link_copied', 'Link Copied');
+
+      btn.classList.add('is-copied');
+      btn.setAttribute('aria-label', copiedLabel);
+      if (icon) {
+        icon.classList.remove('hgi-link-01');
+        icon.classList.add('hgi-tick-01');
+      }
+
+      setTimeout(function() {
+        btn.classList.remove('is-copied');
+        btn.setAttribute('aria-label', originalLabel);
+        if (icon) {
+          icon.classList.remove('hgi-tick-01');
+          icon.classList.add('hgi-link-01');
+        }
+      }, 1500);
+    });
+  });
+})();
