@@ -1,0 +1,3 @@
+## 2024-04-26 - [Changelog Empty State & Particle Accessibility]
+**Learning:** Decorative background elements like `<canvas class="particles">` were missing `aria-hidden="true"`, causing unnecessary noise for screen readers on every page. Additionally, the `reworking-container` class from `reworking.css` serves as a standardized design pattern for empty/loading states across the site (already used in Roadmap and Examples).
+**Action:** Always check for background decorative canvases and apply `aria-hidden="true"`. Use the `.reworking-container` pattern for new empty states to maintain visual consistency.
