@@ -13,3 +13,6 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+## 2026-06-21 - [Changelog Search Accessibility and Empty States]
+**Learning:** Including keyboard shortcut hints like `(/)` in an element's `aria-label` results in confusing screen reader output (e.g., "Search changelog... slash"). Hints should be placed in the `placeholder` or a separate description, keeping the `aria-label` purely descriptive of the element's purpose. Additionally, using `aria-live="polite"` on empty state containers ensures users are immediately aware when a search returns no results.
+**Action:** Always verify that `aria-label` content is concise and free of purely visual or technical hints. Implement `aria-live` for dynamic UI changes like search filtering results.
