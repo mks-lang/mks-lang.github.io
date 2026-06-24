@@ -27,6 +27,15 @@
 
   const codeText = (value) => (Array.isArray(value) ? value.join('\n') : String(value || ''));
 
+  function makeCopyLink() {
+    const btn = document.createElement('button');
+    btn.className = 'docs-copy-link';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', window.MKSSiteI18n?.get('copy.link', 'Copy link'));
+    btn.innerHTML = '<i class="hgi-stroke hgi-link-01" aria-hidden="true"></i>';
+    return btn;
+  }
+
   function makeCodeBlock(code, withCopy = true) {
     const block = document.createElement('div');
     block.className = 'code-block';
@@ -94,6 +103,10 @@
     eyebrow.className = 'eyebrow';
     eyebrow.textContent = hero.eyebrow || 'Docs';
 
+    const actions = document.createElement('div');
+    actions.className = 'docs-hero-actions';
+    actions.append(makeCopyLink());
+
     const meta = document.createElement('div');
     meta.className = 'docs-hero-meta';
     meta.innerHTML = `${iconMarkup(hero.icon)}<span>${hero.meta || 'Reference based on current interpreter branch'}</span>`;
@@ -123,7 +136,7 @@
       '<div><span>></span> runtime notes ready</div>'
     ].join('');
 
-    header.append(scene, eyebrow, meta, title, description, pills, terminal);
+    header.append(scene, eyebrow, actions, meta, title, description, pills, terminal);
     return header;
   }
 
@@ -140,8 +153,15 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">
+        ${statusBadges(section)}
+      </div>
     `;
+
+    const sectionActions = title.querySelector('.docs-section-actions');
+    if (sectionActions) {
+      sectionActions.prepend(makeCopyLink());
+    }
 
     const description = document.createElement('p');
     description.className = 'sub';
@@ -228,8 +248,15 @@
         ${iconMarkup(section.icon)}
         <h2>${section.title}</h2>
       </div>
-      ${statusBadges(section)}
+      <div class="docs-section-actions">
+        ${statusBadges(section)}
+      </div>
     `;
+
+    const sectionActions = title.querySelector('.docs-section-actions');
+    if (sectionActions) {
+      sectionActions.prepend(makeCopyLink());
+    }
 
     const description = document.createElement('p');
     description.className = 'sub';
@@ -359,10 +386,10 @@
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();
