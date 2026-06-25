@@ -139,6 +139,11 @@ function renderReleases(releases) {
         </article>
       `).join('')}
     </section>
+
+    <div class="changelog-empty hidden reworking-container" aria-live="polite">
+      <div class="reworking-icon"></div>
+      <div class="reworking-text" data-i18n="changelog.empty">${escapeHtml(window.MKSSiteI18n?.get('changelog.empty', 'No changes found'))}</div>
+    </div>
   `;
 }
 
@@ -152,13 +157,20 @@ function initFilters() {
   let query = '';
 
   function applyFilters() {
+    let visibleCount = 0;
     cards.forEach((card) => {
       const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
       card.hidden = !isVisible;
+      if (isVisible) visibleCount++;
     });
+
+    const emptyState = document.querySelector('.changelog-empty');
+    if (emptyState) {
+      emptyState.classList.toggle('hidden', visibleCount > 0);
+    }
   }
 
   filters.addEventListener('click', function(event) {

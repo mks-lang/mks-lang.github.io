@@ -272,6 +272,10 @@ body[data-theme="dark"] {
   margin-top: 18px;
 }
 
+.changelog-empty {
+  margin-top: 24px;
+}
+
 .change-card {
   display: grid;
   grid-template-columns: 120px minmax(0, 1fr);
