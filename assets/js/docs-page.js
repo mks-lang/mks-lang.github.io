@@ -149,20 +149,31 @@
 
     const tabs = document.createElement('div');
     tabs.className = 'tabs';
+    tabs.setAttribute('role', 'tablist');
 
     const panes = document.createDocumentFragment();
     section.tabs.forEach((tab, index) => {
+      const tabId = `tab-${section.id}-${tab.id}`;
+      const panelId = `panel-${section.id}-${tab.id}`;
+
       const button = document.createElement('button');
       button.className = index === 0 ? 'tab active' : 'tab';
       button.type = 'button';
+      button.id = tabId;
       button.dataset.tab = tab.id;
+      button.setAttribute('role', 'tab');
       button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+      button.setAttribute('aria-controls', panelId);
+      button.setAttribute('tabindex', index === 0 ? '0' : '-1');
       button.textContent = tab.label;
       tabs.append(button);
 
       const pane = document.createElement('div');
       pane.className = index === 0 ? 'tab-pane active' : 'tab-pane';
+      pane.id = panelId;
       pane.dataset.tabPane = tab.id;
+      pane.setAttribute('role', 'tabpanel');
+      pane.setAttribute('aria-labelledby', tabId);
       pane.hidden = index !== 0;
       const codeBlock = makeCodeBlock(tab.code);
       codeBlock.dataset.lang = tab.label || tab.id || 'code';
@@ -251,11 +262,13 @@
       const panes = Array.from(panel.querySelectorAll('.tab-pane'));
       if (!panes.length) return;
 
-      function activate(name) {
+      function activate(name, focus = false) {
         tabs.forEach((tab) => {
           const isActive = tab.dataset.tab === name;
           tab.classList.toggle('active', isActive);
           tab.setAttribute('aria-selected', String(isActive));
+          tab.setAttribute('tabindex', isActive ? '0' : '-1');
+          if (isActive && focus) tab.focus();
         });
 
         panes.forEach((pane) => {
@@ -268,8 +281,21 @@
       const initial = tabset.querySelector('.tab.active')?.dataset.tab || tabs[0]?.dataset.tab;
       if (initial) activate(initial);
 
-      tabs.forEach((tab) => {
+      tabs.forEach((tab, index) => {
         tab.addEventListener('click', () => activate(tab.dataset.tab));
+
+        tab.addEventListener('keydown', (e) => {
+          let nextIndex = -1;
+          if (e.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+          else if (e.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+          else if (e.key === 'Home') nextIndex = 0;
+          else if (e.key === 'End') nextIndex = tabs.length - 1;
+
+          if (nextIndex !== -1) {
+            e.preventDefault();
+            activate(tabs[nextIndex].dataset.tab, true);
+          }
+        });
       });
     });
   }
@@ -359,10 +385,10 @@
 
   function escapeHtml(str) {
     return String(str ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 })();
