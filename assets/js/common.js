@@ -176,6 +176,7 @@
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const canvas = document.querySelector('.particles');
   if (!canvas) return;
+  canvas.setAttribute('aria-hidden', 'true');
 
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
