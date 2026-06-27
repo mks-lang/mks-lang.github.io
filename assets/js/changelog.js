@@ -15,7 +15,8 @@
     root.innerHTML = [
       renderHero(data.hero, data.stats),
       renderFilters(data.releases),
-      renderReleases(data.releases)
+      renderReleases(data.releases),
+      renderEmptyState()
     ].join('');
 
     initFilters();
@@ -48,9 +49,9 @@ function renderHero(hero, stats) {
   return `
     <section class="change-hero">
       <div class="change-hero-bg">
-        <div class="change-grid"></div>
-        <div class="change-beam beam-a"></div>
-        <div class="change-beam beam-b"></div>
+        <div class="change-grid" aria-hidden="true"></div>
+        <div class="change-beam beam-a" aria-hidden="true"></div>
+        <div class="change-beam beam-b" aria-hidden="true"></div>
       </div>
 
       <div class="section change-hero-inner">
@@ -67,7 +68,7 @@ function renderHero(hero, stats) {
         </div>
 
         <div class="change-console panel glass">
-          <div class="console-head">
+          <div class="console-head" aria-hidden="true">
             <span></span><span></span><span></span>
             <strong>/changelog/live</strong>
           </div>
@@ -93,12 +94,13 @@ function renderHero(hero, stats) {
 function renderFilters(releases) {
   const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
   const tags = [allLabel, ...new Set((releases || []).map(item => item.tag).filter(Boolean))];
-  const searchPlaceholder = (window.MKSSiteI18n?.get('changelog.search', 'Search changelog...') || 'Search changelog...') + ' (/)';
+  const searchText = window.MKSSiteI18n?.get('changelog.search', 'Search changelog...');
+  const searchPlaceholder = searchText + ' (/)';
 
   return `
     <section class="section change-filter-shell">
       <div class="change-filters panel glass" data-change-filters>
-        <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
+        <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchText)}" data-change-search>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
             <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}" aria-pressed="${index === 0 ? 'true' : 'false'}">
@@ -108,6 +110,16 @@ function renderFilters(releases) {
         </div>
       </div>
     </section>
+  `;
+}
+
+function renderEmptyState() {
+  const emptyText = window.MKSSiteI18n?.get('changelog.empty', 'No changes found');
+  return `
+    <div class="changelog-empty reworking-container hidden" aria-live="polite">
+      <div class="reworking-icon"></div>
+      <div class="reworking-text" data-i18n="changelog.empty">${escapeHtml(emptyText)}</div>
+    </div>
   `;
 }
 
@@ -146,19 +158,25 @@ function initFilters() {
   const filters = document.querySelector('[data-change-filters]');
   const cards = Array.from(document.querySelectorAll('.change-card'));
   const search = document.querySelector('[data-change-search]');
+  const empty = document.querySelector('.changelog-empty');
   if (!filters || !cards.length) return;
 
   let activeFilter = window.MKSSiteI18n?.get('filters.all', 'all');
   let query = '';
 
   function applyFilters() {
+    const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
+    let visibleCount = 0;
     cards.forEach((card) => {
-      const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
       card.hidden = !isVisible;
+      if (isVisible) visibleCount++;
     });
+    if (empty) {
+      empty.classList.toggle('hidden', visibleCount > 0);
+    }
   }
 
   filters.addEventListener('click', function(event) {
@@ -206,9 +224,9 @@ function chipClass(variant) {
 
 function escapeHtml(str) {
   return String(str ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
