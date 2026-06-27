@@ -60,7 +60,7 @@ function formatLine(text, withCursor = false) {
 
 function escapeHtml(str) {
   return str
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
