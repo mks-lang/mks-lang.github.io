@@ -220,6 +220,10 @@ body[data-theme="dark"] {
   margin-top: 18px;
 }
 
+.changelog-empty {
+  margin-top: 24px;
+}
+
 .change-filters {
   position: sticky;
   top: 84px;
