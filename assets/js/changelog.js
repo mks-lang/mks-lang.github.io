@@ -15,7 +15,8 @@
     root.innerHTML = [
       renderHero(data.hero, data.stats),
       renderFilters(data.releases),
-      renderReleases(data.releases)
+      renderReleases(data.releases),
+      renderEmptyState()
     ].join('');
 
     initFilters();
@@ -98,7 +99,12 @@ function renderFilters(releases) {
   return `
     <section class="section change-filter-shell">
       <div class="change-filters panel glass" data-change-filters>
-        <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
+        <div class="change-search-wrap">
+          <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
+          <button class="change-search-clear hidden" type="button" aria-label="Clear search" data-change-search-clear>
+            <i class="hgi-stroke hgi-cancel-01" aria-hidden="true"></i>
+          </button>
+        </div>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
             <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}" aria-pressed="${index === 0 ? 'true' : 'false'}">
@@ -108,6 +114,16 @@ function renderFilters(releases) {
         </div>
       </div>
     </section>
+  `;
+}
+
+function renderEmptyState() {
+  const emptyLabel = window.MKSSiteI18n?.get('changelog.empty', 'No changes found');
+  return `
+    <div class="changelog-empty hidden reworking-container" aria-live="polite">
+      <div class="reworking-icon"></div>
+      <div class="reworking-text">${escapeHtml(emptyLabel)}</div>
+    </div>
   `;
 }
 
@@ -146,18 +162,34 @@ function initFilters() {
   const filters = document.querySelector('[data-change-filters]');
   const cards = Array.from(document.querySelectorAll('.change-card'));
   const search = document.querySelector('[data-change-search]');
+  const clearBtn = document.querySelector('[data-change-search-clear]');
+  const emptyState = document.querySelector('.changelog-empty');
   if (!filters || !cards.length) return;
 
   let activeFilter = window.MKSSiteI18n?.get('filters.all', 'all');
   let query = '';
 
   function applyFilters() {
+    let visibleCount = 0;
     cards.forEach((card) => {
       const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
       card.hidden = !isVisible;
+      if (isVisible) visibleCount++;
+    });
+
+    if (clearBtn) clearBtn.classList.toggle('hidden', !query);
+    if (emptyState) emptyState.classList.toggle('hidden', visibleCount > 0);
+  }
+
+  if (clearBtn && search) {
+    clearBtn.addEventListener('click', () => {
+      search.value = '';
+      query = '';
+      search.focus();
+      applyFilters();
     });
   }
 
