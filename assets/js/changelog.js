@@ -93,12 +93,13 @@ function renderHero(hero, stats) {
 function renderFilters(releases) {
   const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
   const tags = [allLabel, ...new Set((releases || []).map(item => item.tag).filter(Boolean))];
-  const searchPlaceholder = (window.MKSSiteI18n?.get('changelog.search', 'Search changelog...') || 'Search changelog...') + ' (/)';
+  const searchLabel = window.MKSSiteI18n?.get('changelog.search', 'Search changelog...') || 'Search changelog...';
+  const searchPlaceholder = searchLabel + ' (/)';
 
   return `
     <section class="section change-filter-shell">
       <div class="change-filters panel glass" data-change-filters>
-        <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchPlaceholder)}" data-change-search>
+        <input class="change-search" type="search" placeholder="${escapeHtml(searchPlaceholder)}" aria-label="${escapeHtml(searchLabel)}" data-change-search>
         <div class="change-filter-list">
           ${tags.map((tag, index) => `
             <button class="change-filter ${index === 0 ? 'active' : ''}" type="button" data-filter="${escapeHtml(tag)}" aria-pressed="${index === 0 ? 'true' : 'false'}">
@@ -138,6 +139,10 @@ function renderReleases(releases) {
           </div>
         </article>
       `).join('')}
+      <div class="changelog-empty hidden reworking-container" aria-live="polite">
+        <div class="reworking-icon"></div>
+        <div class="reworking-text">${escapeHtml(window.MKSSiteI18n?.get('changelog.empty', 'No changes found'))}</div>
+      </div>
     </section>
   `;
 }
@@ -146,19 +151,26 @@ function initFilters() {
   const filters = document.querySelector('[data-change-filters]');
   const cards = Array.from(document.querySelectorAll('.change-card'));
   const search = document.querySelector('[data-change-search]');
+  const empty = document.querySelector('.changelog-empty');
   if (!filters || !cards.length) return;
 
   let activeFilter = window.MKSSiteI18n?.get('filters.all', 'all');
   let query = '';
 
   function applyFilters() {
+    let visibleCount = 0;
+    const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
     cards.forEach((card) => {
-      const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
       card.hidden = !isVisible;
+      if (isVisible) visibleCount++;
     });
+
+    if (empty) {
+      empty.classList.toggle('hidden', visibleCount > 0);
+    }
   }
 
   filters.addEventListener('click', function(event) {

@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-07-03 - Screen Reader Clarity for Search and Backgrounds
+**Learning:** Decorative background elements (like particles and console header dots) and keyboard shortcut hints in aria-labels create unnecessary noise for screen reader users. Keeping hints in the placeholder and marking decorative canvases with aria-hidden="true" ensures a cleaner, more focused experience.
+**Action:** Always exclude keyboard shortcuts from aria-labels and apply aria-hidden="true" to any decorative background/animation elements during UI audits.
