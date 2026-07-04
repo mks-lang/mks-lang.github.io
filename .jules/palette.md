@@ -13,3 +13,7 @@
 ## 2026-05-12 - Centralized Overlay State Management
 **Learning:** Managing side effects like background scroll locking (`overflow: hidden` on body) and keyboard dismissal (Escape key) across multiple triggers (burger, backdrop, links, Esc key) is prone to state desync.
 **Action:** Centralize all overlay transitions into a single `toggle[Component](open)` function that handles both visual classes and global side effects consistently.
+
+## 2026-05-14 - Standardized Accessible Empty States
+**Learning:** Standardizing empty state patterns (using the `.reworking-container` pulse animation) across different search-heavy pages like Examples and Changelog creates a cohesive user experience. Combining this with `aria-live="polite"` ensures that screen reader users are immediately informed when a search query results in an empty set.
+**Action:** Always reuse the repository's established empty state visual language and include ARIA live regions for dynamic search/filter feedback.
