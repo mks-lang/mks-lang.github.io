@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="assets/css/reworking.css?v=20260427-1">
 </head>
 <body data-theme="dark">
-  <canvas class="particles"></canvas>
+  <canvas class="particles" aria-hidden="true"></canvas>
 
   <main id="main-content" tabindex="-1">
     <section class="examples-hero">
@@ -55,7 +55,7 @@
 
           <div class="examples-terminal">
             <div class="term-header">
-              <div class="term-dots"><span></span><span></span><span></span></div>
+              <div class="term-dots" aria-hidden="true"><span></span><span></span><span></span></div>
               <span class="term-path">/examples/showcase.mks</span>
             </div>
             <div class="term-body" data-examples-terminal>
@@ -84,7 +84,7 @@
 
         <section class="examples-stats" aria-label="Examples summary">
           <div>
-            <span data-example-count>0</span>
+            <span data-example-count aria-live="polite">0</span>
             <p>copyable snippets</p>
           </div>
           <div>
@@ -195,7 +195,7 @@ Writeln([1,2,3].sum());</code></pre>
           </div>
         </section>
 
-        <section class="example-grid">
+        <section class="example-grid" aria-live="polite">
           <article class="example-card" data-kind="basics">
             <div class="card-top">
               <span class="tag">Basics</span>
@@ -1010,7 +1010,7 @@ mks --help</code></pre>
 
         </section>
 
-        <div class="examples-empty hidden reworking-container">
+        <div class="examples-empty hidden reworking-container" aria-live="polite">
           <div class="reworking-icon"></div>
           <div class="reworking-text" data-i18n="examples.empty">No examples found</div>
         </div>

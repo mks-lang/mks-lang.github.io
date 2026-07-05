@@ -1,0 +1,3 @@
+## 2024-05-15 - [Enhanced Search Feedback & Accessibility]
+**Learning:** Decorative background elements (particles, UI terminal dots) can create unnecessary noise for screen reader users if not explicitly hidden. Providing immediate feedback via `aria-live` regions for search result counts and empty states significantly improves the experience for non-visual users. Reusing existing complex UI patterns (like the "Reworking" container) for empty states maintains visual harmony and reduces CSS bloat.
+**Action:** Always audit for decorative `<canvas>` or CSS-only "dot" decorations and apply `aria-hidden="true"`. Implement `aria-live="polite"` on dynamic search result containers. Use localized strings for empty states to ensure accessibility across all supported languages.
