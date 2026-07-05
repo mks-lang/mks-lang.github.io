@@ -67,7 +67,7 @@ function renderHero(hero, stats) {
         </div>
 
         <div class="change-console panel glass">
-          <div class="console-head">
+          <div class="console-head" aria-hidden="true">
             <span></span><span></span><span></span>
             <strong>/changelog/live</strong>
           </div>
@@ -112,8 +112,10 @@ function renderFilters(releases) {
 }
 
 function renderReleases(releases) {
+  const emptyLabel = window.MKSSiteI18n?.get('changelog.empty', 'No changes found');
+
   return `
-    <section class="section change-feed" data-change-feed>
+    <section class="section change-feed" data-change-feed aria-live="polite">
       ${(releases || []).map((release, index) => `
         <article class="change-card panel glimmer" data-tag="${escapeHtml(release.tag || '')}" style="--delay:${index * 90}ms">
           <div class="change-date">
@@ -139,6 +141,11 @@ function renderReleases(releases) {
         </article>
       `).join('')}
     </section>
+
+    <div class="changelog-empty reworking-container hidden" aria-live="polite">
+      <div class="reworking-icon"></div>
+      <div class="reworking-text">${escapeHtml(emptyLabel)}</div>
+    </div>
   `;
 }
 
@@ -152,13 +159,20 @@ function initFilters() {
   let query = '';
 
   function applyFilters() {
+    let visibleCount = 0;
     cards.forEach((card) => {
       const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
       card.hidden = !isVisible;
+      if (isVisible) visibleCount++;
     });
+
+    const empty = document.querySelector('.changelog-empty');
+    if (empty) {
+      empty.classList.toggle('hidden', visibleCount > 0);
+    }
   }
 
   filters.addEventListener('click', function(event) {
