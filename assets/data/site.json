@@ -31,7 +31,8 @@
       "roadmap.reworking": "Reworking...",
       "docs.warning.title": "Note",
       "docs.warning.text": "Some examples currently may be erroneous and non-working, this will be fixed soon.",
-      "examples.empty": "No examples found"
+      "examples.empty": "No examples found",
+      "changelog.empty": "No matching releases found"
     },
     "ru": {
       "brand.language": "язык",
@@ -64,7 +65,8 @@
       "roadmap.reworking": "В процессе переработки...",
       "docs.warning.title": "Примечание",
       "docs.warning.text": "Некоторые примеры в данный момент могут быть ошибочными и нерабочими, это будет исправлено в ближайшее время.",
-      "examples.empty": "Примеры не найдены"
+      "examples.empty": "Примеры не найдены",
+      "changelog.empty": "Релизы не найдены"
     }
   },
   "pages": {
