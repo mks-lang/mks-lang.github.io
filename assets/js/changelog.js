@@ -15,7 +15,8 @@
     root.innerHTML = [
       renderHero(data.hero, data.stats),
       renderFilters(data.releases),
-      renderReleases(data.releases)
+      renderReleases(data.releases),
+      renderEmptyState()
     ].join('');
 
     initFilters();
@@ -111,6 +112,16 @@ function renderFilters(releases) {
   `;
 }
 
+function renderEmptyState() {
+  const text = window.MKSSiteI18n?.get('changelog.empty', 'No matching changes found') || 'No matching changes found';
+  return `
+      <div class="changelog-empty reworking-container" aria-live="polite" hidden>
+      <div class="reworking-icon"></div>
+      <div class="reworking-text">${escapeHtml(text)}</div>
+    </div>
+  `;
+}
+
 function renderReleases(releases) {
   return `
     <section class="section change-feed" data-change-feed>
@@ -152,13 +163,21 @@ function initFilters() {
   let query = '';
 
   function applyFilters() {
+    const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
+    let visibleCount = 0;
+
     cards.forEach((card) => {
-      const allLabel = window.MKSSiteI18n?.get('filters.all', 'all');
       const matchesFilter = activeFilter === allLabel || card.dataset.tag === activeFilter;
       const matchesQuery = !query || card.textContent.toLowerCase().includes(query);
       const isVisible = matchesFilter && matchesQuery;
       card.hidden = !isVisible;
+      if (isVisible) visibleCount++;
     });
+
+    const empty = document.querySelector('.changelog-empty');
+    if (empty) {
+      empty.hidden = visibleCount > 0;
+    }
   }
 
   filters.addEventListener('click', function(event) {
@@ -206,9 +225,9 @@ function chipClass(variant) {
 
 function escapeHtml(str) {
   return String(str ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }

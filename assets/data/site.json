@@ -29,6 +29,7 @@
       "roadmap.where_heading": "Where MKS is heading",
       "roadmap.path": "Path",
       "roadmap.reworking": "Reworking...",
+      "changelog.empty": "No matching changes found",
       "docs.warning.title": "Note",
       "docs.warning.text": "Some examples currently may be erroneous and non-working, this will be fixed soon.",
       "examples.empty": "No examples found"
@@ -62,6 +63,7 @@
       "roadmap.where_heading": "Куда движется MKS",
       "roadmap.path": "Путь",
       "roadmap.reworking": "В процессе переработки...",
+      "changelog.empty": "Изменения не найдены",
       "docs.warning.title": "Примечание",
       "docs.warning.text": "Некоторые примеры в данный момент могут быть ошибочными и нерабочими, это будет исправлено в ближайшее время.",
       "examples.empty": "Примеры не найдены"
