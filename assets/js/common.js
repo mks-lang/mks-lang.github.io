@@ -394,6 +394,11 @@
       }
 
       if (e.key === 'Escape' && isInput) {
+        var isSearchInput = active.matches && active.matches('[data-example-search], [data-change-search]');
+        if (isSearchInput && active.value) {
+          active.value = '';
+          active.dispatchEvent(new Event('input', { bubbles: true }));
+        }
         active.blur();
       }
     } catch (err) {}
