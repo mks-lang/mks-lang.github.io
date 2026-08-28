@@ -14,6 +14,7 @@
   var chips = document.querySelectorAll('.filter-chip');
   var cards = document.querySelectorAll('.example-card, .featured-card');
   var search = document.querySelector('[data-example-search]');
+  var clearBtn = document.querySelector('[data-example-search-clear]');
   var count = document.querySelector('[data-example-count]');
 
   if (!chips.length || !cards.length) return;
@@ -73,7 +74,18 @@
   if (search) {
     search.addEventListener('input', function() {
       query = search.value.trim().toLowerCase();
+      if (clearBtn) clearBtn.hidden = !query;
       applyFilters();
+    });
+  }
+
+  if (clearBtn && search) {
+    clearBtn.addEventListener('click', function() {
+      search.value = '';
+      query = '';
+      clearBtn.hidden = true;
+      applyFilters();
+      search.focus();
     });
   }
 })();

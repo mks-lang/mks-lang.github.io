@@ -68,7 +68,10 @@
         </header>
 
         <div class="examples-toolbar">
-          <input class="examples-search" type="search" placeholder="Search examples... (/)" aria-label="Search examples" data-example-search>
+          <div class="search-input-wrapper">
+            <input class="examples-search" type="search" placeholder="Search examples... (/)" aria-label="Search examples" data-example-search>
+            <button class="search-clear-btn" type="button" aria-label="Clear search" data-example-search-clear hidden>×</button>
+          </div>
 
           <div class="toolbar-left">
             <button class="filter-chip active" data-filter="all" aria-pressed="true">All</button>
