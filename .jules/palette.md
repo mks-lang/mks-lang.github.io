@@ -17,3 +17,7 @@
 ## 2026-05-24 - Consistent Search Empty States
 **Learning:** Implementing localized empty states for search/filter views using a shared design component (`.reworking-container`) and `aria-live="polite"` ensures that users receive immediate, accessible feedback when no results match their query, maintaining visual consistency across the application.
 **Action:** Always provide a localized empty state with appropriate ARIA live regions for interactive lists that can be filtered to zero results.
+
+## 2026-09-02 - Search Keyboard Escape & ARIA Hint Separation
+**Learning:** Appending visual keyboard hints (such as `(/)`) directly to `aria-label` causes screen readers to read shortcut syntax as part of the element's accessible name. Keeping `aria-label` concise (e.g. "Search changelog...") while leaving shortcut hints in `placeholder` preserves screen reader clarity. Additionally, handling `Escape` on search inputs to clear query values before blurring provides a familiar, fluid search experience.
+**Action:** Exclude keyboard shortcut hints from `aria-label` and handle `Escape` key events on search inputs to clear non-empty queries prior to blurring focus.
