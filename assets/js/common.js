@@ -394,6 +394,12 @@
       }
 
       if (e.key === 'Escape' && isInput) {
+        if (active.type === 'search' || active.hasAttribute('data-example-search') || active.hasAttribute('data-change-search')) {
+          if (active.value !== '') {
+            active.value = '';
+            active.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        }
         active.blur();
       }
     } catch (err) {}
